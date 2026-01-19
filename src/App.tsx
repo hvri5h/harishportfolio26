@@ -3,7 +3,7 @@ import { motion, AnimatePresence, useScroll, useTransform, MotionValue } from 'f
 import {
   Linkedin,
   Github,
-  X,
+  X as XIcon,
   Palette,
   Code2,
   Send
@@ -23,9 +23,9 @@ const clientLogos = [
   'Shopify'
 ];
 
+const Column = ({ projects, scrollY, offset, className = '', setSelectedProject }: { projects: Project[], scrollY: MotionValue<number>, offset: number, className?: string, setSelectedProject: (p: Project) => void }) => {
+  const y = useTransform(scrollY, [0, 3000], [0, offset]);
 
-
-const Column = ({ projects, y, className = '', setSelectedProject }: { projects: Project[], y: MotionValue<number>, className?: string, setSelectedProject: (p: Project) => void }) => {
   return (
     <motion.div style={{ y }} className={`masonry-column ${className}`}>
       {projects.map((project) => (
@@ -38,12 +38,23 @@ const Column = ({ projects, y, className = '', setSelectedProject }: { projects:
           transition={{ duration: 0.5 }}
           onClick={() => setSelectedProject(project)}
         >
-          <img
-            src={project.image}
-            alt={project.title}
-            className="work-item-image"
-            loading="lazy"
-          />
+          {project.type === 'video' ? (
+            <video
+              src={project.image}
+              className="work-item-image"
+              autoPlay
+              loop
+              muted
+              playsInline
+            />
+          ) : (
+            <img
+              src={project.image}
+              alt={project.title}
+              className="work-item-image"
+              loading="lazy"
+            />
+          )}
           <div className="work-item-overlay">
             <span className="work-item-category">{project.category}</span>
             <h3 className="work-item-title">{project.title}</h3>
@@ -53,7 +64,6 @@ const Column = ({ projects, y, className = '', setSelectedProject }: { projects:
     </motion.div>
   );
 };
-
 
 function useWindowSize() {
   const [windowSize, setWindowSize] = useState({
@@ -113,13 +123,59 @@ function App() {
 
   // Split projects into columns
   const columns = useCallback(() => {
-    return Array.from({ length: numColumns }, (_, i) =>
-      projects.filter((_, index) => index % numColumns === i)
-    );
+    if (numColumns < 6) {
+      // For smaller screens, fall back to simple distribution
+      if (numColumns === 1) return [projects];
+
+      const cols = Array.from({ length: numColumns }, () => [] as Project[]);
+      projects.forEach((project, i) => {
+        cols[i % numColumns].push(project);
+      });
+      return cols;
+    }
+
+    // For desktop (6 columns): Pattern [Wide, Slim, Wide, Wide, Slim, Wide]
+    // Indices: 0(W), 1(S), 2(W), 3(W), 4(S), 5(W)
+    const mobileProjects = projects.filter(p => p.isMobile);
+    const desktopProjects = projects.filter(p => !p.isMobile);
+
+    // Initialize columns and height trackers
+    const cols = Array.from({ length: 6 }, () => [] as Project[]);
+    const colHeights = new Array(6).fill(0);
+
+    // Heuristics for visual height to balance columns
+    // Mobile (Slim): width=1 unit, aspect~16:9 tall => height ≈ 1.8
+    // Desktop (Wide): width=1.8 unit, aspect~16:9 wide => height ≈ 1.0
+    const MOBILE_HEIGHT_WEIGHT = 1.8;
+    const DESKTOP_HEIGHT_WEIGHT = 1.0;
+
+    // Helper: Add project to the shortest column among allowed indices
+    const addToShortest = (project: Project, allowedIndices: number[], heightWeight: number) => {
+      let minH = Infinity;
+      let targetColIndex = allowedIndices[0];
+
+      allowedIndices.forEach(idx => {
+        if (colHeights[idx] < minH) {
+          minH = colHeights[idx];
+          targetColIndex = idx;
+        }
+      });
+
+      cols[targetColIndex].push(project);
+      colHeights[targetColIndex] += heightWeight;
+    };
+
+    // Balance Mobile Projects between columns 1 and 4
+    mobileProjects.forEach(p => addToShortest(p, [1, 4], MOBILE_HEIGHT_WEIGHT));
+
+    // Balance Desktop Projects between columns 0, 2, 3, 5
+    desktopProjects.forEach(p => addToShortest(p, [0, 2, 3, 5], DESKTOP_HEIGHT_WEIGHT));
+
+    return cols;
   }, [projects, numColumns]);
 
-  // Parallax offsets for up to 6 columns
-  const parallaxOffsets = [0, 80, -60, 40, -90, 20];
+  // Parallax offsets
+  const parallaxOffsets = [0, 100, -50, 60, -80, 20];
   const { scrollY } = useScroll();
 
   return (
@@ -150,20 +206,19 @@ function App() {
 
       {/* Work Section */}
       <section id="work" className="section work-section">
-        <div className="container" style={{ maxWidth: '100%', paddingLeft: 40, paddingRight: 40 }}>
+        <div className="container-fluid">
           <div className="work-masonry">
             {columns().map((colProjects, colIndex) => {
-              // Creating a unique transform for each column based on its index
-              // We reuse the hook logic inline or via a helper
               const offset = parallaxOffsets[colIndex % parallaxOffsets.length];
-              const y = useTransform(scrollY, [0, 3000], [0, offset]);
+              const isSlim = numColumns >= 6 && (colIndex === 1 || colIndex === 4);
 
               return (
                 <Column
                   key={colIndex}
                   projects={colProjects}
-                  y={y}
-                  className={colIndex % 2 === 1 ? 'mt-20' : ''} // Stagger alternate columns initially
+                  scrollY={scrollY}
+                  offset={offset}
+                  className={`${isSlim ? 'masonry-column-slim' : 'masonry-column-wide'}`}
                   setSelectedProject={setSelectedProject}
                 />
               );
@@ -202,7 +257,7 @@ function App() {
         </div>
       </section>
 
-      {/* About Section (merged skills + testimonials) */}
+      {/* About Section */}
       <section id="about" className="section about-section">
         <div className="container">
           <motion.div
@@ -275,7 +330,7 @@ function App() {
             </h3>
           </motion.div>
 
-          {/* Testimonials within About */}
+          {/* Testimonials */}
           <motion.div
             className="testimonials-header"
             initial={{ opacity: 0, y: 20 }}
@@ -310,7 +365,7 @@ function App() {
         </div>
       </section>
 
-      {/* Contact Section - Peter Lewis style */}
+      {/* Contact Section */}
       <section id="contact" className="section contact-section">
         <div className="container">
           <motion.div
@@ -321,13 +376,11 @@ function App() {
             transition={{ duration: 0.6 }}
           >
             <div className="contact-image">
+              {/* Just use a placeholder or memoji again if no profile pic yet */}
               <img
-                src="/profile.jpg"
+                src={memoji}
                 alt="Profile"
-                onError={(e) => {
-                  // Fallback to placeholder if image doesn't exist
-                  e.currentTarget.src = 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face';
-                }}
+                className="contact-memoji"
               />
             </div>
             <div className="contact-text">
@@ -364,7 +417,7 @@ function App() {
       <footer className="footer">
         <div className="container">
           <div className="footer-content">
-            <p>&copy; {new Date().getFullYear()} [Your Name]</p>
+            <p>&copy; {new Date().getFullYear()} Harish</p>
             <p className="footer-note">Designed & built by me</p>
           </div>
         </div>
@@ -393,13 +446,24 @@ function App() {
                 onClick={() => setSelectedProject(null)}
                 aria-label="Close modal"
               >
-                <X size={20} />
+                <XIcon size={20} />
               </button>
-              <img
-                src={selectedProject.image}
-                alt={selectedProject.title}
-                className="modal-image"
-              />
+              {selectedProject.type === 'video' ? (
+                <video
+                  src={selectedProject.image}
+                  className="modal-image"
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                />
+              ) : (
+                <img
+                  src={selectedProject.image}
+                  alt={selectedProject.title}
+                  className="modal-image"
+                />
+              )}
               <div className="modal-content">
                 <p className="modal-category">{selectedProject.category}</p>
                 <h2 className="modal-title">{selectedProject.title}</h2>

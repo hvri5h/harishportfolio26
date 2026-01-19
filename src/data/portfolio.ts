@@ -1,3 +1,25 @@
+import img_0DqW from '../assets/test/0DqWFfs9zfVYPO7PZd8O8bsRtE.avif';
+import img_6SXU from '../assets/test/6SXUv7jMAEkw8PabtmC6TXNIiM.avif';
+import img_8VfS from '../assets/test/8VfS5zuMmDchIpaCf767I8rX7Y.avif';
+import img_Hp4K from '../assets/test/Hp4KG1pwKb6cl66bNB9b2pYWQ3Y.avif';
+import img_KCk7 from '../assets/test/KCk7nP2M4mP1QclNxHPIrT1FvcA.avif';
+import img_cx71 from '../assets/test/cx71XZYYWfIozOc1rn55Bw.avif';
+import vid_QfJE from '../assets/test/QfJEiLDoHB5b7C3TtRfG3xFqCog.mp4';
+
+import img_0DoF from '../assets/test/0DoFvQInPiH34TWUk6DzVA9JQ.avif';
+import img_3RGr from '../assets/test/3RGrfrckophlAobhfZlqf1MDPd0.avif';
+import img_HnQI from '../assets/test/HnQI4uTAjbgziEmMMInd3R6o9c.avif';
+import img_JUWR from '../assets/test/JUWRJbfPWXb05lTNw0q4p1jewc.avif';
+import img_PruQ from '../assets/test/PruQlxKuftAZHgOh7hJT3jaUbs.avif';
+import img_W1Q8 from '../assets/test/W1Q88PlQfYXaGug9EBkmai9By4.avif';
+import img_gmhd from '../assets/test/gmhdX4XPuJvQqId9jDmFHb7cFE.avif';
+import img_hZ3z from '../assets/test/hZ3ztUHQQ9Tn50mg184gLvKcy4E.avif';
+import img_iR48 from '../assets/test/iR48olgey2UZQ9FFhsWFne27Ag.avif';
+import img_irsy from '../assets/test/irsyTM7kM1DWjcg6fJkQQ1O04s.avif';
+import vid_Ejxm from '../assets/test/EjxmZ2XPUCOqFJumyZ0M8ofWfUA.mp4';
+import vid_m8Z1 from '../assets/test/m8Z1Zg8JHiuWfp5GqAGZylPuYCQ.mp4';
+import vid_vkTX from '../assets/test/vkTXRpatm4bojSpTLqmk0YWz8.mp4';
+
 export interface Project {
   id: string;
   title: string;
@@ -5,7 +27,9 @@ export interface Project {
   description: string;
   tags: string[];
   color: string;
-  image: string;
+  image: string; // URL string for both images and videos
+  type: 'image' | 'video'; // New field
+  isMobile: boolean; // New field to guide layout
   year: string;
 }
 
@@ -21,248 +45,51 @@ export interface Testimonial {
   company: string;
 }
 
+// Helper to create project entries
+const createProject = (
+  id: string,
+  src: string,
+  isMobile: boolean,
+  type: 'image' | 'video',
+  title: string,
+  category: string
+): Project => ({
+  id,
+  title,
+  category,
+  description: 'A showcased project demonstrating design and engineering capabilities.',
+  tags: ['Design', 'Development'],
+  color: '#000000',
+  image: src,
+  type,
+  isMobile,
+  year: '2025'
+});
+
 export const projects: Project[] = [
-  {
-    id: 'project-1',
-    title: 'Finance Dashboard',
-    category: 'Product Design & Development',
-    description: 'Designed and built a comprehensive financial analytics platform helping teams track metrics, visualize trends, and make data-driven decisions. Full-stack implementation with real-time data sync.',
-    tags: ['React', 'TypeScript', 'D3.js', 'Node.js'],
-    color: '#0066ff',
-    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=600&fit=crop',
-    year: '2025'
-  },
-  {
-    id: 'project-2',
-    title: 'E-commerce Redesign',
-    category: 'UX Design & Frontend',
-    description: 'Led the complete redesign of a fashion e-commerce platform, increasing conversion by 34%. Implemented a component library and design system from scratch.',
-    tags: ['Figma', 'Next.js', 'Shopify', 'CSS'],
-    color: '#ff6b6b',
-    image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=600&fit=crop',
-    year: '2025'
-  },
-  {
-    id: 'project-3',
-    title: 'Healthcare App',
-    category: 'Mobile Design & Development',
-    description: 'Designed and developed a patient-facing mobile app for appointment scheduling, health tracking, and telehealth consultations. HIPAA-compliant architecture.',
-    tags: ['React Native', 'Figma', 'Firebase', 'Healthcare'],
-    color: '#4ecdc4',
-    image: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?w=800&h=600&fit=crop',
-    year: '2024'
-  },
-  {
-    id: 'project-4',
-    title: 'AI Writing Assistant',
-    category: 'Product Design',
-    description: 'Created the end-to-end experience for an AI-powered writing tool. Focused on making complex AI features feel intuitive and approachable for everyday users.',
-    tags: ['Product Strategy', 'UX Research', 'Prototyping'],
-    color: '#9b59b6',
-    image: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&h=600&fit=crop',
-    year: '2024'
-  },
-  {
-    id: 'project-5',
-    title: 'SaaS Platform',
-    category: 'Design System & Development',
-    description: 'Built a scalable design system and component library serving 12 product teams. Reduced design-to-development time by 60% through systematic documentation.',
-    tags: ['Design Systems', 'React', 'Storybook', 'Tokens'],
-    color: '#f39c12',
-    image: 'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?w=800&h=600&fit=crop',
-    year: '2024'
-  },
-  {
-    id: 'project-6',
-    title: 'Developer Tools',
-    category: 'Full-Stack Development',
-    description: 'Architected and shipped a suite of developer productivity tools including a CLI, VS Code extension, and web dashboard for monitoring deployments.',
-    tags: ['Node.js', 'Electron', 'CLI', 'DevTools'],
-    color: '#1abc9c',
-    image: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&h=600&fit=crop',
-    year: '2023'
-  },
-  {
-    id: 'project-7',
-    title: 'Brand Identity',
-    category: 'Branding & Visual Design',
-    description: 'Developed complete brand identity for a climate-tech startup including logo, color system, typography, and brand guidelines. Extended to marketing site design.',
-    tags: ['Branding', 'Visual Design', 'Guidelines'],
-    color: '#3498db',
-    image: 'https://images.unsplash.com/photo-1542744094-3a31f272c490?w=800&h=600&fit=crop',
-    year: '2023'
-  },
-  {
-    id: 'project-8',
-    title: 'Data Visualization',
-    category: 'Interactive Design & Dev',
-    description: 'Created interactive data stories and visualizations for a research publication, making complex datasets accessible and engaging for general audiences.',
-    tags: ['D3.js', 'Scrollytelling', 'Data Viz'],
-    color: '#e74c3c',
-    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=600&fit=crop',
-    year: '2023'
-  },
-  {
-    id: 'project-9',
-    title: 'Marketplace Platform',
-    category: 'Product & Engineering',
-    description: 'End-to-end design and development of a B2B marketplace connecting service providers with enterprise clients. Built real-time messaging and payment systems.',
-    tags: ['Next.js', 'PostgreSQL', 'Stripe', 'WebSockets'],
-    color: '#8e44ad',
-    image: 'https://images.unsplash.com/photo-1556761175-b413da4baf72?w=800&h=600&fit=crop',
-    year: '2023'
-  },
-  {
-    id: 'project-10',
-    title: 'Mobile Banking',
-    category: 'UX/UI Design',
-    description: 'Redesigned the mobile banking experience for a regional credit union, improving task completion rates and customer satisfaction scores significantly.',
-    tags: ['Mobile UX', 'FinTech', 'Accessibility'],
-    color: '#27ae60',
-    image: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?w=800&h=600&fit=crop',
-    year: '2022'
-  },
-  {
-    id: 'project-11',
-    title: 'Educational Platform',
-    category: 'Design & Development',
-    description: 'Built an interactive learning platform with video lessons, quizzes, and progress tracking. Focus on engagement and retention for adult learners.',
-    tags: ['EdTech', 'Vue.js', 'Video', 'Gamification'],
-    color: '#e67e22',
-    image: 'https://images.unsplash.com/photo-1501504905252-473c47e087f8?w=800&h=600&fit=crop',
-    year: '2022'
-  },
-  {
-    id: 'project-12',
-    title: 'IoT Dashboard',
-    category: 'Industrial Design & Dev',
-    description: 'Designed and implemented monitoring dashboards for industrial IoT systems, handling real-time data from thousands of sensors across multiple facilities.',
-    tags: ['IoT', 'Real-time', 'React', 'MQTT'],
-    color: '#2c3e50',
-    image: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&h=600&fit=crop',
-    year: '2022'
-  },
-  // Duplicates for demo purposes to fill columns
-  {
-    id: 'project-13',
-    title: 'Crypto Wallet',
-    category: 'Web3 Design',
-    description: 'Secure and intuitive wallet interface for managing digital assets.',
-    tags: ['Web3', 'React', 'Tailwind'],
-    color: '#8e44ad',
-    image: 'https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=800&h=600&fit=crop',
-    year: '2023'
-  },
-  {
-    id: 'project-14',
-    title: 'Travel App',
-    category: 'Mobile UX',
-    description: 'Immersive travel planning experience with rich media and itineraries.',
-    tags: ['Flutter', 'Dart', 'UX'],
-    color: '#e67e22',
-    image: 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=800&h=600&fit=crop',
-    year: '2022'
-  },
-  {
-    id: 'project-15',
-    title: 'Restaurant POS',
-    category: 'System Design',
-    description: 'High-performance point of sale system for fast-paced service environments.',
-    tags: ['Hardware', 'Interface', 'Performance'],
-    color: '#c0392b',
-    image: 'https://images.unsplash.com/photo-1556740758-90de374c12ad?w=800&h=600&fit=crop',
-    year: '2023'
-  },
-  {
-    id: 'project-16',
-    title: 'Fitness Tracker',
-    category: 'Wearable UI',
-    description: 'Companion app for a next-gen fitness wearable device.',
-    tags: ['iOS', 'HealthKit', 'SwiftUI'],
-    color: '#2ecc71',
-    image: 'https://images.unsplash.com/photo-1576678927484-cc907957088c?w=800&h=600&fit=crop',
-    year: '2024'
-  },
-  {
-    id: 'project-17',
-    title: 'Smart Home Hub',
-    category: 'IoT Interface',
-    description: 'Centralized control efficiency for modern smart homes.',
-    tags: ['HomeKit', 'React', 'Zigbee'],
-    color: '#34495e',
-    image: 'https://images.unsplash.com/photo-1558002038-1091a1661116?w=800&h=600&fit=crop',
-    year: '2023'
-  },
-  {
-    id: 'project-18',
-    title: 'Music Streaming',
-    category: 'Media App',
-    description: 'Reimagining the music discovery experience with social features.',
-    tags: ['Streaming', 'Social', 'Mobile'],
-    color: '#9b59b6',
-    image: 'https://images.unsplash.com/photo-1614680376593-3b0f39343cc4?w=800&h=600&fit=crop',
-    year: '2024'
-  },
-  {
-    id: 'project-19',
-    title: 'Learning Management',
-    category: 'Enterprise SaaS',
-    description: 'Corporate training platform focused on employee engagement.',
-    tags: ['SaaS', 'B2B', 'Learning'],
-    color: '#16a085',
-    image: 'https://images.unsplash.com/photo-1501504905252-473c47e087f8?w=800&h=600&fit=crop',
-    year: '2022'
-  },
-  {
-    id: 'project-20',
-    title: 'Virtual Event Space',
-    category: '3D Web',
-    description: 'Browser-based 3D environment for virtual conferences and meetups.',
-    tags: ['Three.js', 'WebGL', 'Events'],
-    color: '#2980b9',
-    image: 'https://images.unsplash.com/photo-1551818255-e6e10975bc17?w=800&h=600&fit=crop',
-    year: '2023'
-  },
-  {
-    id: 'project-21',
-    title: 'Charity Marketplace',
-    category: 'Non-profit',
-    description: 'Connecting donors with verified charitable causes transparently.',
-    tags: ['Social Impact', 'Design', 'Trust'],
-    color: '#e74c3c',
-    image: 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=800&h=600&fit=crop',
-    year: '2024'
-  },
-  {
-    id: 'project-22',
-    title: 'Code Editor Theme',
-    category: 'Developer Experience',
-    description: 'A dark mode theme designed for long coding sessions.',
-    tags: ['DX', 'Design', 'Accessibility'],
-    color: '#2c3e50',
-    image: 'https://images.unsplash.com/photo-1542831371-29b0f74f9713?w=800&h=600&fit=crop',
-    year: '2022'
-  },
-  {
-    id: 'project-23',
-    title: 'Weather App',
-    category: 'Utility',
-    description: 'Hyper-local weather forecasting with beautiful visualizations.',
-    tags: ['Data', 'Visualization', 'Mobile'],
-    color: '#3498db',
-    image: 'https://images.unsplash.com/photo-1592210454359-9043f067919b?w=800&h=600&fit=crop',
-    year: '2023'
-  },
-  {
-    id: 'project-24',
-    title: 'Recipe Manager',
-    category: 'Lifestyle',
-    description: 'Organize, plan, and share family recipes with ease.',
-    tags: ['Food', 'Social', 'App'],
-    color: '#f1c40f',
-    image: 'https://images.unsplash.com/photo-1466637574441-749b8f19452f?w=800&h=600&fit=crop',
-    year: '2024'
-  }
+  // Mobile Projects (Column 1)
+  createProject('mob-1', img_0DqW, true, 'image', 'Mobile Analytics', 'Mobile App'),
+  createProject('mob-2', img_6SXU, true, 'image', 'Social Connect', 'iOS Design'),
+  createProject('mob-3', img_8VfS, true, 'image', 'Health Tracker', 'Product Design'),
+  createProject('mob-4', img_Hp4K, true, 'image', 'Finance Flow', 'Mobile UX'),
+  createProject('mob-5', img_KCk7, true, 'image', 'E-Reader', 'App Design'),
+  createProject('mob-6', img_cx71, true, 'image', 'Travel Companion', 'Mobile Interface'),
+  createProject('mob-7', vid_QfJE, true, 'video', 'Interaction Demo', 'Prototype'),
+
+  // Desktop Projects (Other Columns)
+  createProject('desk-1', img_0DoF, false, 'image', 'Dashboard UI', 'Web App'),
+  createProject('desk-2', img_3RGr, false, 'image', 'Design System', 'System'),
+  createProject('desk-3', img_HnQI, false, 'image', 'Marketing Site', 'Web Design'),
+  createProject('desk-4', img_JUWR, false, 'image', 'SaaS Platform', 'Product'),
+  createProject('desk-5', img_PruQ, false, 'image', 'Analytics Tool', 'Dashboard'),
+  createProject('desk-6', img_W1Q8, false, 'image', 'Portfolio V1', 'Web'),
+  createProject('desk-7', img_gmhd, false, 'image', 'E-Commerce', 'Shopify'),
+  createProject('desk-8', img_hZ3z, false, 'image', 'Brand Guidelines', 'Branding'),
+  createProject('desk-9', img_iR48, false, 'image', 'Documentation', 'DevTools'),
+  createProject('desk-10', img_irsy, false, 'image', 'Landing Page', 'Web'),
+  createProject('desk-11', vid_Ejxm, false, 'video', 'Motion Study', 'Animation'),
+  createProject('desk-12', vid_m8Z1, false, 'video', 'Interface Demo', 'Prototyping'),
+  createProject('desk-13', vid_vkTX, false, 'video', 'User Flow', 'UX Research'),
 ];
 
 export const clients: Client[] = [
@@ -276,19 +103,19 @@ export const clients: Client[] = [
 
 export const testimonials: Testimonial[] = [
   {
-    quote: "One of the few designers who can seamlessly move between high-level product strategy and hands-on implementation. A rare combination of skills that made a real impact on our product.",
+    quote: "One of the few designers who can seamlessly move between high-level product strategy and hands-on implementation.",
     author: "Sarah Chen",
     role: "VP of Product",
     company: "TechCorp"
   },
   {
-    quote: "Their understanding of both design systems and frontend architecture helped us ship faster without compromising quality. Would work with them again in a heartbeat.",
+    quote: "Their understanding of both design systems and frontend architecture helped us ship faster without compromising quality.",
     author: "Marcus Johnson",
     role: "Engineering Director",
     company: "StartupXYZ"
   },
   {
-    quote: "Brought a level of craft and attention to detail that elevated our entire product. The design system they built is still paying dividends years later.",
+    quote: "Brought a level of craft and attention to detail that elevated our entire product.",
     author: "Emily Rodriguez",
     role: "CEO",
     company: "DesignStudio"
@@ -297,23 +124,11 @@ export const testimonials: Testimonial[] = [
 
 export const skills = {
   design: [
-    'Product Design',
-    'UX Research',
-    'Visual Design',
-    'Design Systems',
-    'Prototyping',
-    'Brand Identity',
-    'Motion Design',
-    'Interaction Design'
+    'Product Design', 'UX Research', 'Visual Design', 'Design Systems',
+    'Prototyping', 'Brand Identity', 'Motion Design', 'Interaction Design'
   ],
   engineering: [
-    'React / Next.js',
-    'TypeScript',
-    'Node.js',
-    'PostgreSQL',
-    'GraphQL',
-    'AWS / Vercel',
-    'React Native',
-    'Design Tokens'
+    'React / Next.js', 'TypeScript', 'Node.js', 'PostgreSQL',
+    'GraphQL', 'AWS / Vercel', 'React Native', 'Design Tokens'
   ]
 };
