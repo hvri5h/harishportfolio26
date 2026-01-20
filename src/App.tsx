@@ -10,7 +10,6 @@ import {
 } from 'lucide-react';
 import { Navigation } from './components/Navigation';
 import { projects, testimonials, skills, type Project } from './data/portfolio';
-import './App.css';
 
 import memoji from './assets/memoji.png';
 
@@ -27,11 +26,11 @@ const Column = ({ projects, scrollY, offset, className = '', setSelectedProject 
   const y = useTransform(scrollY, [0, 3000], [0, offset]);
 
   return (
-    <motion.div style={{ y }} className={`masonry-column ${className}`}>
+    <motion.div style={{ y }} className={`flex flex-col gap-3 min-w-0 ${className}`}>
       {projects.map((project) => (
         <motion.div
           key={project.id}
-          className="work-item"
+          className="relative w-full rounded-xl overflow-hidden cursor-pointer bg-surface transition-transform duration-base mb-0 block hover:-translate-y-1 hover:shadow-2xl hover:z-10 group"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-50px' }}
@@ -41,7 +40,7 @@ const Column = ({ projects, scrollY, offset, className = '', setSelectedProject 
           {project.type === 'video' ? (
             <video
               src={project.image}
-              className="work-item-image"
+              className="w-full h-auto block object-cover transition-transform duration-slow group-hover:scale-105"
               autoPlay
               loop
               muted
@@ -51,13 +50,13 @@ const Column = ({ projects, scrollY, offset, className = '', setSelectedProject 
             <img
               src={project.image}
               alt={project.title}
-              className="work-item-image"
+              className="w-full h-auto block object-cover transition-transform duration-slow group-hover:scale-105"
               loading="lazy"
             />
           )}
-          <div className="work-item-overlay">
-            <span className="work-item-category">{project.category}</span>
-            <h3 className="work-item-title">{project.title}</h3>
+          <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent opacity-0 transition-opacity duration-base flex flex-col justify-end p-6 group-hover:opacity-100">
+            <span className="text-[0.6875rem] uppercase tracking-[0.05em] text-white/70 mb-1">{project.category}</span>
+            <h3 className="text-base font-semibold text-white">{project.title}</h3>
           </div>
         </motion.div>
       ))}
@@ -179,25 +178,25 @@ function App() {
   const { scrollY } = useScroll();
 
   return (
-    <div className="app">
+    <div className="min-h-screen">
       <Navigation activeSection={activeSection} onSectionChange={handleSectionChange} />
 
       {/* Hero Section */}
-      <header className="hero">
-        <div className="container">
+      <header className="h-auto min-h-[90vh] flex items-start justify-center pt-[200px] pb-16 max-sm:h-[calc(100vh-60px)] max-sm:px-8">
+        <div className="max-w-[1200px] mx-auto px-8 w-full">
           <motion.div
-            className="hero-content"
+            className="max-w-[900px] mx-auto flex flex-col items-center text-center"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, ease: [0.25, 0.1, 0.25, 1] }}
           >
-            <div className="hero-avatar">
-              <img src={memoji} alt="Harish" />
+            <div className="mb-6 drop-shadow-xl max-md:w-[200px]">
+              <img src={memoji} alt="Harish" className="w-[250px] h-auto" />
             </div>
-            <h1 className="hero-title">
+            <h1 className="font-display font-black text-[6rem] tracking-[-0.03em] leading-none text-text mb-4 uppercase max-md:text-[clamp(3rem,10vw,4.5rem)] max-sm:text-[1.75rem]">
               HARISH
             </h1>
-            <p className="hero-subtitle">
+            <p className="font-display font-medium text-2xl text-text-secondary leading-[1.4] max-w-[450px] max-md:text-xl">
               Independent Design Engineer with 10+ years designing and building digital products for startups and agencies.
             </p>
           </motion.div>
@@ -205,9 +204,9 @@ function App() {
       </header>
 
       {/* Work Section */}
-      <section id="work" className="section work-section">
-        <div className="container-fluid">
-          <div className="work-masonry">
+      <section id="work" className="pt-0 pb-32 mt-0 relative check-mt-target">
+        <div className="max-w-full px-4">
+          <div className="flex gap-3 items-start justify-center w-full">
             {columns().map((colProjects, colIndex) => {
               const offset = parallaxOffsets[colIndex % parallaxOffsets.length];
               const isSlim = numColumns >= 6 && (colIndex === 1 || colIndex === 4);
@@ -218,7 +217,10 @@ function App() {
                   projects={colProjects}
                   scrollY={scrollY}
                   offset={offset}
-                  className={`${isSlim ? 'masonry-column-slim' : 'masonry-column-wide'}`}
+                  className={numColumns >= 6
+                    ? (isSlim ? 'flex-1' : 'flex-[1.8]') // Desktop ratios
+                    : 'flex-1' // Fallback
+                  }
                   setSelectedProject={setSelectedProject}
                 />
               );
@@ -228,29 +230,29 @@ function App() {
       </section>
 
       {/* Clients Section */}
-      <section className="section clients-section">
-        <div className="container">
+      <section className="py-24 bg-bg-alt border-y border-border-light">
+        <div className="max-w-[1200px] mx-auto px-12 max-sm:px-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <p className="section-label">Proven effectiveness</p>
-            <h2 className="section-title">
+            <p className="text-[0.8125rem] font-medium uppercase tracking-[0.05em] text-text-tertiary mb-4">Proven effectiveness</p>
+            <h2 className="text-[clamp(1.5rem,3vw,2rem)] font-semibold leading-[1.3] text-text mb-12 max-w-[600px]">
               For 8+ years, I've shaped and shipped industry-leading products at every scale and phase.
             </h2>
           </motion.div>
           <motion.div
-            className="clients-grid"
+            className="flex justify-start items-center gap-16 flex-wrap"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
             {clientLogos.map((client) => (
-              <div key={client} className="client-logo">
-                <span>{client}</span>
+              <div key={client} className="opacity-40 transition-opacity duration-base hover:opacity-70">
+                <span className="text-base font-semibold tracking-[-0.01em] text-text">{client}</span>
               </div>
             ))}
           </motion.div>
@@ -258,104 +260,104 @@ function App() {
       </section>
 
       {/* About Section */}
-      <section id="about" className="section about-section">
-        <div className="container">
+      <section id="about" className="py-32 bg-bg">
+        <div className="max-w-[1200px] mx-auto px-12 max-sm:px-6">
           <motion.div
-            className="section-header"
+            className="mb-16 max-w-[700px]"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <p className="section-label">End-to-end expertise</p>
-            <h2 className="section-title">
+            <p className="text-[0.8125rem] font-medium uppercase tracking-[0.05em] text-text-tertiary mb-4">End-to-end expertise</p>
+            <h2 className="text-[clamp(1.5rem,3vw,2rem)] font-semibold leading-[1.3] text-text">
               To every project, I bring generalist range and multi-specialist depth.
             </h2>
           </motion.div>
 
-          <div className="skills-grid">
+          <div className="grid grid-cols-2 gap-24 mb-32 max-md:grid-cols-1 max-md:gap-16">
             <motion.div
-              className="skills-column"
+              className="p-12 bg-surface border border-border-light rounded-xl"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5 }}
             >
-              <h3>
-                <Palette size={20} />
+              <h3 className="text-base font-semibold mb-4 flex items-center gap-2 text-text">
+                <Palette size={20} className="text-accent" />
                 Design
               </h3>
-              <p className="skills-description">
+              <p className="text-[0.9375rem] text-text-secondary mb-8 leading-[1.6]">
                 From strategy to pixels, I shape products that are both beautiful and deeply functional.
               </p>
-              <div className="skills-list">
+              <div className="flex flex-wrap gap-2">
                 {skills.design.map((skill) => (
-                  <span key={skill} className="skill-tag">{skill}</span>
+                  <span key={skill} className="px-3 py-[6px] bg-bg border border-border rounded-full text-[0.8125rem] text-text-secondary transition-all duration-fast hover:border-text-tertiary hover:text-text">{skill}</span>
                 ))}
               </div>
             </motion.div>
 
             <motion.div
-              className="skills-column"
+              className="p-12 bg-surface border border-border-light rounded-xl"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.1 }}
             >
-              <h3>
-                <Code2 size={20} />
+              <h3 className="text-base font-semibold mb-4 flex items-center gap-2 text-text">
+                <Code2 size={20} className="text-accent" />
                 Engineering
               </h3>
-              <p className="skills-description">
+              <p className="text-[0.9375rem] text-text-secondary mb-8 leading-[1.6]">
                 I build performant, accessible, and maintainable systems from frontend to backend.
               </p>
-              <div className="skills-list">
+              <div className="flex flex-wrap gap-2">
                 {skills.engineering.map((skill) => (
-                  <span key={skill} className="skill-tag">{skill}</span>
+                  <span key={skill} className="px-3 py-[6px] bg-bg border border-border rounded-full text-[0.8125rem] text-text-secondary transition-all duration-fast hover:border-text-tertiary hover:text-text">{skill}</span>
                 ))}
               </div>
             </motion.div>
           </div>
 
           <motion.div
-            className="skills-philosophy"
+            className="p-16 bg-gradient-to-br from-[#f0f9f0] to-[#e8f4f8] rounded-xl text-center"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <p className="section-label">Passion & heart</p>
-            <h3 className="philosophy-text">
+            <p className="text-[0.8125rem] font-medium uppercase tracking-[0.05em] text-text-tertiary mb-4">Passion & heart</p>
+            <h3 className="text-[clamp(1.25rem,2.5vw,1.5rem)] font-medium leading-[1.4] text-text max-w-[700px] mx-auto">
               All my work is infused with relentless focus on customer wellbeing, deep curiosity, and a love for beautiful details.
             </h3>
           </motion.div>
 
           {/* Testimonials */}
           <motion.div
-            className="testimonials-header"
+            className="mt-32 mb-16 max-w-[700px]"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <p className="section-label">Trusted partners</p>
-            <h3 className="section-title">I've built a reputation for results.</h3>
+            <p className="text-[0.8125rem] font-medium uppercase tracking-[0.05em] text-text-tertiary mb-4">Trusted partners</p>
+            <h3 className="text-[clamp(1.5rem,3vw,2rem)] font-semibold leading-[1.3] text-text">I've built a reputation for results.</h3>
           </motion.div>
 
-          <div className="testimonials-grid">
+          <div className="grid grid-cols-[repeat(auto-fit,minmax(320px,1fr))] gap-8">
             {testimonials.map((testimonial, index) => (
               <motion.blockquote
                 key={index}
-                className="testimonial-card"
+                className="p-8 bg-surface border border-border-light rounded-xl transition-all duration-base hover:border-border hover:shadow-lg"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
               >
-                <p className="testimonial-quote">"{testimonial.quote}"</p>
-                <footer className="testimonial-author">
-                  <cite className="testimonial-name">{testimonial.author}</cite>
-                  <span className="testimonial-role">
+                <p className="text-[0.9375rem] leading-[1.7] text-text-secondary mb-8">"{testimonial.quote}"</p>
+                <footer className="flex flex-col">
+                  <cite className="font-semibold text-[0.875rem] text-text not-italic">{testimonial.author}</cite>
+                  <span className="text-[0.8125rem] text-text-tertiary">
                     {testimonial.role}, {testimonial.company}
                   </span>
                 </footer>
@@ -366,46 +368,45 @@ function App() {
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="section contact-section">
-        <div className="container">
+      <section id="contact" className="pt-32 pb-24 bg-bg">
+        <div className="max-w-[1200px] mx-auto px-12 max-sm:px-6">
           <motion.div
-            className="contact-layout"
+            className="flex items-start gap-12 mb-16 max-sm:flex-col max-sm:items-center max-sm:text-center"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <div className="contact-image">
-              {/* Just use a placeholder or memoji again if no profile pic yet */}
+            <div className="shrink-0">
               <img
                 src={memoji}
                 alt="Profile"
-                className="contact-memoji"
+                className="w-[140px] h-[140px] object-cover rounded-xl grayscale max-sm:w-[120px] max-sm:h-[120px]"
               />
             </div>
-            <div className="contact-text">
-              <p className="contact-label">I'm always exploring what's next.</p>
-              <h2 className="contact-title">
+            <div className="flex-1">
+              <p className="text-base italic text-text-secondary mb-2">I'm always exploring what's next.</p>
+              <h2 className="text-[clamp(1.75rem,4vw,2.5rem)] font-normal leading-[1.25] text-text tracking-[-0.01em]">
                 You're ready to take your team to the next level. Let's talk.
               </h2>
             </div>
           </motion.div>
           <motion.div
-            className="contact-links"
+            className="flex items-center gap-4 flex-wrap max-sm:flex-col"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            <a href="mailto:hello@example.com" className="contact-link contact-link-primary">
+            <a href="mailto:hello@example.com" className="inline-flex items-center gap-[6px] px-4 py-[10px] bg-text text-white border border-text rounded-full text-[0.875rem] font-medium transition-all duration-fast hover:bg-[#333] hover:border-[#333] max-sm:w-full max-sm:justify-center">
               <Send size={16} />
               Get in touch
             </a>
-            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="contact-link">
+            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-[6px] px-4 py-[10px] bg-transparent text-text border border-border rounded-full text-[0.875rem] font-medium transition-all duration-fast hover:bg-surface-hover hover:border-text-tertiary max-sm:w-full max-sm:justify-center">
               <Linkedin size={16} />
               LinkedIn
             </a>
-            <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="contact-link">
+            <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-[6px] px-4 py-[10px] bg-transparent text-text border border-border rounded-full text-[0.875rem] font-medium transition-all duration-fast hover:bg-surface-hover hover:border-text-tertiary max-sm:w-full max-sm:justify-center">
               <Github size={16} />
               GitHub
             </a>
@@ -414,11 +415,11 @@ function App() {
       </section>
 
       {/* Footer */}
-      <footer className="footer">
-        <div className="container">
-          <div className="footer-content">
+      <footer className="py-12 bg-bg border-t border-border-light">
+        <div className="max-w-[1200px] mx-auto px-12 max-sm:px-6">
+          <div className="flex justify-between items-center text-text-tertiary text-[0.8125rem] max-sm:flex-col max-sm:gap-4 max-sm:text-center">
             <p>&copy; {new Date().getFullYear()} Harish</p>
-            <p className="footer-note">Designed & built by me</p>
+            <p className="text-text-tertiary">Designed & built by me</p>
           </div>
         </div>
       </footer>
@@ -427,14 +428,14 @@ function App() {
       <AnimatePresence>
         {selectedProject && (
           <motion.div
-            className="modal-backdrop"
+            className="fixed inset-0 bg-black/85 backdrop-blur-md z-[1000] flex items-center justify-center p-8"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setSelectedProject(null)}
           >
             <motion.div
-              className="modal"
+              className="bg-surface rounded-xl max-w-[800px] w-full max-h-[90vh] overflow-y-auto relative"
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -442,7 +443,7 @@ function App() {
               onClick={(e) => e.stopPropagation()}
             >
               <button
-                className="modal-close"
+                className="absolute top-4 right-4 w-9 h-9 flex items-center justify-center rounded-full bg-white/90 text-text transition-all duration-fast z-10 shadow-md hover:bg-white hover:scale-105"
                 onClick={() => setSelectedProject(null)}
                 aria-label="Close modal"
               >
@@ -451,7 +452,7 @@ function App() {
               {selectedProject.type === 'video' ? (
                 <video
                   src={selectedProject.image}
-                  className="modal-image"
+                  className="w-full aspect-video object-cover"
                   autoPlay
                   loop
                   muted
@@ -461,19 +462,19 @@ function App() {
                 <img
                   src={selectedProject.image}
                   alt={selectedProject.title}
-                  className="modal-image"
+                  className="w-full aspect-video object-cover"
                 />
               )}
-              <div className="modal-content">
-                <p className="modal-category">{selectedProject.category}</p>
-                <h2 className="modal-title">{selectedProject.title}</h2>
-                <p className="modal-description">{selectedProject.description}</p>
-                <div className="modal-tags">
+              <div className="p-12">
+                <p className="text-[0.8125rem] text-accent mb-1 uppercase tracking-[0.03em] font-medium">{selectedProject.category}</p>
+                <h2 className="text-2xl font-bold mb-6 text-text">{selectedProject.title}</h2>
+                <p className="text-base text-text-secondary leading-[1.7] mb-8">{selectedProject.description}</p>
+                <div className="flex flex-wrap gap-2">
                   {selectedProject.tags.map((tag) => (
-                    <span key={tag} className="modal-tag">{tag}</span>
+                    <span key={tag} className="px-3 py-[6px] bg-surface-hover rounded-full text-[0.8125rem] text-text-secondary">{tag}</span>
                   ))}
                 </div>
-                <div className="modal-meta">
+                <div className="flex justify-between mt-8 pt-8 border-t border-border-light text-[0.8125rem] text-text-tertiary">
                   <span>Year: {selectedProject.year}</span>
                 </div>
               </div>

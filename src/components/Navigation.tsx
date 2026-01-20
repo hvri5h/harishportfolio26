@@ -53,21 +53,22 @@ export function Navigation({ activeSection, onSectionChange }: NavigationProps) 
 
   return (
     <motion.nav
-      className="nav-container"
+      className="fixed top-8 left-0 right-0 z-[100] flex justify-center pointer-events-none"
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.3 }}
     >
-      <div className="nav-pills">
+      <div className="flex items-center bg-[#f0f0f0]/50 backdrop-blur-[20px] backdrop-saturate-[180%] border border-white/50 rounded-full p-[6px] gap-1 shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1),0_2px_4px_-1px_rgba(0,0,0,0.06),0_0_0_1px_rgba(0,0,0,0.05)] pointer-events-auto transition-all duration-base hover:bg-[#f5f5f5]/80 hover:shadow-[0_10px_15px_-3px_rgba(0,0,0,0.1),0_4px_6px_-2px_rgba(0,0,0,0.05),0_0_0_1px_rgba(0,0,0,0.05)]">
         {navItems.map((item) => (
           <button
             key={item.id}
-            className={`nav-pill ${activeSection === item.id ? 'active' : ''}`}
+            className={`relative px-6 py-2 text-[0.9375rem] font-medium text-black/60 rounded-full transition-colors duration-fast z-10 bg-transparent cursor-pointer leading-normal hover:text-black/90 ${activeSection === item.id ? 'text-black font-semibold' : ''
+              }`}
             onClick={() => handleClick(item.id)}
           >
             {activeSection === item.id && (
               <motion.div
-                className="nav-pill-highlight"
+                className="absolute inset-0 bg-white rounded-full shadow-[0_2px_5px_rgba(0,0,0,0.05),0_1px_2px_rgba(0,0,0,0.1)] -z-10"
                 layoutId="nav-highlight"
                 transition={{
                   type: 'spring',
@@ -76,7 +77,7 @@ export function Navigation({ activeSection, onSectionChange }: NavigationProps) 
                 }}
               />
             )}
-            <span className="nav-pill-label">{item.label}</span>
+            <span className="relative z-10">{item.label}</span>
           </button>
         ))}
       </div>
