@@ -9,18 +9,12 @@ import {
   Send
 } from 'lucide-react';
 import { Navigation } from './components/Navigation';
+import LogoCloud from './components/LogoCloud';
 import { projects, testimonials, skills, type Project } from './data/portfolio';
 
 import memoji from './assets/memoji.png';
 
-const clientLogos = [
-  'Stripe',
-  'Vercel',
-  'Figma',
-  'Notion',
-  'Linear',
-  'Shopify'
-];
+
 
 const Column = ({ projects, scrollY, offset, className = '', setSelectedProject }: { projects: Project[], scrollY: MotionValue<number>, offset: number, className?: string, setSelectedProject: (p: Project) => void }) => {
   const y = useTransform(scrollY, [0, 3000], [0, offset]);
@@ -204,7 +198,7 @@ function App() {
       </header>
 
       {/* Work Section */}
-      <section id="work" className="pt-0 pb-32 mt-0 relative check-mt-target">
+      <section id="work" className="pt-0 pb-32 mt-0 relative check-mt-target mb-[-200px] xl:mb-[-500px]">
         <div className="max-w-full px-4">
           <div className="flex gap-3 items-start justify-center w-full">
             {columns().map((colProjects, colIndex) => {
@@ -227,40 +221,14 @@ function App() {
             })}
           </div>
         </div>
+        <div className="absolute bottom-[200px] xl:bottom-[500px] left-0 w-full h-[500px] bg-gradient-to-t from-[var(--color-bg)] to-transparent pointer-events-none z-10" />
       </section>
 
       {/* Clients Section */}
-      <section className="py-24 bg-bg-alt border-y border-border-light">
-        <div className="max-w-[1200px] mx-auto px-12 max-sm:px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <p className="text-[0.8125rem] font-medium uppercase tracking-[0.05em] text-text-tertiary mb-4">Proven effectiveness</p>
-            <h2 className="text-[clamp(1.5rem,3vw,2rem)] font-semibold leading-[1.3] text-text mb-12 max-w-[600px]">
-              For 8+ years, I've shaped and shipped industry-leading products at every scale and phase.
-            </h2>
-          </motion.div>
-          <motion.div
-            className="flex justify-start items-center gap-16 flex-wrap"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            {clientLogos.map((client) => (
-              <div key={client} className="opacity-40 transition-opacity duration-base hover:opacity-70">
-                <span className="text-base font-semibold tracking-[-0.01em] text-text">{client}</span>
-              </div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
+      <LogoCloud />
 
       {/* About Section */}
-      <section id="about" className="py-32 bg-bg">
+      <section id="about" className="py-32 bg-bg relative z-30">
         <div className="max-w-[1200px] mx-auto px-12 max-sm:px-6">
           <motion.div
             className="mb-16 max-w-[700px]"
@@ -368,7 +336,7 @@ function App() {
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="pt-32 pb-24 bg-bg">
+      <section id="contact" className="pt-32 pb-24 bg-bg relative z-30">
         <div className="max-w-[1200px] mx-auto px-12 max-sm:px-6">
           <motion.div
             className="flex items-start gap-12 mb-16 max-sm:flex-col max-sm:items-center max-sm:text-center"
@@ -415,7 +383,7 @@ function App() {
       </section>
 
       {/* Footer */}
-      <footer className="py-12 bg-bg border-t border-border-light">
+      <footer className="py-12 bg-bg border-t border-border-light relative z-30">
         <div className="max-w-[1200px] mx-auto px-12 max-sm:px-6">
           <div className="flex justify-between items-center text-text-tertiary text-[0.8125rem] max-sm:flex-col max-sm:gap-4 max-sm:text-center">
             <p>&copy; {new Date().getFullYear()} Harish</p>
