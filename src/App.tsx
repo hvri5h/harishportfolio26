@@ -1,16 +1,15 @@
 import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform, MotionValue } from 'framer-motion';
 import {
-  Linkedin,
-  Github,
   X as XIcon,
-  Palette,
-  Code2,
-  Send
 } from 'lucide-react';
 import { Navigation } from './components/Navigation';
 import LogoCloud from './components/LogoCloud';
-import { projects, testimonials, skills, type Project } from './data/portfolio';
+import WhatIDo from './components/WhatIDo';
+import Services from './components/Services';
+import Testimonials from './components/Testimonials';
+import AboutMe from './components/AboutMe';
+import { projects, type Project } from './data/portfolio';
 
 import memoji from './assets/memoji.png';
 
@@ -187,8 +186,8 @@ function App() {
             <div className="mb-6 drop-shadow-xl max-md:w-[200px]">
               <img src={memoji} alt="Harish" className="w-[250px] h-auto" />
             </div>
-            <h1 className="font-display font-black text-[6rem] tracking-[-0.03em] leading-none text-text mb-4 uppercase max-md:text-[clamp(3rem,10vw,4.5rem)] max-sm:text-[1.75rem]">
-              HARISH
+            <h1 className="font-display font-black text-[6rem] tracking-[-0.03em] leading-none text-text mb-4 max-md:text-[clamp(3rem,10vw,4.5rem)] max-sm:text-[1.75rem]">
+              Harish
             </h1>
             <p className="font-display font-medium text-2xl text-text-secondary leading-[1.4] max-w-[450px] max-md:text-xl">
               Independent Design Engineer with 10+ years designing and building digital products for startups and agencies.
@@ -227,170 +226,19 @@ function App() {
       {/* Clients Section */}
       <LogoCloud />
 
-      {/* About Section */}
-      <section id="about" className="py-32 bg-bg relative z-30">
-        <div className="max-w-[1200px] mx-auto px-12 max-sm:px-6">
-          <motion.div
-            className="mb-16 max-w-[700px]"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <p className="text-[0.8125rem] font-medium uppercase tracking-[0.05em] text-text-tertiary mb-4">End-to-end expertise</p>
-            <h2 className="text-[clamp(1.5rem,3vw,2rem)] font-semibold leading-[1.3] text-text">
-              To every project, I bring generalist range and multi-specialist depth.
-            </h2>
-          </motion.div>
+      {/* What I Do Section */}
+      <WhatIDo />
 
-          <div className="grid grid-cols-2 gap-24 mb-32 max-md:grid-cols-1 max-md:gap-16">
-            <motion.div
-              className="p-12 bg-surface border border-border-light rounded-xl"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-            >
-              <h3 className="text-base font-semibold mb-4 flex items-center gap-2 text-text">
-                <Palette size={20} className="text-accent" />
-                Design
-              </h3>
-              <p className="text-[0.9375rem] text-text-secondary mb-8 leading-[1.6]">
-                From strategy to pixels, I shape products that are both beautiful and deeply functional.
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {skills.design.map((skill) => (
-                  <span key={skill} className="px-3 py-[6px] bg-bg border border-border rounded-full text-[0.8125rem] text-text-secondary transition-all duration-fast hover:border-text-tertiary hover:text-text">{skill}</span>
-                ))}
-              </div>
-            </motion.div>
+      {/* Services Section */}
+      <Services />
 
-            <motion.div
-              className="p-12 bg-surface border border-border-light rounded-xl"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-            >
-              <h3 className="text-base font-semibold mb-4 flex items-center gap-2 text-text">
-                <Code2 size={20} className="text-accent" />
-                Engineering
-              </h3>
-              <p className="text-[0.9375rem] text-text-secondary mb-8 leading-[1.6]">
-                I build performant, accessible, and maintainable systems from frontend to backend.
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {skills.engineering.map((skill) => (
-                  <span key={skill} className="px-3 py-[6px] bg-bg border border-border rounded-full text-[0.8125rem] text-text-secondary transition-all duration-fast hover:border-text-tertiary hover:text-text">{skill}</span>
-                ))}
-              </div>
-            </motion.div>
-          </div>
+      {/* Testimonials Section */}
+      <Testimonials />
 
-          <motion.div
-            className="p-16 bg-gradient-to-br from-[#f0f9f0] to-[#e8f4f8] rounded-xl text-center"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <p className="text-[0.8125rem] font-medium uppercase tracking-[0.05em] text-text-tertiary mb-4">Passion & heart</p>
-            <h3 className="text-[clamp(1.25rem,2.5vw,1.5rem)] font-medium leading-[1.4] text-text max-w-[700px] mx-auto">
-              All my work is infused with relentless focus on customer wellbeing, deep curiosity, and a love for beautiful details.
-            </h3>
-          </motion.div>
+      {/* About Me Section */}
+      <AboutMe />
 
-          {/* Testimonials */}
-          <motion.div
-            className="mt-32 mb-16 max-w-[700px]"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <p className="text-[0.8125rem] font-medium uppercase tracking-[0.05em] text-text-tertiary mb-4">Trusted partners</p>
-            <h3 className="text-[clamp(1.5rem,3vw,2rem)] font-semibold leading-[1.3] text-text">I've built a reputation for results.</h3>
-          </motion.div>
 
-          <div className="grid grid-cols-[repeat(auto-fit,minmax(320px,1fr))] gap-8">
-            {testimonials.map((testimonial, index) => (
-              <motion.blockquote
-                key={index}
-                className="p-8 bg-surface border border-border-light rounded-xl transition-all duration-base hover:border-border hover:shadow-lg"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-              >
-                <p className="text-[0.9375rem] leading-[1.7] text-text-secondary mb-8">"{testimonial.quote}"</p>
-                <footer className="flex flex-col">
-                  <cite className="font-semibold text-[0.875rem] text-text not-italic">{testimonial.author}</cite>
-                  <span className="text-[0.8125rem] text-text-tertiary">
-                    {testimonial.role}, {testimonial.company}
-                  </span>
-                </footer>
-              </motion.blockquote>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Contact Section */}
-      <section id="contact" className="pt-32 pb-24 bg-bg relative z-30">
-        <div className="max-w-[1200px] mx-auto px-12 max-sm:px-6">
-          <motion.div
-            className="flex items-start gap-12 mb-16 max-sm:flex-col max-sm:items-center max-sm:text-center"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <div className="shrink-0">
-              <img
-                src={memoji}
-                alt="Profile"
-                className="w-[140px] h-[140px] object-cover rounded-xl grayscale max-sm:w-[120px] max-sm:h-[120px]"
-              />
-            </div>
-            <div className="flex-1">
-              <p className="text-base italic text-text-secondary mb-2">I'm always exploring what's next.</p>
-              <h2 className="text-[clamp(1.75rem,4vw,2.5rem)] font-normal leading-[1.25] text-text tracking-[-0.01em]">
-                You're ready to take your team to the next level. Let's talk.
-              </h2>
-            </div>
-          </motion.div>
-          <motion.div
-            className="flex items-center gap-4 flex-wrap max-sm:flex-col"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            <a href="mailto:hello@example.com" className="inline-flex items-center gap-[6px] px-4 py-[10px] bg-text text-white border border-text rounded-full text-[0.875rem] font-medium transition-all duration-fast hover:bg-[#333] hover:border-[#333] max-sm:w-full max-sm:justify-center">
-              <Send size={16} />
-              Get in touch
-            </a>
-            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-[6px] px-4 py-[10px] bg-transparent text-text border border-border rounded-full text-[0.875rem] font-medium transition-all duration-fast hover:bg-surface-hover hover:border-text-tertiary max-sm:w-full max-sm:justify-center">
-              <Linkedin size={16} />
-              LinkedIn
-            </a>
-            <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-[6px] px-4 py-[10px] bg-transparent text-text border border-border rounded-full text-[0.875rem] font-medium transition-all duration-fast hover:bg-surface-hover hover:border-text-tertiary max-sm:w-full max-sm:justify-center">
-              <Github size={16} />
-              GitHub
-            </a>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="py-12 bg-bg border-t border-border-light relative z-30">
-        <div className="max-w-[1200px] mx-auto px-12 max-sm:px-6">
-          <div className="flex justify-between items-center text-text-tertiary text-[0.8125rem] max-sm:flex-col max-sm:gap-4 max-sm:text-center">
-            <p>&copy; {new Date().getFullYear()} Harish</p>
-            <p className="text-text-tertiary">Designed & built by me</p>
-          </div>
-        </div>
-      </footer>
 
       {/* Project Modal */}
       <AnimatePresence>

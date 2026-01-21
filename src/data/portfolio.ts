@@ -43,6 +43,7 @@ export interface Testimonial {
   author: string;
   role: string;
   company: string;
+  image: string;
 }
 
 // Helper to create project entries
@@ -106,19 +107,22 @@ export const testimonials: Testimonial[] = [
     quote: "One of the few designers who can seamlessly move between high-level product strategy and hands-on implementation.",
     author: "Sarah Chen",
     role: "VP of Product",
-    company: "TechCorp"
+    company: "TechCorp",
+    image: "https://ui-avatars.com/api/?name=Sarah+Chen&background=random"
   },
   {
     quote: "Their understanding of both design systems and frontend architecture helped us ship faster without compromising quality.",
     author: "Marcus Johnson",
     role: "Engineering Director",
-    company: "StartupXYZ"
+    company: "StartupXYZ",
+    image: "https://ui-avatars.com/api/?name=Marcus+Johnson&background=random"
   },
   {
     quote: "Brought a level of craft and attention to detail that elevated our entire product.",
     author: "Emily Rodriguez",
     role: "CEO",
-    company: "DesignStudio"
+    company: "DesignStudio",
+    image: "https://ui-avatars.com/api/?name=Emily+Rodriguez&background=random"
   }
 ];
 

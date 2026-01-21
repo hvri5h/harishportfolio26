@@ -2,7 +2,7 @@ export default function LogoCloud() {
     return (
         <section className="bg-bg py-24 relative z-30">
             <div className="mx-auto max-w-[1200px] px-6">
-                <h2 className="text-center text-[clamp(1.5rem,3vw,1.5rem)] font-semibold leading-[1.3] text-text mb-16">
+                <h2 className="text-center text-[clamp(1.5rem,3vw,1.5rem)] font-semibold leading-[1.3] text-text-secondary mb-16">
                     For 12+ years, I’ve shipped digital products at every scale and phase.
                 </h2>
                 <div className="mx-auto flex max-w-4xl flex-wrap items-center justify-center gap-x-12 gap-y-10 sm:gap-x-16 sm:gap-y-12 grayscale opacity-60 hover:opacity-100 transition-opacity duration-300">
