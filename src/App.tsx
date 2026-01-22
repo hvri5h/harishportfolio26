@@ -337,7 +337,7 @@ function App() {
             onClick={() => setSelectedProject(null)}
           >
             <motion.div
-              className="bg-surface rounded-xl max-w-[800px] w-full max-h-[90vh] overflow-y-auto relative"
+              className="relative max-w-[90vw] max-h-[90vh] flex items-center justify-center"
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -354,7 +354,7 @@ function App() {
               {selectedProject.type === 'video' ? (
                 <video
                   src={selectedProject.image}
-                  className="w-full aspect-video object-cover"
+                  className="max-w-full max-h-[90vh] w-auto h-auto object-contain rounded-xl"
                   autoPlay
                   loop
                   muted
@@ -364,22 +364,9 @@ function App() {
                 <img
                   src={selectedProject.image}
                   alt={selectedProject.title}
-                  className="w-full aspect-video object-cover"
+                  className="max-w-full max-h-[90vh] w-auto h-auto object-contain rounded-xl"
                 />
               )}
-              <div className="p-12">
-                <p className="text-[0.8125rem] text-accent mb-1 uppercase tracking-[0.03em] font-medium">{selectedProject.category}</p>
-                <h2 className="text-2xl font-bold mb-6 text-text">{selectedProject.title}</h2>
-                <p className="text-base text-text-secondary leading-[1.7] mb-8">{selectedProject.description}</p>
-                <div className="flex flex-wrap gap-2">
-                  {selectedProject.tags.map((tag) => (
-                    <span key={tag} className="px-3 py-[6px] bg-surface-hover rounded-full text-[0.8125rem] text-text-secondary">{tag}</span>
-                  ))}
-                </div>
-                <div className="flex justify-between mt-8 pt-8 border-t border-border-light text-[0.8125rem] text-text-tertiary">
-                  <span>Year: {selectedProject.year}</span>
-                </div>
-              </div>
             </motion.div>
           </motion.div>
         )}
