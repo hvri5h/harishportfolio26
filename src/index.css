@@ -109,3 +109,8 @@
 ::-webkit-scrollbar-thumb:hover {
   background: var(--color-text-tertiary);
 }
+
+::selection {
+  background-color: #FC6407;
+  color: #ffffff;
+}

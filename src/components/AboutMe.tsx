@@ -36,12 +36,12 @@ const AboutMe = () => {
                     viewport={{ once: true }}
                     transition={{ duration: 0.5, delay: 0.2 }}
                 >
-                    <p className="font-display font-medium text-2xl text-text-secondary leading-relaxed max-md:text-xl">
-                        Hi, I'm Harish from New Zealand — a passionate product designer with some technical know-how.
+                    <p className="font-display font-medium text-xl text-text-secondary leading-relaxed max-md:text-xl max-w-[500px] mx-auto">
+                    I'm Harish — an Independent Design Engineer originally from New Zealand, but currently based in Australia.
                     </p>
 
-                    <p className="font-sans text-xl text-text-secondary leading-relaxed max-w-[650px] mx-auto max-md:text-lg">
-                        In a past life I led product design at Unbounce before moving into product management and then full-time freelance — building things is my jam.
+                    <p className="font-sans text-xl text-text-secondary leading-relaxed max-w-[600px] mx-auto max-md:text-lg">
+                    I work best with startups and agencies who value craft and momentum. If you're looking for someone who can own both design and development and ship fast without compromising quality, I'd love to hear about your project.
                     </p>
                 </motion.div>
 

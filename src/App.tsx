@@ -18,15 +18,30 @@ import { projects, type Project } from './data/portfolio';
 
 
 
-const Column = ({ projects, scrollY, offset, className = '', setSelectedProject }: { projects: Project[], scrollY: MotionValue<number>, offset: number, className?: string, setSelectedProject: (p: Project) => void }) => {
+const Column = ({ 
+  projects, 
+  scrollY, 
+  offset, 
+  isNarrow,
+  setSelectedProject 
+}: { 
+  projects: Project[], 
+  scrollY: MotionValue<number>, 
+  offset: number, 
+  isNarrow: boolean,
+  setSelectedProject: (p: Project) => void 
+}) => {
   const y = useTransform(scrollY, [0, 3000], [0, offset]);
 
   return (
-    <motion.div style={{ y }} className={`flex flex-col gap-3 min-w-0 ${className}`}>
+    <motion.div 
+      style={{ y }} 
+      className={`flex flex-col gap-3 min-w-0 ${isNarrow ? 'flex-[0.6]' : 'flex-1'}`}
+    >
       {projects.map((project) => (
         <motion.div
           key={project.id}
-          className="relative w-full rounded-xl overflow-hidden cursor-pointer bg-surface transition-transform duration-base mb-0 block hover:-translate-y-1 hover:shadow-2xl hover:z-10 group"
+          className="relative w-full rounded-xl overflow-hidden cursor-pointer bg-[#1a1a1a] transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:z-10 group"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-50px' }}
@@ -36,7 +51,7 @@ const Column = ({ projects, scrollY, offset, className = '', setSelectedProject 
           {project.type === 'video' ? (
             <video
               src={project.image}
-              className="w-full h-auto block object-cover transition-transform duration-slow group-hover:scale-105"
+              className="w-full h-auto block object-cover transition-transform duration-500 group-hover:scale-[1.02]"
               autoPlay
               loop
               muted
@@ -46,13 +61,13 @@ const Column = ({ projects, scrollY, offset, className = '', setSelectedProject 
             <img
               src={project.image}
               alt={project.title}
-              className="w-full h-auto block object-cover transition-transform duration-slow group-hover:scale-105"
+              className="w-full h-auto block object-cover transition-transform duration-500 group-hover:scale-[1.02]"
               loading="lazy"
             />
           )}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent opacity-0 transition-opacity duration-base flex flex-col justify-end p-6 group-hover:opacity-100">
-            <span className="text-[0.6875rem] uppercase tracking-[0.05em] text-white/70 mb-1">{project.category}</span>
-            <h3 className="text-base font-semibold text-white">{project.title}</h3>
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 transition-opacity duration-300 flex flex-col justify-end p-4 group-hover:opacity-100">
+            <span className="text-[0.625rem] uppercase tracking-[0.08em] text-white/60 mb-1">{project.category}</span>
+            <h3 className="text-sm font-medium text-white">{project.title}</h3>
           </div>
         </motion.div>
       ))}
@@ -120,64 +135,90 @@ function App() {
     return () => window.removeEventListener('keydown', handleEscape);
   }, []);
 
-  // Determine number of columns based on width
-  const numColumns = size.width > 1600 ? 6 : size.width > 1200 ? 4 : size.width > 768 ? 3 : size.width > 480 ? 2 : 1;
+  // Determine number of columns based on width - 5 columns on desktop, min 2 on mobile
+  const numColumns = size.width > 1200 ? 5 : size.width > 900 ? 4 : size.width > 640 ? 3 : 2;
 
-  // Split projects into columns
+  // Column configuration: which columns are narrow (for mobile content)
+  // Pattern for 5 cols: [Wide, Narrow, Wide, Narrow, Wide]
+  const narrowColumns = numColumns === 5 ? [1, 3] : numColumns === 4 ? [1, 2] : [];
+
+  // Split projects into columns - mobile to narrow, desktop to wide
   const columns = useCallback(() => {
-    if (numColumns < 6) {
-      // For smaller screens, fall back to simple distribution
-      if (numColumns === 1) return [projects];
+    // Initialize columns and height trackers
+    const cols: Project[][] = Array.from({ length: numColumns }, () => []);
+    const colHeights = new Array(numColumns).fill(0);
 
-      const cols = Array.from({ length: numColumns }, () => [] as Project[]);
-      projects.forEach((project, i) => {
-        cols[i % numColumns].push(project);
+    // Height weights for balancing
+    const MOBILE_HEIGHT = 1.8;
+    const DESKTOP_HEIGHT = 1.0;
+
+    // For 2-3 columns (mobile/tablet): distribute ALL projects evenly across all columns
+    if (numColumns <= 3) {
+      projects.forEach(project => {
+        // Find the shortest column
+        let minH = Infinity;
+        let targetCol = 0;
+        
+        for (let i = 0; i < numColumns; i++) {
+          if (colHeights[i] < minH) {
+            minH = colHeights[i];
+            targetCol = i;
+          }
+        }
+
+        cols[targetCol].push(project);
+        colHeights[targetCol] += project.isMobile ? MOBILE_HEIGHT : DESKTOP_HEIGHT;
       });
+
       return cols;
     }
 
-    // For desktop (6 columns): Pattern [Wide, Slim, Wide, Wide, Slim, Wide]
-    // Indices: 0(W), 1(S), 2(W), 3(W), 4(S), 5(W)
+    // For 4+ columns: separate mobile and desktop content
     const mobileProjects = projects.filter(p => p.isMobile);
     const desktopProjects = projects.filter(p => !p.isMobile);
 
-    // Initialize columns and height trackers
-    const cols = Array.from({ length: 6 }, () => [] as Project[]);
-    const colHeights = new Array(6).fill(0);
+    // Get indices for narrow and wide columns
+    const narrowIndices = narrowColumns;
+    const wideIndices = Array.from({ length: numColumns }, (_, i) => i).filter(i => !narrowIndices.includes(i));
 
-    // Heuristics for visual height to balance columns
-    // Mobile (Slim): width=1 unit, aspect~16:9 tall => height ≈ 1.8
-    // Desktop (Wide): width=1.8 unit, aspect~16:9 wide => height ≈ 1.0
-    const MOBILE_HEIGHT_WEIGHT = 1.8;
-    const DESKTOP_HEIGHT_WEIGHT = 1.0;
-
-    // Helper: Add project to the shortest column among allowed indices
-    const addToShortest = (project: Project, allowedIndices: number[], heightWeight: number) => {
+    // Distribute mobile projects to narrow columns
+    mobileProjects.forEach(project => {
+      const targetIndices = narrowIndices.length > 0 ? narrowIndices : wideIndices;
       let minH = Infinity;
-      let targetColIndex = allowedIndices[0];
-
-      allowedIndices.forEach(idx => {
+      let targetCol = targetIndices[0];
+      
+      targetIndices.forEach(idx => {
         if (colHeights[idx] < minH) {
           minH = colHeights[idx];
-          targetColIndex = idx;
+          targetCol = idx;
         }
       });
 
-      cols[targetColIndex].push(project);
-      colHeights[targetColIndex] += heightWeight;
-    };
+      cols[targetCol].push(project);
+      colHeights[targetCol] += MOBILE_HEIGHT;
+    });
 
-    // Balance Mobile Projects between columns 1 and 4
-    mobileProjects.forEach(p => addToShortest(p, [1, 4], MOBILE_HEIGHT_WEIGHT));
+    // Distribute desktop projects to wide columns
+    desktopProjects.forEach(project => {
+      let minH = Infinity;
+      let targetCol = wideIndices[0];
+      
+      wideIndices.forEach(idx => {
+        if (colHeights[idx] < minH) {
+          minH = colHeights[idx];
+          targetCol = idx;
+        }
+      });
 
-    // Balance Desktop Projects between columns 0, 2, 3, 5
-    desktopProjects.forEach(p => addToShortest(p, [0, 2, 3, 5], DESKTOP_HEIGHT_WEIGHT));
+      cols[targetCol].push(project);
+      colHeights[targetCol] += DESKTOP_HEIGHT;
+    });
 
     return cols;
-  }, [projects, numColumns]);
+  }, [numColumns, narrowColumns, projects]);
 
-  // Parallax offsets
-  const parallaxOffsets = [0, 100, -50, 60, -80, 20];
+  // Parallax offsets for 5 columns - subtle staggered effect
+  const parallaxOffsets = [0, 80, -40, 60, -60];
   const { scrollY } = useScroll();
 
   return (
@@ -206,7 +247,7 @@ function App() {
               >
                 {isCopied ? <Check size={14} /> : <Copy size={14} />}
               </button>
-              <a href="mailto:hello@hari.sh" className="hover:text-text transition-colors">hello@hari.sh</a>
+              <a href="mailto:htiruna@gmail.com" className="hover:text-text transition-colors">htiruna@gmail.com</a>
             </div>
           </div>
           <div className="pointer-events-auto flex flex-col items-end gap-1">
@@ -224,26 +265,25 @@ function App() {
           >
             <div className="mb-6 h-[250px] w-[250px] max-md:h-[200px] max-md:w-[200px] overflow-visible">
               <div className="h-[350px] w-[320px] -translate-x-[35px] -translate-y-[60px] max-md:h-[260px] max-md:w-[260px] max-md:-translate-x-[30px] max-md:-translate-y-[30px]">
-                <Spline scene="https://prod.spline.design/zy5bc6-NJcpDwB1Y/scene.splinecode" onWheel={(e) => e.stopPropagation()} />
+                <Spline scene="https://prod.spline.design/zy5bc6-NJcpDwB1Y/scene.splinecode" />
               </div>
             </div>
             <h1 className="font-display font-black text-[6rem] tracking-[-0.03em] leading-none text-text mb-4 max-md:text-[clamp(3rem,10vw,4.5rem)] max-sm:text-[1.75rem] z-10">
               Harish
             </h1>
             <p className="font-display font-medium text-2xl text-text-secondary leading-[1.4] max-w-[450px] max-md:text-xl">
-              Independent Design Engineer with 10+ years designing and building digital products for startups and agencies.
-            </p>
+              Design + Engineering partner for startups and agencies who value craft and speed. </p>
           </motion.div>
         </div>
       </header>
 
       {/* Work Section */}
-      <section id="work" className="pt-0 pb-32 mt-0 relative check-mt-target mb-[-200px] xl:mb-[-500px]">
-        <div className="max-w-full px-4">
+      <section id="work" className="pt-0 pb-32 mt-0 relative mb-[-200px] xl:mb-[-500px]">
+        <div className="max-w-[1800px] mx-auto px-3 md:px-4">
           <div className="flex gap-3 items-start justify-center w-full">
             {columns().map((colProjects, colIndex) => {
               const offset = parallaxOffsets[colIndex % parallaxOffsets.length];
-              const isSlim = numColumns >= 6 && (colIndex === 1 || colIndex === 4);
+              const isNarrow = narrowColumns.includes(colIndex);
 
               return (
                 <Column
@@ -251,10 +291,7 @@ function App() {
                   projects={colProjects}
                   scrollY={scrollY}
                   offset={offset}
-                  className={numColumns >= 6
-                    ? (isSlim ? 'flex-1' : 'flex-[1.8]') // Desktop ratios
-                    : 'flex-1' // Fallback
-                  }
+                  isNarrow={isNarrow}
                   setSelectedProject={setSelectedProject}
                 />
               );
@@ -280,7 +317,7 @@ function App() {
       <AboutMe />
 
       {/* Footer */}
-      <footer className="w-full max-w-[1200px] mx-auto px-8 py-8 flex justify-between items-center text-sm font-medium text-text-secondary hidden md:flex">
+      <footer className="w-full max-w-[1200px] mx-auto px-8 py-8 hidden md:flex justify-between items-center text-sm font-medium text-text-secondary">
         <div className="flex items-center gap-1">
           <span>&copy; 2026 - Harish Tirunahari</span>
         </div>
@@ -288,9 +325,6 @@ function App() {
           <span>Have a nice {new Date().toLocaleDateString(undefined, { weekday: 'long' })} :)</span>
         </div>
       </footer>
-
-
-
 
       {/* Project Modal */}
       <AnimatePresence>
