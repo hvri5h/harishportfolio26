@@ -2,7 +2,10 @@ import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform, MotionValue } from 'framer-motion';
 import {
   X as XIcon,
+  Check,
+  Copy,
 } from 'lucide-react';
+import Spline from '@splinetool/react-spline';
 import { Navigation } from './components/Navigation';
 import LogoCloud from './components/LogoCloud';
 import WhatIDo from './components/WhatIDo';
@@ -11,7 +14,7 @@ import Testimonials from './components/Testimonials';
 import AboutMe from './components/AboutMe';
 import { projects, type Project } from './data/portfolio';
 
-import memoji from './assets/memoji.png';
+
 
 
 
@@ -84,6 +87,13 @@ function App() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [activeSection, setActiveSection] = useState('work');
   const size = useWindowSize();
+  const [isCopied, setIsCopied] = useState(false);
+
+  const handleCopyEmail = () => {
+    navigator.clipboard.writeText('hello@hari.sh');
+    setIsCopied(true);
+    setTimeout(() => setIsCopied(false), 2000);
+  };
 
   const handleSectionChange = useCallback((section: string) => {
     setActiveSection(section);
@@ -175,7 +185,36 @@ function App() {
       <Navigation activeSection={activeSection} onSectionChange={handleSectionChange} />
 
       {/* Hero Section */}
-      <header className="h-auto min-h-[90vh] flex items-start justify-center pt-[200px] pb-16 max-sm:h-[calc(100vh-60px)] max-sm:px-8">
+      <header className="relative h-auto min-h-[90vh] flex items-start justify-center pt-[200px] pb-16 max-sm:h-[calc(100vh-60px)] max-sm:px-8">
+        {/* Header Content - Top Frame */}
+        <div className="absolute top-8 left-0 right-0 max-w-[1200px] mx-auto px-8 hidden md:flex justify-between items-center h-[54px] text-sm font-medium text-text-secondary pointer-events-none">
+          <div className="pointer-events-auto flex flex-col items-start gap-1">
+            <div className="flex items-center gap-2">
+              <div className="flex items-center justify-center w-[14px]">
+                <div className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                </div>
+              </div>
+              <span>Available for work Feb 2026</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={handleCopyEmail}
+                className="flex items-center justify-center w-[14px] text-text-secondary hover:text-text transition-colors focus:outline-none"
+                title="Copy email address"
+              >
+                {isCopied ? <Check size={14} /> : <Copy size={14} />}
+              </button>
+              <a href="mailto:hello@hari.sh" className="hover:text-text transition-colors">hello@hari.sh</a>
+            </div>
+          </div>
+          <div className="pointer-events-auto flex flex-col items-end gap-1">
+            <span>Melbourne, Australia</span>
+            <span>{new Date().toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' }).replace(/,/g, '')}</span>
+          </div>
+        </div>
+
         <div className="max-w-[1200px] mx-auto px-8 w-full">
           <motion.div
             className="max-w-[900px] mx-auto flex flex-col items-center text-center"
@@ -183,10 +222,12 @@ function App() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, ease: [0.25, 0.1, 0.25, 1] }}
           >
-            <div className="mb-6 drop-shadow-xl max-md:w-[200px]">
-              <img src={memoji} alt="Harish" className="w-[250px] h-auto" />
+            <div className="mb-6 h-[250px] w-[250px] max-md:h-[200px] max-md:w-[200px] overflow-visible">
+              <div className="h-[350px] w-[320px] -translate-x-[35px] -translate-y-[60px] max-md:h-[260px] max-md:w-[260px] max-md:-translate-x-[30px] max-md:-translate-y-[30px]">
+                <Spline scene="https://prod.spline.design/zy5bc6-NJcpDwB1Y/scene.splinecode" onWheel={(e) => e.stopPropagation()} />
+              </div>
             </div>
-            <h1 className="font-display font-black text-[6rem] tracking-[-0.03em] leading-none text-text mb-4 max-md:text-[clamp(3rem,10vw,4.5rem)] max-sm:text-[1.75rem]">
+            <h1 className="font-display font-black text-[6rem] tracking-[-0.03em] leading-none text-text mb-4 max-md:text-[clamp(3rem,10vw,4.5rem)] max-sm:text-[1.75rem] z-10">
               Harish
             </h1>
             <p className="font-display font-medium text-2xl text-text-secondary leading-[1.4] max-w-[450px] max-md:text-xl">
@@ -237,6 +278,17 @@ function App() {
 
       {/* About Me Section */}
       <AboutMe />
+
+      {/* Footer */}
+      <footer className="w-full max-w-[1200px] mx-auto px-8 py-8 flex justify-between items-center text-sm font-medium text-text-secondary hidden md:flex">
+        <div className="flex items-center gap-1">
+          <span>&copy; 2026 - Harish Tirunahari</span>
+        </div>
+        <div className="flex items-center gap-1">
+          <span>Have a nice {new Date().toLocaleDateString('en-US', { weekday: 'long' })} :)</span>
+        </div>
+      </footer>
+
 
 
 
