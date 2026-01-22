@@ -24,7 +24,7 @@ const stackItems = [
 
 const WhatIDo = () => {
     return (
-        <section className="py-24 bg-bg relative z-30">
+        <section id="about" className="py-24 bg-bg relative z-30">
             <div className="max-w-[1200px] mx-auto px-8 max-sm:px-6">
 
                 {/* Header content */}

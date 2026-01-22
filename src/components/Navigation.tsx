@@ -18,7 +18,7 @@ export function Navigation({ activeSection, onSectionChange }: NavigationProps) 
   useEffect(() => {
     const options = {
       root: null,
-      rootMargin: '-40% 0px -40% 0px',
+      rootMargin: '-40% 0px -20% 0px',
       threshold: 0,
     };
 

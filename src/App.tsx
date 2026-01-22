@@ -285,7 +285,7 @@ function App() {
           <span>&copy; 2026 - Harish Tirunahari</span>
         </div>
         <div className="flex items-center gap-1">
-          <span>Have a nice {new Date().toLocaleDateString('en-US', { weekday: 'long' })} :)</span>
+          <span>Have a nice {new Date().toLocaleDateString(undefined, { weekday: 'long' })} :)</span>
         </div>
       </footer>
 

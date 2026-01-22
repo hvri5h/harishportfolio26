@@ -3,7 +3,7 @@ import avatar from '../assets/avatar.jpg';
 
 const AboutMe = () => {
     return (
-        <section className="py-20 bg-bg relative z-30">
+        <section id="contact" className="pt-20 pb-48 bg-bg relative z-30">
             <div className="max-w-[800px] mx-auto px-6 text-center">
                 <motion.h2
                     className="font-display font-black text-[60px] leading-[1.1] tracking-[-0.01em] text-text mb-12 max-md:text-5xl max-sm:text-4xl"
