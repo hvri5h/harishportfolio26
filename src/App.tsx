@@ -68,9 +68,18 @@ const Column = ({
                 />
               )}
             </div>
-            <div className="flex flex-col px-2 pb-2 gap-1">
-              <h3 className="font-display font-semibold text-lg text-black/90 leading-tight">{project.title}</h3>
-              <p className="text-sm text-text-secondary font-medium">{project.category}</p>
+            <div className="flex items-center gap-3 px-2 pb-2 pt-1">
+              <div className="w-10 h-10 rounded-full bg-gray-200 overflow-hidden shrink-0 border border-black/5">
+                <img
+                  src={project.logo || `https://ui-avatars.com/api/?name=${encodeURIComponent(project.title)}&background=random&color=fff&size=64`}
+                  alt={project.title}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="flex flex-col">
+                <h3 className="font-display font-semibold text-base text-black/90 leading-tight">{project.title}</h3>
+                <p className="text-xs text-text-secondary font-medium">{project.category}</p>
+              </div>
             </div>
           </div>
         </motion.div>

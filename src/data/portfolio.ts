@@ -26,14 +26,14 @@ import audiobook from '../assets/work/audiobook.png';
 import superbnb from '../assets/work/superbnb.png';
 import tpb from '../assets/work/tpb.png';
 import nearmap from '../assets/work/nearmap.png';
-import qantas from '../assets/work/qantas.png';
+import qantas from '../assets/work/qantas-shopping.png';
 import superbnbapp from '../assets/work/superbnbapp.png';
 import timeblockapp from '../assets/work/timeblockapp.png';
 import mfp from '../assets/work/mfp.png';
 import caltrava from '../assets/work/caltrava.png';
 import wooflysplash from '../assets/work/wooflysplash.png';
 import reachout from '../assets/work/reachout.png';
-import canon from '../assets/work/canon.png';
+import canon from '../assets/work/canon-2.png';
 
 export interface Project {
   id: string;
@@ -46,6 +46,7 @@ export interface Project {
   type: 'image' | 'video'; // New field
   isMobile: boolean; // New field to guide layout
   year: string;
+  logo?: string; // Optional field for project logo
 }
 
 export interface Client {
@@ -68,7 +69,8 @@ const createProject = (
   isMobile: boolean,
   type: 'image' | 'video',
   title: string,
-  category: string
+  category: string,
+  logo?: string
 ): Project => ({
   id,
   title,
@@ -79,7 +81,8 @@ const createProject = (
   image: src,
   type,
   isMobile,
-  year: '2025'
+  year: '2025',
+  logo
 });
 
 export const projects: Project[] = [
@@ -88,18 +91,21 @@ export const projects: Project[] = [
   createProject('mob-4', lj, true, 'image', 'LJ Hooker', 'iOS App'),
   createProject('mob-2', watercoola, true, 'image', 'Watercoola', 'iOS App'),
   createProject('mob-3', audiobook, true, 'image', 'Audiobook', 'iOS App'),
-  createProject('mob-5', timeblockapp, true, 'image', 'Timeblock', 'iOS App'),
+  // createProject('mob-5', timeblockapp, true, 'image', 'Timeblock', 'iOS App'),
+
 
   // Desktop Projects (Other Columns)
   createProject('desk-1', superbnb, false, 'image', 'Superbnb', 'Web Design'),
   createProject('desk-2', tpb, false, 'image', 'TPB', 'Web App'),
   createProject('desk-3', nearmap, false, 'image', 'Nearmap', 'Web App'),
   createProject('desk-4', qantas, false, 'image', 'Qantas', 'Web App'),
-  createProject('desk-5', superbnbapp, false, 'image', 'Superbnb', 'Web App'),
+  // createProject('desk-5', superbnbapp, false, 'image', 'Superbnb', 'Web App'),
   createProject('desk-6', canon, false, 'image', 'Canon', 'Web App'),
-  createProject('desk-7', mfp, false, 'image', 'MyFitnessPal (Redesign)', 'Web Design'),
-  createProject('desk-8', caltrava, false, 'image', 'Caltrava', 'Web App'),
-  createProject('desk-9', reachout, false, 'image', 'Reachout', 'Web App'),
+  // createProject('desk-6', canon, false, 'image', 'Canon', 'Web App'),
+
+  // createProject('desk-7', mfp, false, 'image', 'MyFitnessPal (Redesign)', 'Web Design'),
+  // createProject('desk-8', caltrava, false, 'image', 'Caltrava', 'Web App'),
+  createProject('desk-6', reachout, false, 'image', 'Reachout', 'Web App'),
 ];
 
 export const clients: Client[] = [
