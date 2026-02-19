@@ -18,56 +18,60 @@ import { projects, type Project } from './data/portfolio';
 
 
 
-const Column = ({ 
-  projects, 
-  scrollY, 
-  offset, 
+const Column = ({
+  projects,
+  scrollY,
+  offset,
   isNarrow,
-  setSelectedProject 
-}: { 
-  projects: Project[], 
-  scrollY: MotionValue<number>, 
-  offset: number, 
+  setSelectedProject
+}: {
+  projects: Project[],
+  scrollY: MotionValue<number>,
+  offset: number,
   isNarrow: boolean,
-  setSelectedProject: (p: Project) => void 
+  setSelectedProject: (p: Project) => void
 }) => {
   const y = useTransform(scrollY, [0, 3000], [0, offset]);
 
   return (
-    <motion.div 
-      style={{ y }} 
+    <motion.div
+      style={{ y }}
       className={`flex flex-col gap-3 min-w-0 ${isNarrow ? 'flex-[0.6]' : 'flex-1'}`}
     >
       {projects.map((project) => (
         <motion.div
           key={project.id}
-          className="relative w-full rounded-xl overflow-hidden cursor-pointer bg-[#1a1a1a] transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:z-10 group"
+          className="relative w-full cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:z-10 group"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-50px' }}
           transition={{ duration: 0.5 }}
           onClick={() => setSelectedProject(project)}
         >
-          {project.type === 'video' ? (
-            <video
-              src={project.image}
-              className="w-full h-auto block object-cover transition-transform duration-500 group-hover:scale-[1.02]"
-              autoPlay
-              loop
-              muted
-              playsInline
-            />
-          ) : (
-            <img
-              src={project.image}
-              alt={project.title}
-              className="w-full h-auto block object-cover transition-transform duration-500 group-hover:scale-[1.02]"
-              loading="lazy"
-            />
-          )}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 transition-opacity duration-300 flex flex-col justify-end p-4 group-hover:opacity-100">
-            <span className="text-[0.625rem] uppercase tracking-[0.08em] text-white/60 mb-1">{project.category}</span>
-            <h3 className="text-sm font-medium text-white">{project.title}</h3>
+          <div className="flex flex-col gap-3 p-3 bg-[#f0f0f0]/50 backdrop-blur-[20px] backdrop-saturate-[180%] border border-white/50 rounded-3xl shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1),0_2px_4px_-1px_rgba(0,0,0,0.06),0_0_0_1px_rgba(0,0,0,0.05)] transition-all duration-base hover:bg-[#f5f5f5]/80 hover:shadow-[0_10px_15px_-3px_rgba(0,0,0,0.1),0_4px_6px_-2px_rgba(0,0,0,0.05),0_0_0_1px_rgba(0,0,0,0.05)]">
+            <div className="rounded-2xl overflow-hidden relative w-full bg-black/5">
+              {project.type === 'video' ? (
+                <video
+                  src={project.image}
+                  className="w-full h-auto block object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                />
+              ) : (
+                <img
+                  src={project.image}
+                  alt={project.title}
+                  className="w-full h-auto block object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+                  loading="lazy"
+                />
+              )}
+            </div>
+            <div className="flex flex-col px-2 pb-2 gap-1">
+              <h3 className="font-display font-semibold text-lg text-black/90 leading-tight">{project.title}</h3>
+              <p className="text-sm text-text-secondary font-medium">{project.category}</p>
+            </div>
           </div>
         </motion.div>
       ))}
@@ -158,7 +162,7 @@ function App() {
         // Find the shortest column
         let minH = Infinity;
         let targetCol = 0;
-        
+
         for (let i = 0; i < numColumns; i++) {
           if (colHeights[i] < minH) {
             minH = colHeights[i];
@@ -186,7 +190,7 @@ function App() {
       const targetIndices = narrowIndices.length > 0 ? narrowIndices : wideIndices;
       let minH = Infinity;
       let targetCol = targetIndices[0];
-      
+
       targetIndices.forEach(idx => {
         if (colHeights[idx] < minH) {
           minH = colHeights[idx];
@@ -202,7 +206,7 @@ function App() {
     desktopProjects.forEach(project => {
       let minH = Infinity;
       let targetCol = wideIndices[0];
-      
+
       wideIndices.forEach(idx => {
         if (colHeights[idx] < minH) {
           minH = colHeights[idx];
@@ -277,8 +281,10 @@ function App() {
         </div>
       </header>
 
+
+
       {/* Work Section */}
-      <section id="work" className="pt-0 pb-32 mt-0 relative mb-[-200px] xl:mb-[-500px]">
+      <section id="work" className="pt-0 pb-32 mt-0 relative">
         <div className="max-w-[1800px] mx-auto px-3 md:px-4">
           <div className="flex gap-3 items-start justify-center w-full">
             {columns().map((colProjects, colIndex) => {
@@ -298,7 +304,6 @@ function App() {
             })}
           </div>
         </div>
-        <div className="absolute bottom-[200px] xl:bottom-[500px] left-0 w-full h-[500px] bg-gradient-to-t from-[var(--color-bg)] to-transparent pointer-events-none z-10" />
       </section>
 
       {/* Clients Section */}
@@ -371,7 +376,7 @@ function App() {
           </motion.div>
         )}
       </AnimatePresence>
-    </div>
+    </div >
   );
 }
 
