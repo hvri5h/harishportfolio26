@@ -20,18 +20,18 @@
 // import vid_m8Z1 from '../assets/test/m8Z1Zg8JHiuWfp5GqAGZylPuYCQ.mp4';
 // import vid_vkTX from '../assets/test/vkTXRpatm4bojSpTLqmk0YWz8.mp4';
 
-import lj from '../assets/work/lj.png';
-import watercoola from '../assets/work/watercoola.png';
-import audiobook from '../assets/work/audiobook.png';
-import superbnb from '../assets/work/superbnb.png';
-import tpb from '../assets/work/tpb.png';
+import lj from '../assets/work/lj-2.png';
+import watercoola from '../assets/work/watercoola-2.png';
+import audiobook from '../assets/work/audiobook-2.png';
+import superbnb from '../assets/work/superbnb-2.png';
+import tpb from '../assets/work/tpb-3.png';
 import nearmap from '../assets/work/nearmap.png';
 import qantas from '../assets/work/qantas-shopping.png';
 import superbnbapp from '../assets/work/superbnbapp.png';
 import timeblockapp from '../assets/work/timeblockapp.png';
 import mfp from '../assets/work/mfp.png';
 import caltrava from '../assets/work/caltrava.png';
-import wooflysplash from '../assets/work/wooflysplash.png';
+import wooflysplash from '../assets/work/woofly-2.png';
 import reachout from '../assets/work/reachout.png';
 import canon from '../assets/work/canon-2.png';
 
@@ -47,6 +47,7 @@ export interface Project {
   isMobile: boolean; // New field to guide layout
   year: string;
   logo?: string; // Optional field for project logo
+  services?: string[];
 }
 
 export interface Client {
@@ -69,43 +70,36 @@ const createProject = (
   isMobile: boolean,
   type: 'image' | 'video',
   title: string,
-  category: string,
-  logo?: string
+  description: string,
+  services: string[]
 ): Project => ({
   id,
   title,
-  category,
-  description: 'A showcased project demonstrating design and engineering capabilities.',
+  category: services[0] || 'Design',
+  description,
+  services,
   tags: ['Design', 'Development'],
   color: '#000000',
   image: src,
   type,
   isMobile,
   year: '2025',
-  logo
 });
 
 export const projects: Project[] = [
   // Mobile Projects (Column 1)
-  createProject('mob-1', wooflysplash, true, 'image', 'Woofly', 'iOS App'),
-  createProject('mob-4', lj, true, 'image', 'LJ Hooker', 'iOS App'),
-  createProject('mob-2', watercoola, true, 'image', 'Watercoola', 'iOS App'),
-  createProject('mob-3', audiobook, true, 'image', 'Audiobook', 'iOS App'),
-  // createProject('mob-5', timeblockapp, true, 'image', 'Timeblock', 'iOS App'),
-
+  createProject('mob-1', wooflysplash, true, 'image', 'Woofly', 'Dog walking built for modern pet owners', ['product design', 'branding']),
+  createProject('mob-4', lj, true, 'image', 'LJ Hooker', 'Real estate property management app', ['product design']),
+  createProject('mob-2', watercoola, true, 'image', 'Watercoola', 'Connecting remote teams asynchronously', ['product design', 'branding']),
+  createProject('mob-3', audiobook, true, 'image', 'Audiobook app concept', 'Listen to your favorite books on the go', ['product design']),
 
   // Desktop Projects (Other Columns)
-  createProject('desk-1', superbnb, false, 'image', 'Superbnb', 'Web Design'),
-  createProject('desk-2', tpb, false, 'image', 'TPB', 'Web App'),
-  createProject('desk-3', nearmap, false, 'image', 'Nearmap', 'Web App'),
-  createProject('desk-4', qantas, false, 'image', 'Qantas', 'Web App'),
-  // createProject('desk-5', superbnbapp, false, 'image', 'Superbnb', 'Web App'),
-  createProject('desk-6', canon, false, 'image', 'Canon', 'Web App'),
-  // createProject('desk-6', canon, false, 'image', 'Canon', 'Web App'),
-
-  // createProject('desk-7', mfp, false, 'image', 'MyFitnessPal (Redesign)', 'Web Design'),
-  // createProject('desk-8', caltrava, false, 'image', 'Caltrava', 'Web App'),
-  createProject('desk-6', reachout, false, 'image', 'Reachout', 'Web App'),
+  createProject('desk-1', superbnb, false, 'image', 'Superbnb', 'Next generation of property rentals', ['website design', 'product design']),
+  createProject('desk-2', tpb, false, 'image', 'TPB', 'Modern banking for the digital age', ['product design', 'frontend engineering']),
+  createProject('desk-3', nearmap, false, 'image', 'Nearmap', 'Geospatial intelligence platform for aerial mapping', ['frontend engineering']),
+  createProject('desk-4', qantas, false, 'image', 'Qantas', 'Loyalty program shopping portal', ['fullstack engineering']),
+  createProject('desk-6', canon, false, 'image', 'Canon', 'Photography gear rental platform', ['frontend engineering']),
+  createProject('desk-7', reachout, false, 'image', 'Reachout', 'Mental health support network', ['fullstack engineering']),
 ];
 
 export const clients: Client[] = [

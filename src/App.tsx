@@ -14,10 +14,6 @@ import Testimonials from './components/Testimonials';
 import AboutMe from './components/AboutMe';
 import { projects, type Project } from './data/portfolio';
 
-
-
-
-
 const Column = ({
   projects,
   scrollY,
@@ -48,8 +44,8 @@ const Column = ({
           transition={{ duration: 0.5 }}
           onClick={() => setSelectedProject(project)}
         >
-          <div className="flex flex-col gap-3 p-3 bg-[#f0f0f0]/50 backdrop-blur-[20px] backdrop-saturate-[180%] border border-white/50 rounded-3xl shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1),0_2px_4px_-1px_rgba(0,0,0,0.06),0_0_0_1px_rgba(0,0,0,0.05)] transition-all duration-base hover:bg-[#f5f5f5]/80 hover:shadow-[0_10px_15px_-3px_rgba(0,0,0,0.1),0_4px_6px_-2px_rgba(0,0,0,0.05),0_0_0_1px_rgba(0,0,0,0.05)]">
-            <div className="rounded-2xl overflow-hidden relative w-full bg-black/5">
+          <div className="flex flex-col gap-3 p-3 bg-[#f0f0f0]/50 backdrop-blur-[20px] backdrop-saturate-[180%] border border-white/50 rounded-[48px] [corner-shape:squircle] shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1),0_2px_4px_-1px_rgba(0,0,0,0.06),0_0_0_1px_rgba(0,0,0,0.05)] transition-all duration-base hover:bg-[#f5f5f5]/80 hover:shadow-[0_10px_15px_-3px_rgba(0,0,0,0.1),0_4px_6px_-2px_rgba(0,0,0,0.05),0_0_0_1px_rgba(0,0,0,0.05)]">
+            <div className="rounded-[36px] [corner-shape:squircle] overflow-hidden relative w-full bg-black/5">
               {project.type === 'video' ? (
                 <video
                   src={project.image}
@@ -68,18 +64,13 @@ const Column = ({
                 />
               )}
             </div>
-            <div className="flex items-center gap-3 px-2 pb-2 pt-1">
-              <div className="w-10 h-10 rounded-full bg-gray-200 overflow-hidden shrink-0 border border-black/5">
-                <img
-                  src={project.logo || `https://ui-avatars.com/api/?name=${encodeURIComponent(project.title)}&background=random&color=fff&size=64`}
-                  alt={project.title}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div className="flex flex-col">
-                <h3 className="font-display font-semibold text-base text-black/90 leading-tight">{project.title}</h3>
-                <p className="text-xs text-text-secondary font-medium">{project.category}</p>
-              </div>
+            <div className="flex flex-col gap-0.5 px-2 pb-2 pt-2">
+              <h3 className="font-display font-semibold text-base text-black/90 leading-tight">{project.title}</h3>
+              {project.services && project.services.length > 0 && (
+                <p className="text-[14px] text-text-secondary leading-snug">
+                  {project.services.join(', ')}
+                </p>
+              )}
             </div>
           </div>
         </motion.div>
