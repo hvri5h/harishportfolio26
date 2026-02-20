@@ -4,6 +4,7 @@ import {
   X as XIcon,
   Check,
   Copy,
+  ArrowUpRight,
 } from 'lucide-react';
 import Spline from '@splinetool/react-spline';
 import { Navigation } from './components/Navigation';
@@ -107,6 +108,36 @@ function App() {
   const [activeSection, setActiveSection] = useState('work');
   const size = useWindowSize();
   const [isCopied, setIsCopied] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    if (!isLoading) return;
+
+    let currentProgress = 0;
+    const interval = setInterval(() => {
+      currentProgress += (99 - currentProgress) * 0.05;
+      setProgress(Math.round(currentProgress));
+    }, 50);
+
+    // Fallback if spline never loads
+    const timeout = setTimeout(() => {
+      setProgress(100);
+      setTimeout(() => setIsLoading(false), 500);
+    }, 8000);
+
+    return () => {
+      clearInterval(interval);
+      clearTimeout(timeout);
+    };
+  }, [isLoading]);
+
+  const handleSplineLoad = useCallback(() => {
+    setProgress(100);
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 600); // display 100% for a brief moment before fading out
+  }, []);
 
   const handleCopyEmail = () => {
     navigator.clipboard.writeText('hello@hari.sh');
@@ -119,7 +150,7 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (selectedProject) {
+    if (isLoading) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
@@ -127,7 +158,7 @@ function App() {
     return () => {
       document.body.style.overflow = '';
     };
-  }, [selectedProject]);
+  }, [isLoading]);
 
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
@@ -227,6 +258,21 @@ function App() {
 
   return (
     <div className="min-h-screen">
+      <AnimatePresence>
+        {isLoading && (
+          <motion.div
+            initial={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.8, ease: "easeInOut" }}
+            className="fixed inset-0 z-[9999] bg-bg flex flex-col items-center justify-center"
+          >
+            <div className="relative font-display font-black text-7xl md:text-9xl text-text tracking-tighter">
+              {progress}<span className="inline-block ml-2 text-4xl md:text-6xl text-text">%</span>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <Navigation activeSection={activeSection} onSectionChange={handleSectionChange} />
 
       {/* Hero Section */}
@@ -241,7 +287,7 @@ function App() {
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
                 </div>
               </div>
-              <span>Available for work Feb 2026</span>
+              <span>Available for work Mar 2026</span>
             </div>
             <div className="flex items-center gap-2">
               <button
@@ -269,7 +315,7 @@ function App() {
           >
             <div className="mb-6 h-[250px] w-[250px] max-md:h-[200px] max-md:w-[200px] overflow-visible">
               <div className="h-[350px] w-[320px] -translate-x-[35px] -translate-y-[60px] max-md:h-[260px] max-md:w-[260px] max-md:-translate-x-[30px] max-md:-translate-y-[30px]">
-                <Spline scene="https://prod.spline.design/zy5bc6-NJcpDwB1Y/scene.splinecode" />
+                <Spline scene="https://prod.spline.design/zy5bc6-NJcpDwB1Y/scene.splinecode" onLoad={handleSplineLoad} />
               </div>
             </div>
             <h1 className="font-display font-black text-[6rem] tracking-[-0.03em] leading-none text-text mb-4 max-md:text-[clamp(3rem,10vw,4.5rem)] max-sm:text-[1.75rem] z-10">
@@ -334,49 +380,119 @@ function App() {
       {/* Project Modal */}
       <AnimatePresence>
         {selectedProject && (
-          <motion.div
-            className="fixed inset-0 bg-black/85 backdrop-blur-md z-[1000] flex items-center justify-center p-8"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={() => setSelectedProject(null)}
-          >
+          <div className="fixed inset-0 z-[1000] pointer-events-none">
+            {/* Backdrop */}
             <motion.div
-              className="relative max-w-[90vw] max-h-[90vh] flex items-center justify-center"
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-              onClick={(e) => e.stopPropagation()}
+              className="absolute inset-0 bg-[#0f0f11]/90 pointer-events-auto"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              style={{ willChange: 'opacity' }}
+            />
+
+            {/* Scrollable Container */}
+            <div
+              className="absolute inset-0 overflow-y-auto w-full pointer-events-auto overscroll-contain"
+              onClick={() => setSelectedProject(null)}
             >
-              <button
-                className="absolute top-4 right-4 w-9 h-9 flex items-center justify-center rounded-full bg-white/90 text-text transition-all duration-fast z-10 shadow-md hover:bg-white hover:scale-105"
-                onClick={() => setSelectedProject(null)}
-                aria-label="Close modal"
-              >
-                <XIcon size={20} />
-              </button>
-              {selectedProject.type === 'video' ? (
-                <video
-                  src={selectedProject.image}
-                  className="max-w-full max-h-[90vh] w-auto h-auto object-contain rounded-xl"
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                />
-              ) : (
-                <img
-                  src={selectedProject.image}
-                  alt={selectedProject.title}
-                  className="max-w-full max-h-[90vh] w-auto h-auto object-contain rounded-xl"
-                />
-              )}
-            </motion.div>
-          </motion.div>
+              <div className="min-h-full flex flex-col justify-end md:justify-center items-center w-full relative z-10 px-0 pt-16 md:px-8 md:py-16">
+                {/* Modal Container */}
+                <motion.div
+                  className="w-full max-w-[1120px] mt-auto md:m-auto pointer-events-auto relative overflow-hidden bg-white rounded-t-[32px] md:rounded-[32px] shadow-2xl flex flex-col"
+                  initial={{ y: "100%", opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  exit={{ y: "100%", opacity: 0 }}
+                  transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+                  onClick={(e) => e.stopPropagation()}
+                  style={{ willChange: 'transform, opacity' }}
+                >
+                  {/* Media Content - Full Bleed Top Image/Video */}
+                  <div className="w-full relative bg-black/5 flex items-center justify-center">
+                    {selectedProject.type === 'video' ? (
+                      <video
+                        src={selectedProject.coverImage || selectedProject.image}
+                        className="w-full h-auto aspect-[1120/630] object-cover block"
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                      />
+                    ) : (
+                      <img
+                        src={selectedProject.coverImage || selectedProject.image}
+                        alt={selectedProject.title}
+                        className="w-full h-auto aspect-[1120/630] object-cover block"
+                      />
+                    )}
+                    {/* Close Button overlaying top right of image */}
+                    <button
+                      className="absolute top-4 right-4 md:top-6 md:right-6 w-10 h-10 flex items-center justify-center rounded-full bg-white/80 text-black backdrop-blur-md transition-all duration-300 hover:scale-105 hover:bg-white z-50 shadow-sm"
+                      onClick={() => setSelectedProject(null)}
+                      aria-label="Close modal"
+                    >
+                      <XIcon size={20} />
+                    </button>
+                  </div>
+
+                  {/* Detail Content Block */}
+                  <div className="w-full flex flex-col md:flex-row gap-10 md:gap-16 p-8 md:p-12 lg:p-16">
+                    {/* Left Column (Meta & Link) */}
+                    <div className="w-full md:w-[200px] lg:w-[250px] flex-shrink-0 flex flex-col gap-8 md:gap-10">
+                      <div className="flex flex-col gap-6">
+                        <div className="flex flex-col gap-1.5">
+                          <span className="text-[13px] font-bold text-text-secondary">Role</span>
+                          <span className="text-[15px] text-text">{selectedProject.role}</span>
+                        </div>
+                        <div className="flex flex-col gap-1.5">
+                          <span className="text-[13px] font-bold text-text-secondary">Client</span>
+                          <span className="text-[15px] text-text">{selectedProject.client}</span>
+                        </div>
+                      </div>
+
+                      <a href={selectedProject.liveLink || "#"} target="_blank" rel="noopener noreferrer"
+                        className="inline-flex items-center justify-between gap-3 px-5 py-2.5 bg-white border border-black/10 text-black font-medium text-[14px] rounded-full transition-all duration-300 hover:scale-[1.02] hover:bg-black/5 shadow-sm self-start">
+                        Live link <ArrowUpRight size={16} />
+                      </a>
+                    </div>
+
+                    {/* Right Column (Title & Desc) */}
+                    <div className="flex-grow flex flex-col items-start min-w-0">
+                      <h2 className="font-display font-bold text-3xl md:text-4xl lg:text-[2.5rem] tracking-tight text-text mb-1 md:mb-2 leading-tight">
+                        {selectedProject.title}
+                      </h2>
+                      <h3 className="text-xl md:text-2xl text-text-secondary mb-8 md:mb-10 leading-snug">
+                        {selectedProject.subtitle}
+                      </h3>
+
+                      <div className="text-[15px] md:text-base text-text leading-relaxed whitespace-pre-line max-w-[650px]">
+                        {selectedProject.description}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Sequential Content Images */}
+                  {selectedProject.contentImages && selectedProject.contentImages.length > 0 && (
+                    <div className="w-full flex flex-col gap-6 md:gap-10 px-6 md:px-12 lg:px-16 pb-12 md:pb-16 lg:pb-20">
+                      {selectedProject.contentImages.map((img, index) => (
+                        <div key={index} className="w-full rounded-[16px] md:rounded-[24px] overflow-hidden bg-black/5 flex items-center justify-center">
+                          <img
+                            src={img}
+                            alt={`${selectedProject.title} workflow ${index + 1}`}
+                            className="w-full h-auto object-contain block"
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                </motion.div>
+              </div>
+            </div>
+          </div>
         )}
       </AnimatePresence>
-    </div >
+    </div>
   );
 }
 

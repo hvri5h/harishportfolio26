@@ -27,11 +27,15 @@ import superbnb from '../assets/work/superbnb-2.png';
 import tpb from '../assets/work/tpb-3.png';
 import nearmap from '../assets/work/nearmap.png';
 import qantas from '../assets/work/qantas-shopping.png';
-import superbnbapp from '../assets/work/superbnbapp.png';
-import timeblockapp from '../assets/work/timeblockapp.png';
-import mfp from '../assets/work/mfp.png';
-import caltrava from '../assets/work/caltrava.png';
+// import superbnbapp from '../assets/work/superbnbapp.png';
+// import timeblockapp from '../assets/work/timeblockapp.png';
+// import mfp from '../assets/work/mfp.png';
+// import caltrava from '../assets/work/caltrava.png';
 import wooflysplash from '../assets/work/woofly-2.png';
+import woofly1 from '../assets/work/woofly/1.png';
+import woofly2 from '../assets/work/woofly/2.png';
+import woofly3 from '../assets/work/woofly/3.png';
+import woofly4 from '../assets/work/woofly/4.png';
 import reachout from '../assets/work/reachout.png';
 import canon from '../assets/work/canon-2.png';
 
@@ -48,6 +52,15 @@ export interface Project {
   year: string;
   logo?: string; // Optional field for project logo
   services?: string[];
+  timeline?: string;
+  role?: string;
+  team?: string;
+  collaborators?: string;
+  client?: string;
+  liveLink?: string;
+  subtitle?: string;
+  coverImage?: string;
+  contentImages?: string[];
 }
 
 export interface Client {
@@ -71,7 +84,8 @@ const createProject = (
   type: 'image' | 'video',
   title: string,
   description: string,
-  services: string[]
+  services: string[],
+  overrides?: Partial<Project>
 ): Project => ({
   id,
   title,
@@ -83,23 +97,95 @@ const createProject = (
   image: src,
   type,
   isMobile,
-  year: '2025',
+  year: '2024',
+  timeline: '3 Months',
+  role: 'Lead Designer',
+  team: '2 Engineers, 1 Product Manager',
+  collaborators: 'Alex Rivera, Taylor Swift',
+  client: 'Confidential Client',
+  liveLink: 'https://example.com',
+  subtitle: 'A closer look at the process and outcomes of this project.',
+  ...overrides
 });
 
 export const projects: Project[] = [
   // Mobile Projects (Column 1)
-  createProject('mob-1', wooflysplash, true, 'image', 'Woofly', 'Dog walking built for modern pet owners', ['product design', 'branding']),
-  createProject('mob-4', lj, true, 'image', 'LJ Hooker', 'Real estate property management app', ['product design']),
-  createProject('mob-2', watercoola, true, 'image', 'Watercoola', 'Connecting remote teams asynchronously', ['product design', 'branding']),
-  createProject('mob-3', audiobook, true, 'image', 'Audiobook app concept', 'Listen to your favorite books on the go', ['product design']),
+  {
+    ...createProject('mob-1', wooflysplash, true, 'image', 'Woofly', 'A mobile app that helps dog owners find, vet, and book reliable walkers in their area, solving the trust problem that keeps people from handing over the leash.', ['product design', 'branding'], {
+      subtitle: 'Find trusted dog walkers nearby',
+      client: 'Dribbble Capstone Project',
+      team: 'Myself',
+      year: '2023',
+      role: 'UX/UI Designer',
+      timeline: '8 Weeks'
+    }),
+    coverImage: woofly1,
+    contentImages: [woofly2, woofly3, woofly4],
+  },
+  createProject('mob-4', lj, true, 'image', 'LJ Hooker', 'A mobile app that keeps property buyers in the loop with instant notifications on price changes, new listings, and auction updates.', ['product design'], {
+    subtitle: 'Real-time property updates for home buyers',
+    client: 'LJ Hooker',
+    team: '3 Engineers, 1 Designer, PM',
+    year: '2023',
+    role: 'Product Designer',
+    timeline: '4 Months'
+  }),
+  createProject('mob-2', watercoola, true, 'image', 'Watercoola', 'Connecting remote teams asynchronously through immersive virtual environments.', ['product design', 'branding'], {
+    client: 'Watercoola Inc.',
+    team: 'Myself, 2 Frontend Engineers',
+    year: '2024',
+    timeline: '6 Weeks'
+  }),
+  createProject('mob-3', audiobook, true, 'image', 'Audiobook app concept', 'Listen to your favorite books on the go with this modern, accessible player.', ['product design'], {
+    client: 'Personal Project',
+    team: 'Myself',
+    year: '2025',
+    timeline: '2 Weeks'
+  }),
 
   // Desktop Projects (Other Columns)
-  createProject('desk-1', superbnb, false, 'image', 'Superbnb', 'Next generation of property rentals', ['website design', 'product design']),
-  createProject('desk-2', tpb, false, 'image', 'TPB', 'Modern banking for the digital age', ['product design', 'frontend engineering']),
-  createProject('desk-3', nearmap, false, 'image', 'Nearmap', 'Geospatial intelligence platform for aerial mapping', ['frontend engineering']),
-  createProject('desk-4', qantas, false, 'image', 'Qantas', 'Loyalty program shopping portal', ['fullstack engineering']),
-  createProject('desk-6', canon, false, 'image', 'Canon', 'Photography gear rental platform', ['frontend engineering']),
-  createProject('desk-7', reachout, false, 'image', 'Reachout', 'Mental health support network', ['fullstack engineering']),
+  createProject('desk-1', superbnb, false, 'image', 'Superbnb', "A tool for digital nomads to find the best Airbnbs by price and location, with AI-powered filters and deal alerts you won't find on Airbnb itself.", ['website design', 'product design'], {
+    subtitle: 'Smarter Airbnb search for digital nomads',
+    client: 'Solo founder',
+    team: 'Myself, Frontend Engineer',
+    year: '2024',
+    role: 'Lead Designer',
+    timeline: '3 Months'
+  }),
+  createProject('desk-2', tpb, false, 'image', 'The Professional Builder', 'A SaaS platform that gives builders a step-by-step system to start and run their own building company, with courses, task management, team tools, and compliance tracking.', ['product design', 'frontend engineering'], {
+    subtitle: 'Business training and management tools for builders',
+    client: 'The Professional Builder (TBP)',
+    team: 'Myself, Backend Engineer',
+    year: '2024',
+    role: 'Product Designer & Engineer',
+    timeline: '6 Months'
+  }),
+  createProject('desk-3', nearmap, false, 'image', 'Nearmap', "A brand refresh for Australia's leading aerial imagery company — new marketing website and a scalable design system to support future work.", ['frontend engineering'], {
+    subtitle: 'Brand refresh and marketing website',
+    client: 'Nearmap',
+    team: '3 Engineers, 2 Designers, PM',
+    year: '2024',
+    role: 'Frontend Engineer',
+    timeline: '5 Months'
+  }),
+  createProject('desk-4', qantas, false, 'image', 'Qantas', 'Loyalty program shopping portal', ['fullstack engineering'], {
+    client: 'Qantas Airways',
+    team: '5 Engineers, 2 Designers, 1 PM',
+    year: '2023',
+    timeline: '8 Months'
+  }),
+  createProject('desk-6', canon, false, 'image', 'Canon', 'Photography gear rental platform', ['frontend engineering'], {
+    client: 'Canon Australia',
+    team: '3 Engineers, 1 Designer',
+    year: '2024',
+    timeline: '4 Months'
+  }),
+  createProject('desk-7', reachout, false, 'image', 'Reachout', 'Mental health support network', ['fullstack engineering'], {
+    client: 'Reachout Org',
+    team: '4 Engineers, 2 Designers',
+    year: '2023',
+    timeline: '6 Months'
+  }),
 ];
 
 export const clients: Client[] = [
