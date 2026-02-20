@@ -113,10 +113,10 @@ export const projects: Project[] = [
   {
     ...createProject('mob-1', wooflysplash, true, 'image', 'Woofly', 'A mobile app that helps dog owners find, vet, and book reliable walkers in their area, solving the trust problem that keeps people from handing over the leash.', ['product design', 'branding'], {
       subtitle: 'Find trusted dog walkers nearby',
-      client: 'Dribbble Capstone Project',
+      client: 'Personal Project',
       team: 'Myself',
       year: '2023',
-      role: 'UX/UI Designer',
+      role: 'Product Designer',
       timeline: '8 Weeks'
     }),
     coverImage: woofly1,
@@ -171,18 +171,21 @@ export const projects: Project[] = [
   createProject('desk-4', qantas, false, 'image', 'Qantas', 'Loyalty program shopping portal', ['fullstack engineering'], {
     client: 'Qantas Airways',
     team: '5 Engineers, 2 Designers, 1 PM',
+    role: 'Fullstack Engineer',
     year: '2023',
     timeline: '8 Months'
   }),
   createProject('desk-6', canon, false, 'image', 'Canon', 'Photography gear rental platform', ['frontend engineering'], {
     client: 'Canon Australia',
     team: '3 Engineers, 1 Designer',
+    role: 'Frontend Engineer',
     year: '2024',
     timeline: '4 Months'
   }),
   createProject('desk-7', reachout, false, 'image', 'Reachout', 'Mental health support network', ['fullstack engineering'], {
     client: 'Reachout Org',
     team: '4 Engineers, 2 Designers',
+    role: 'Fullstack Engineer',
     year: '2023',
     timeline: '6 Months'
   }),
