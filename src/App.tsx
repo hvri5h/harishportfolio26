@@ -450,10 +450,12 @@ function App() {
                         </div>
                       </div>
 
-                      <a href={selectedProject.liveLink || "#"} target="_blank" rel="noopener noreferrer"
-                        className="inline-flex items-center justify-between gap-3 px-5 py-2.5 bg-white border border-black/10 text-black font-medium text-[14px] rounded-full transition-all duration-300 hover:scale-[1.02] hover:bg-black/5 shadow-sm self-start">
-                        Live link <ArrowUpRight size={16} />
-                      </a>
+                      {selectedProject.liveLink && (
+                        <a href={selectedProject.liveLink} target="_blank" rel="noopener noreferrer"
+                          className="inline-flex items-center justify-between gap-3 px-5 py-2.5 bg-white border border-black/10 text-black font-medium text-[14px] rounded-full transition-all duration-300 hover:scale-[1.02] hover:bg-black/5 shadow-sm self-start">
+                          Live link <ArrowUpRight size={16} />
+                        </a>
+                      )}
                     </div>
 
                     {/* Right Column (Title & Desc) */}

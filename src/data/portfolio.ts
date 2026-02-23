@@ -34,10 +34,12 @@ import qantas from '../assets/work/qantas-shopping.png';
 import wooflysplash from '../assets/work/woofly-2.png';
 import woofly1 from '../assets/work/woofly/1.png';
 import woofly2 from '../assets/work/woofly/2.png';
-import woofly3 from '../assets/work/woofly/3.png';
+import wooflyLogo from '../assets/work/woofly/3.png';
 import woofly4 from '../assets/work/woofly/4.png';
+import woofly5 from '../assets/work/woofly/5.png';
 import reachout from '../assets/work/reachout.png';
 import canon from '../assets/work/canon-2.png';
+import nearmapBanner from '../assets/work/nearmap/banner.png';
 
 export interface Project {
   id: string;
@@ -103,7 +105,6 @@ const createProject = (
   team: '2 Engineers, 1 Product Manager',
   collaborators: 'Alex Rivera, Taylor Swift',
   client: 'Confidential Client',
-  liveLink: 'https://example.com',
   subtitle: 'A closer look at the process and outcomes of this project.',
   ...overrides
 });
@@ -120,7 +121,7 @@ export const projects: Project[] = [
       timeline: '8 Weeks'
     }),
     coverImage: woofly1,
-    contentImages: [woofly2, woofly3, woofly4],
+    contentImages: [woofly2, woofly4, woofly5, wooflyLogo],
   },
   createProject('mob-4', lj, true, 'image', 'LJ Hooker', 'A mobile app that keeps property buyers in the loop with instant notifications on price changes, new listings, and auction updates.', ['product design'], {
     subtitle: 'Real-time property updates for home buyers',
@@ -160,14 +161,18 @@ export const projects: Project[] = [
     role: 'Product Designer & Engineer',
     timeline: '6 Months'
   }),
-  createProject('desk-3', nearmap, false, 'image', 'Nearmap', "A brand refresh for Australia's leading aerial imagery company — new marketing website and a scalable design system to support future work.", ['frontend engineering'], {
-    subtitle: 'Brand refresh and marketing website',
-    client: 'Nearmap',
-    team: '3 Engineers, 2 Designers, PM',
-    year: '2024',
-    role: 'Frontend Engineer',
-    timeline: '5 Months'
-  }),
+  {
+    ...createProject('desk-3', nearmap, false, 'image', 'Nearmap', "A brand refresh for Australia's leading aerial imagery company — new marketing website and a scalable design system to support future work.", ['frontend engineering'], {
+      subtitle: 'Brand refresh and marketing website',
+      client: 'Nearmap',
+      team: '3 Engineers, 2 Designers, PM',
+      year: '2024',
+      role: 'Frontend Engineer',
+      timeline: '5 Months'
+    }),
+    coverImage: nearmapBanner,
+    contentImages: [],
+  },
   createProject('desk-4', qantas, false, 'image', 'Qantas', 'Loyalty program shopping portal', ['fullstack engineering'], {
     client: 'Qantas Airways',
     team: '5 Engineers, 2 Designers, 1 PM',
