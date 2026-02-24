@@ -1,10 +1,10 @@
 import { useRef, useEffect, useState } from "react";
-import canonLogo from "../assets/logos/canon.png";
-import ljhookerLogo from "../assets/logos/ljhooker.png";
-import nearmapLogo from "../assets/logos/nearmap.png";
-import optusLogo from "../assets/logos/optus.png";
-import qantasLogo from "../assets/logos/qantas.png";
-import reachoutLogo from "../assets/logos/reachout.png";
+import canonLogo from "../assets/logos/canon.webp";
+import ljhookerLogo from "../assets/logos/ljhooker.webp";
+import nearmapLogo from "../assets/logos/nearmap.webp";
+import optusLogo from "../assets/logos/optus.webp";
+import qantasLogo from "../assets/logos/qantas.webp";
+import reachoutLogo from "../assets/logos/reachout.webp";
 
 const logos = [
   { src: qantasLogo, alt: "Qantas", className: "h-4 md:h-5", href: "https://qantas.com" },

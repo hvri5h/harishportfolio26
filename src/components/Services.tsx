@@ -11,32 +11,32 @@ import {
 const services = [
     {
         title: "Zero to One",
-        description: "For startups, I function as a one-person product team. I take vague concepts and turn them into shipped, polished products without the overhead of a large team.",
+        description: "A one-person product team for startups. Vague concept to shipped product, without the overhead.",
         icon: PiRocketShipStroke
     },
     {
         title: "Fractional Design Engineer",
-        description: "I slot seamlessly into existing teams, bridging the gap between designers and developers. I speak both languages to ensure implementation matches the vision.",
+        description: "I slot into your existing team on a part-time basis. I speak both design and code, so nothing gets lost between Figma and production.",
         icon: PiGitPullRequestStroke
     },
     {
-        title: "AI Native & Craft-Led",
-        description: "I use AI as a superpower to amplify my manual craft, not replace it. I can upskill your team, solve AI challenges, and ship high-quality work without the 'slop'.",
+        title: "AI-Native",
+        description: "I use AI across design and development to move faster, with enough experience to catch the slop and keep the quality high.",
         icon: PiSparkleAi01Stroke
     },
     {
         title: "Async & Autonomous",
-        description: "I thrive in remote environments. Invite me to Slack, assign tasks, and I'll deliver results. No endless meetings—just high-velocity shipping.",
+        description: "I work well with a clear brief and minimal oversight. Slack over meetings, progress over process.",
         icon: PiLightningThunderElectricOnStroke
     },
     {
         title: "Rapid Iteration",
-        description: "I learn problem spaces instantly and turn things around quickly. Whether it's a monthly retainer or a sprint, I adapt to your cadence.",
+        description: "Whether it's a retainer or a sprint, I match your pace. Real progress in days, not weeks.",
         icon: PiRefreshStroke
     },
     {
         title: "Direct Collaboration",
-        description: "No project managers or middlemen. You work directly with me to solve problems, ensuring clear communication and nothing getting lost in translation.",
+        description: "You work with me directly. No layers in between, so communication stays clear and things move faster.",
         icon: PiChatChattingStroke
     }
 ];
@@ -56,7 +56,7 @@ const Services = () => {
                     <motion.p
                         className="font-display font-medium text-2xl text-text-secondary max-w-[600px] max-md:text-xl"
                     >
-                        I collaborate efficiently, solve problems,<br />ship fast, and get sh*t done.
+                        Whether you need a one-person product team or an extra pair of hands, here's how I work.
                     </motion.p>
                 </div>
 

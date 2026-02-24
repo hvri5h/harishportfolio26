@@ -46,7 +46,7 @@ const Tooltip = ({ name, description, children }: TooltipProps) => {
 
 const WhatIDo = () => {
     return (
-        <section className="py-24 bg-bg relative z-30">
+        <section id="about" className="py-24 bg-bg relative z-30">
             <div className="max-w-[1200px] mx-auto px-8 max-sm:px-6">
 
                 {/* Header content */}
@@ -59,7 +59,7 @@ const WhatIDo = () => {
                     <motion.p
                         className="font-display font-medium text-2xl text-text-secondary max-w-[700px] max-md:text-xl"
                     >
-                        I span design, code, and product, owning every step from concept to implementation.
+                        I work across design, code, and product, owning everything from concept to implementation.
                     </motion.p>
                 </div>
 
@@ -75,14 +75,14 @@ const WhatIDo = () => {
                             <h3 className="text-2xl font-bold text-text">Product Design</h3>
                         </div>
                         <p className="text-lg text-text-secondary mb-8 leading-relaxed">
-                            Transform ideas into user-centric products that blend aesthetics and functionality. I create bespoke designs that look and feel premium.
+                            I design interfaces people actually enjoy using. Real product thinking with attention to craft, typography, and how things feel.
                         </p>
 
                         <div className="mt-auto">
                             <div className="flex flex-wrap gap-2.5">
                                 {[
-                                    "Product Strategy", "User Research", "UX/UI Design",
-                                    "Design Systems", "Prototyping", "Design Direction"
+                                    "UX/UI Design", "Prototyping", "Product Thinking",
+                                    "Interaction Design"
                                 ].map((skill) => (
                                     <span
                                         key={skill}
@@ -105,14 +105,14 @@ const WhatIDo = () => {
                             <h3 className="text-2xl font-bold text-text">Software Engineering</h3>
                         </div>
                         <p className="text-lg text-text-secondary mb-8 leading-relaxed">
-                            I build performant, accessible, and maintainable systems from frontend to backend with a focus on polished interactions.
+                            Over a decade of writing code. Frontend is my sweet spot: React, Next.js, animations, the works. I don't just make things look right, I make them work right.
                         </p>
 
                         <div className="mt-auto">
                             <div className="flex flex-wrap gap-2.5">
                                 {[
                                     "React", "Next.js", "TypeScript", "Tailwind CSS",
-                                    "Framer Motion", "API Integration", "Mobile App Development"
+                                    "Framer Motion", "Mobile Apps"
                                 ].map((skill) => (
                                     <span
                                         key={skill}

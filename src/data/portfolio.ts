@@ -1,13 +1,13 @@
-import lj from "../assets/work/lj-2.png";
-import watercoola from "../assets/work/watercoola-2.png";
-import audiobook from "../assets/work/audiobook-2.png";
-import sbnbBanner from "../assets/work/superbnb/_banner.png";
-import tpb from "../assets/work/tpb-3.png";
-import nearmap from "../assets/work/nearmap.png";
-import qantasBanner from "../assets/work/qantas/_banner.png";
-import wooflysplash from "../assets/work/woofly-2.png";
-import reachout from "../assets/work/reachout.png";
-import canon from "../assets/work/canon-2.png";
+import lj from "../assets/work/lj-2.webp";
+import watercoola from "../assets/work/watercoola-2.webp";
+import audiobook from "../assets/work/audiobook-2.webp";
+import sbnbBanner from "../assets/work/superbnb/_banner.webp";
+import tpb from "../assets/work/tpb-3.webp";
+import nearmap from "../assets/work/nearmap.webp";
+import qantasBanner from "../assets/work/qantas/_banner.webp";
+import wooflysplash from "../assets/work/woofly-2.webp";
+import reachout from "../assets/work/reachout.webp";
+import canon from "../assets/work/canon-2.webp";
 
 export interface Project {
   id: string;

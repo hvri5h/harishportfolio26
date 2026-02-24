@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X as XIcon, Check, Copy, ArrowUpRight } from "lucide-react";
 import Spline from "@splinetool/react-spline";
@@ -7,7 +7,6 @@ import { Navigation } from "./components/Navigation";
 import LogoCloud from "./components/LogoCloud";
 import WhatIDo from "./components/WhatIDo";
 import Services from "./components/Services";
-import Testimonials from "./components/Testimonials";
 import AboutMe from "./components/AboutMe";
 import {
   isVideo,
@@ -21,7 +20,10 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [progress, setProgress] = useState(0);
   const [activeSection, setActiveSection] = useState("work");
-  const visibleProjects = projects.filter((p) => !p.isHidden);
+  const visibleProjects = useMemo(
+    () => projects.filter((p) => !p.isHidden),
+    []
+  );
   const gridItems = useProjectGrid(visibleProjects);
 
   useEffect(() => {
@@ -49,6 +51,10 @@ function App() {
     setTimeout(() => {
       setIsLoading(false);
     }, 600);
+  }, []);
+
+  const handleSectionChange = useCallback((section: string) => {
+    setActiveSection(section);
   }, []);
 
   const handleCopyEmail = () => {
@@ -102,7 +108,7 @@ function App() {
       {/* Navigation */}
       <Navigation
         activeSection={activeSection}
-        onSectionChange={setActiveSection}
+        onSectionChange={handleSectionChange}
       />
 
       {/* Hero Section */}
@@ -155,7 +161,11 @@ function App() {
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={!isLoading ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+              transition={{
+                duration: 0.8,
+                delay: 0.1,
+                ease: [0.16, 1, 0.3, 1],
+              }}
               className="mb-6 h-[250px] w-[250px] max-md:h-[200px] max-md:w-[200px] overflow-visible"
             >
               <div className="h-[350px] w-[320px] -translate-x-[35px] -translate-y-[60px] max-md:h-[260px] max-md:w-[260px] max-md:-translate-x-[30px] max-md:-translate-y-[30px]">
@@ -168,7 +178,11 @@ function App() {
             <motion.h1
               initial={{ opacity: 0, y: 30 }}
               animate={!isLoading ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+              transition={{
+                duration: 0.8,
+                delay: 0.2,
+                ease: [0.16, 1, 0.3, 1],
+              }}
               className="font-display font-black text-[5rem] tracking-[-0.03em] leading-none text-text mb-4 max-md:text-[clamp(2.5rem,8vw,4rem)] max-sm:text-[1.75rem] z-10"
             >
               Harish
@@ -176,7 +190,11 @@ function App() {
             <motion.p
               initial={{ opacity: 0, y: 30 }}
               animate={!isLoading ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+              transition={{
+                duration: 0.8,
+                delay: 0.3,
+                ease: [0.16, 1, 0.3, 1],
+              }}
               className="font-display font-medium text-2xl text-text-secondary leading-[1.4] max-w-[500px] mb-6"
             >
               Design + Engineering partner for startups and agencies who value
@@ -185,7 +203,11 @@ function App() {
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={!isLoading ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.8, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              transition={{
+                duration: 0.8,
+                delay: 0.4,
+                ease: [0.16, 1, 0.3, 1],
+              }}
               className="w-full"
             >
               <LogoCloud />
@@ -199,18 +221,28 @@ function App() {
         <div className="max-w-[1200px] mx-auto px-3 md:px-8">
           <div className="grid grid-cols-2 gap-4 md:gap-6 lg:gap-8">
             {gridItems?.map((item, i) => {
-              const animateProps = i === 0 ? {
-                initial: { opacity: 0 },
-                animate: !isLoading ? { opacity: 1 } : {},
-                transition: { duration: 0.8, delay: 0.5, ease: [0.16, 1, 0.3, 1] as const }
-              } : {};
+              const animateProps =
+                i === 0
+                  ? {
+                      initial: { opacity: 0 },
+                      animate: !isLoading ? { opacity: 1 } : {},
+                      transition: {
+                        duration: 0.8,
+                        delay: 0.5,
+                        ease: [0.16, 1, 0.3, 1] as const,
+                      },
+                    }
+                  : {};
 
               return (
                 <motion.div
                   {...animateProps}
                   key={`${item.project.id}-${i}`}
-                  className={`relative cursor-pointer rounded-[32px] md:rounded-[48px] overflow-hidden transition-transform duration-[400ms] ease-[cubic-bezier(0.16,1,0.3,1)] hover:scale-[1.02] ${item.span === 2 ? "col-span-2" : "col-span-1 aspect-[3/4] md:aspect-[4/5]"
-                    }`}
+                  className={`relative cursor-pointer rounded-[32px] md:rounded-[48px] overflow-hidden transition-transform duration-[400ms] ease-[cubic-bezier(0.16,1,0.3,1)] hover:scale-[1.02] ${
+                    item.span === 2
+                      ? "col-span-2"
+                      : "col-span-1 aspect-[3/4] md:aspect-[4/5]"
+                  }`}
                   style={{
                     backgroundColor: item.project.bgColor,
                     WebkitMaskImage: "-webkit-radial-gradient(white, black)",
@@ -220,7 +252,11 @@ function App() {
                   {isVideo(item.src) ? (
                     <video
                       src={item.src}
-                      className={item.span === 2 ? "w-full h-auto block transform-gpu" : "absolute inset-0 w-full h-full object-cover block transform-gpu"}
+                      className={
+                        item.span === 2
+                          ? "w-full h-auto block transform-gpu"
+                          : "absolute inset-0 w-full h-full object-cover block transform-gpu"
+                      }
                       autoPlay
                       loop
                       muted
@@ -230,7 +266,11 @@ function App() {
                     <img
                       src={item.src}
                       alt={`${item.project.title} screen`}
-                      className={item.span === 2 ? "w-full h-auto block transform-gpu" : "absolute inset-0 w-full h-full object-cover block transform-gpu"}
+                      className={
+                        item.span === 2
+                          ? "w-full h-auto block transform-gpu"
+                          : "absolute inset-0 w-full h-full object-cover block transform-gpu"
+                      }
                       loading="lazy"
                     />
                   )}
@@ -241,11 +281,9 @@ function App() {
         </div>
       </section>
 
-      <div id="about">
-        <WhatIDo />
-        <Services />
-        {/* <Testimonials /> */}
-      </div>
+      <WhatIDo />
+      <Services />
+      {/* <Testimonials /> */}
       <AboutMe />
 
       {/* Footer */}
@@ -281,15 +319,20 @@ function App() {
               onClick={() => setSelectedProject(null)}
             >
               <div
-                className={`w-full relative z-10 min-h-full flex flex-col items-center ${selectedProject.modalVariant === "imageOnly" ? "justify-center py-12 md:py-24 px-4 md:px-8" : "justify-end md:justify-center px-0 pt-16 md:px-8 md:py-16"}`}
+                className={`w-full relative z-10 min-h-full flex flex-col items-center ${
+                  selectedProject.modalVariant === "imageOnly"
+                    ? "justify-center py-12 md:py-24 px-4 md:px-8"
+                    : "justify-end md:justify-center px-0 pt-16 md:px-8 md:py-16"
+                }`}
                 onClick={() => setSelectedProject(null)}
               >
                 {/* Modal Container */}
                 <motion.div
-                  className={`w-full pointer-events-auto relative overflow-hidden flex flex-col squircle ${selectedProject?.modalVariant === "imageOnly"
-                    ? "max-w-[1200px] xl:max-w-[95vw] bg-transparent justify-center items-center cursor-pointer"
-                    : "mt-auto md:m-auto rounded-t-[48px] md:rounded-[56px] max-w-[1120px] bg-white shadow-2xl"
-                    }`}
+                  className={`w-full pointer-events-auto relative overflow-hidden flex flex-col squircle ${
+                    selectedProject?.modalVariant === "imageOnly"
+                      ? "max-w-[1120px] bg-transparent justify-center items-center cursor-pointer"
+                      : "mt-auto md:m-auto rounded-t-[48px] md:rounded-[56px] max-w-[1120px] bg-white shadow-2xl"
+                  }`}
                   initial={{ y: "100%", opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   exit={{ y: "100%", opacity: 0 }}
@@ -304,7 +347,11 @@ function App() {
                   }}
                   style={
                     selectedProject?.modalVariant !== "imageOnly"
-                      ? { willChange: "transform, opacity", WebkitMaskImage: "-webkit-radial-gradient(white, black)" }
+                      ? {
+                          willChange: "transform, opacity",
+                          WebkitMaskImage:
+                            "-webkit-radial-gradient(white, black)",
+                        }
                       : { willChange: "transform, opacity" }
                   }
                 >
@@ -325,13 +372,17 @@ function App() {
                       <>
                         {/* Cover Image/Video */}
                         <div
-                          className={`relative flex items-center justify-center overflow-hidden w-full ${selectedProject.modalVariant === "imageOnly"
-                            ? "mx-auto rounded-[32px] md:rounded-[48px] squircle shadow-2xl cursor-default"
-                            : ""
-                            }`}
+                          className={`relative flex items-center justify-center overflow-hidden w-full ${
+                            selectedProject.modalVariant === "imageOnly"
+                              ? "mx-auto rounded-[32px] md:rounded-[48px] squircle shadow-2xl cursor-default"
+                              : ""
+                          }`}
                           style={
                             selectedProject.modalVariant === "imageOnly"
-                              ? { WebkitMaskImage: "-webkit-radial-gradient(white, black)" }
+                              ? {
+                                  WebkitMaskImage:
+                                    "-webkit-radial-gradient(white, black)",
+                                }
                               : {}
                           }
                           onClick={(e) => {
@@ -343,10 +394,11 @@ function App() {
                           {isVideo(coverSrc) ? (
                             <video
                               src={coverSrc}
-                              className={`block transform-gpu ${selectedProject.modalVariant === "imageOnly"
-                                ? "w-full h-auto object-contain"
-                                : "w-full h-auto aspect-[21/9] object-cover scale-[1.01]"
-                                }`}
+                              className={`block transform-gpu ${
+                                selectedProject.modalVariant === "imageOnly"
+                                  ? "w-full h-auto object-contain"
+                                  : "w-full h-auto aspect-[21/9] object-cover scale-[1.01]"
+                              }`}
                               autoPlay
                               loop
                               muted
@@ -356,10 +408,11 @@ function App() {
                             <img
                               src={coverSrc}
                               alt={selectedProject.title}
-                              className={`block transform-gpu ${selectedProject.modalVariant === "imageOnly"
-                                ? "w-full h-auto object-contain"
-                                : "w-full h-auto aspect-[21/9] object-cover scale-[1.01]"
-                                }`}
+                              className={`block transform-gpu ${
+                                selectedProject.modalVariant === "imageOnly"
+                                  ? "w-full h-auto object-contain"
+                                  : "w-full h-auto aspect-[21/9] object-cover scale-[1.01]"
+                              }`}
                             />
                           )}
                           <button
@@ -430,7 +483,10 @@ function App() {
                               <div
                                 key={index}
                                 className="w-full rounded-[32px] md:rounded-[48px] overflow-hidden flex items-center justify-center squircle"
-                                style={{ WebkitMaskImage: "-webkit-radial-gradient(white, black)" }}
+                                style={{
+                                  WebkitMaskImage:
+                                    "-webkit-radial-gradient(white, black)",
+                                }}
                               >
                                 {isVideo(img) ? (
                                   <video
@@ -444,8 +500,9 @@ function App() {
                                 ) : (
                                   <img
                                     src={img}
-                                    alt={`${selectedProject.title} ${index + 1
-                                      }`}
+                                    alt={`${selectedProject.title} ${
+                                      index + 1
+                                    }`}
                                     className="w-full h-auto object-contain block scale-[1.01] transform-gpu"
                                   />
                                 )}
