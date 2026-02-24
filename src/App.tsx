@@ -1,108 +1,11 @@
-import { useState, useEffect, useCallback } from 'react';
-import { motion, AnimatePresence, useScroll, useTransform, MotionValue } from 'framer-motion';
-import {
-  X as XIcon,
-  Check,
-  Copy,
-  ArrowUpRight,
-} from 'lucide-react';
-import Spline from '@splinetool/react-spline';
-import { Navigation } from './components/Navigation';
-import LogoCloud from './components/LogoCloud';
-import WhatIDo from './components/WhatIDo';
-import Services from './components/Services';
-import Testimonials from './components/Testimonials';
-import AboutMe from './components/AboutMe';
-import { projects, type Project } from './data/portfolio';
-
-const Column = ({
-  projects,
-  scrollY,
-  offset,
-  isNarrow,
-  setSelectedProject
-}: {
-  projects: Project[],
-  scrollY: MotionValue<number>,
-  offset: number,
-  isNarrow: boolean,
-  setSelectedProject: (p: Project) => void
-}) => {
-  const y = useTransform(scrollY, [0, 3000], [0, offset]);
-
-  return (
-    <motion.div
-      style={{ y }}
-      className={`flex flex-col gap-3 min-w-0 ${isNarrow ? 'flex-[0.6]' : 'flex-1'}`}
-    >
-      {projects.map((project) => (
-        <motion.div
-          key={project.id}
-          className="relative w-full cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:z-10 group"
-          onClick={() => setSelectedProject(project)}
-        >
-          <div className="flex flex-col gap-3 p-3 bg-[#f0f0f0]/50 backdrop-blur-[20px] backdrop-saturate-[180%] border border-white/50 rounded-[48px] [corner-shape:squircle] shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1),0_2px_4px_-1px_rgba(0,0,0,0.06),0_0_0_1px_rgba(0,0,0,0.05)] transition-all duration-base hover:bg-[#f5f5f5]/80 hover:shadow-[0_10px_15px_-3px_rgba(0,0,0,0.1),0_4px_6px_-2px_rgba(0,0,0,0.05),0_0_0_1px_rgba(0,0,0,0.05)]">
-            <div className="rounded-[36px] [corner-shape:squircle] overflow-hidden relative w-full bg-black/5">
-              {project.type === 'video' ? (
-                <video
-                  src={project.image}
-                  className="w-full h-auto block object-cover transition-transform duration-500 group-hover:scale-[1.02]"
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                />
-              ) : (
-                <img
-                  src={project.image}
-                  alt={project.title}
-                  className="w-full h-auto block object-cover transition-transform duration-500 group-hover:scale-[1.02]"
-                  loading="lazy"
-                />
-              )}
-            </div>
-            <div className="flex flex-col gap-0.5 px-2 pb-2 pt-2">
-              <h3 className="font-display font-semibold text-base text-black/90 leading-tight">{project.title}</h3>
-              {project.services && project.services.length > 0 && (
-                <p className="text-[14px] text-text-secondary leading-snug">
-                  {project.services.join(', ')}
-                </p>
-              )}
-            </div>
-          </div>
-        </motion.div>
-      ))}
-    </motion.div>
-  );
-};
-
-function useWindowSize() {
-  const [windowSize, setWindowSize] = useState({
-    width: typeof window !== 'undefined' ? window.innerWidth : 0,
-    height: typeof window !== 'undefined' ? window.innerHeight : 0,
-  });
-
-  useEffect(() => {
-    function handleResize() {
-      setWindowSize({
-        width: window.innerWidth,
-        height: window.innerHeight,
-      });
-    }
-
-    window.addEventListener('resize', handleResize);
-    handleResize();
-
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  return windowSize;
-}
+import { useState, useEffect, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { X as XIcon, Check, Copy, ArrowUpRight } from "lucide-react";
+import Spline from "@splinetool/react-spline";
+import { projects, type Project } from "./data/portfolio";
 
 function App() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
-  const [activeSection, setActiveSection] = useState('work');
-  const size = useWindowSize();
   const [isCopied, setIsCopied] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [progress, setProgress] = useState(0);
@@ -136,121 +39,31 @@ function App() {
   }, []);
 
   const handleCopyEmail = () => {
-    navigator.clipboard.writeText('hello@hari.sh');
+    navigator.clipboard.writeText("hello@hari.sh");
     setIsCopied(true);
     setTimeout(() => setIsCopied(false), 2000);
   };
 
-  const handleSectionChange = useCallback((section: string) => {
-    setActiveSection(section);
-  }, []);
-
   useEffect(() => {
     if (isLoading) {
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = '';
+      document.body.style.overflow = "";
     }
     return () => {
-      document.body.style.overflow = '';
+      document.body.style.overflow = "";
     };
   }, [isLoading]);
 
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
+      if (e.key === "Escape") {
         setSelectedProject(null);
       }
     };
-    window.addEventListener('keydown', handleEscape);
-    return () => window.removeEventListener('keydown', handleEscape);
+    window.addEventListener("keydown", handleEscape);
+    return () => window.removeEventListener("keydown", handleEscape);
   }, []);
-
-  // Determine number of columns based on width - 5 columns on desktop, min 2 on mobile
-  const numColumns = size.width > 1200 ? 5 : size.width > 900 ? 4 : size.width > 640 ? 3 : 2;
-
-  // Column configuration: which columns are narrow (for mobile content)
-  // Pattern for 5 cols: [Wide, Narrow, Wide, Narrow, Wide]
-  const narrowColumns = numColumns === 5 ? [1, 3] : numColumns === 4 ? [1, 2] : [];
-
-  // Split projects into columns - mobile to narrow, desktop to wide
-  const columns = useCallback(() => {
-    // Initialize columns and height trackers
-    const cols: Project[][] = Array.from({ length: numColumns }, () => []);
-    const colHeights = new Array(numColumns).fill(0);
-
-    // Height weights for balancing
-    const MOBILE_HEIGHT = 1.8;
-    const DESKTOP_HEIGHT = 1.0;
-
-    // For 2-3 columns (mobile/tablet): distribute ALL projects evenly across all columns
-    if (numColumns <= 3) {
-      projects.forEach(project => {
-        // Find the shortest column
-        let minH = Infinity;
-        let targetCol = 0;
-
-        for (let i = 0; i < numColumns; i++) {
-          if (colHeights[i] < minH) {
-            minH = colHeights[i];
-            targetCol = i;
-          }
-        }
-
-        cols[targetCol].push(project);
-        colHeights[targetCol] += project.isMobile ? MOBILE_HEIGHT : DESKTOP_HEIGHT;
-      });
-
-      return cols;
-    }
-
-    // For 4+ columns: separate mobile and desktop content
-    const mobileProjects = projects.filter(p => p.isMobile);
-    const desktopProjects = projects.filter(p => !p.isMobile);
-
-    // Get indices for narrow and wide columns
-    const narrowIndices = narrowColumns;
-    const wideIndices = Array.from({ length: numColumns }, (_, i) => i).filter(i => !narrowIndices.includes(i));
-
-    // Distribute mobile projects to narrow columns
-    mobileProjects.forEach(project => {
-      const targetIndices = narrowIndices.length > 0 ? narrowIndices : wideIndices;
-      let minH = Infinity;
-      let targetCol = targetIndices[0];
-
-      targetIndices.forEach(idx => {
-        if (colHeights[idx] < minH) {
-          minH = colHeights[idx];
-          targetCol = idx;
-        }
-      });
-
-      cols[targetCol].push(project);
-      colHeights[targetCol] += MOBILE_HEIGHT;
-    });
-
-    // Distribute desktop projects to wide columns
-    desktopProjects.forEach(project => {
-      let minH = Infinity;
-      let targetCol = wideIndices[0];
-
-      wideIndices.forEach(idx => {
-        if (colHeights[idx] < minH) {
-          minH = colHeights[idx];
-          targetCol = idx;
-        }
-      });
-
-      cols[targetCol].push(project);
-      colHeights[targetCol] += DESKTOP_HEIGHT;
-    });
-
-    return cols;
-  }, [numColumns, narrowColumns, projects]);
-
-  // Parallax offsets for 5 columns - subtle staggered effect
-  const parallaxOffsets = [0, 80, -40, 60, -60];
-  const { scrollY } = useScroll();
 
   return (
     <div className="min-h-screen">
@@ -263,13 +76,14 @@ function App() {
             className="fixed inset-0 z-[9999] bg-bg flex flex-col items-center justify-center"
           >
             <div className="relative font-display font-black text-7xl md:text-9xl text-text tracking-tighter">
-              {progress}<span className="inline-block ml-2 text-4xl md:text-6xl text-text">%</span>
+              {progress}
+              <span className="inline-block ml-2 text-4xl md:text-6xl text-text">
+                %
+              </span>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
-
-      <Navigation activeSection={activeSection} onSectionChange={handleSectionChange} />
 
       {/* Hero Section */}
       <header className="relative h-auto min-h-[90vh] flex items-start justify-center pt-[200px] pb-16 max-sm:h-[calc(100vh-60px)] max-sm:px-8">
@@ -293,72 +107,88 @@ function App() {
               >
                 {isCopied ? <Check size={14} /> : <Copy size={14} />}
               </button>
-              <a href="mailto:htiruna@gmail.com" className="hover:text-text transition-colors">htiruna@gmail.com</a>
+              <a
+                href="mailto:htiruna@gmail.com"
+                className="hover:text-text transition-colors"
+              >
+                htiruna@gmail.com
+              </a>
             </div>
           </div>
           <div className="pointer-events-auto flex flex-col items-end gap-1">
             <span>Melbourne, Australia</span>
-            <span>{new Date().toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' }).replace(/,/g, '')}</span>
+            <span>
+              {new Date()
+                .toLocaleDateString("en-GB", {
+                  weekday: "short",
+                  day: "numeric",
+                  month: "short",
+                  year: "numeric",
+                })
+                .replace(/,/g, "")}
+            </span>
           </div>
         </div>
 
         <div className="max-w-[1200px] mx-auto px-8 w-full">
-          <motion.div
-            className="max-w-[900px] mx-auto flex flex-col items-center text-center"
-          >
+          <motion.div className="max-w-[900px] mx-auto flex flex-col items-center text-center">
             <div className="mb-6 h-[250px] w-[250px] max-md:h-[200px] max-md:w-[200px] overflow-visible">
               <div className="h-[350px] w-[320px] -translate-x-[35px] -translate-y-[60px] max-md:h-[260px] max-md:w-[260px] max-md:-translate-x-[30px] max-md:-translate-y-[30px]">
-                <Spline scene="https://prod.spline.design/zy5bc6-NJcpDwB1Y/scene.splinecode" onLoad={handleSplineLoad} />
+                <Spline
+                  scene="https://prod.spline.design/zy5bc6-NJcpDwB1Y/scene.splinecode"
+                  onLoad={handleSplineLoad}
+                />
               </div>
             </div>
             <h1 className="font-display font-black text-[6rem] tracking-[-0.03em] leading-none text-text mb-4 max-md:text-[clamp(3rem,10vw,4.5rem)] max-sm:text-[1.75rem] z-10">
               Harish
             </h1>
             <p className="font-display font-medium text-2xl text-text-secondary leading-[1.4] max-w-[450px] max-md:text-xl">
-              Design + Engineering partner for startups and agencies who value craft and speed. </p>
+              Design + Engineering partner for startups and agencies who value
+              craft and speed.{" "}
+            </p>
           </motion.div>
         </div>
       </header>
 
-
-
       {/* Work Section */}
       <section id="work" className="pt-0 pb-32 mt-0 relative">
-        <div className="max-w-[1800px] mx-auto px-3 md:px-4">
-          <div className="flex gap-3 items-start justify-center w-full">
-            {columns().map((colProjects, colIndex) => {
-              const offset = parallaxOffsets[colIndex % parallaxOffsets.length];
-              const isNarrow = narrowColumns.includes(colIndex);
-
-              return (
-                <Column
-                  key={colIndex}
-                  projects={colProjects}
-                  scrollY={scrollY}
-                  offset={offset}
-                  isNarrow={isNarrow}
-                  setSelectedProject={setSelectedProject}
-                />
-              );
-            })}
+        <div className="max-w-[1200px] mx-auto px-3 md:px-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4 w-full">
+            {projects.map((project) => (
+              <motion.div
+                key={project.id}
+                className={`relative w-full cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:z-10 group ${
+                  project.isMobile
+                    ? "col-span-1 aspect-[3/4] md:aspect-[4/5]"
+                    : "col-span-1 md:col-span-2 aspect-[4/3] md:aspect-[16/9]"
+                }`}
+                onClick={() => setSelectedProject(project)}
+              >
+                <div className="w-full h-full bg-[#f0f0f0]/50 backdrop-blur-[20px] backdrop-saturate-[180%] border border-white/50 rounded-[48px] [corner-shape:squircle] shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1),0_2px_4px_-1px_rgba(0,0,0,0.06),0_0_0_1px_rgba(0,0,0,0.05)] transition-all duration-base hover:bg-[#f5f5f5]/80 hover:shadow-[0_10px_15px_-3px_rgba(0,0,0,0.1),0_4px_6px_-2px_rgba(0,0,0,0.05),0_0_0_1px_rgba(0,0,0,0.05)] overflow-hidden">
+                  {project.type === "video" ? (
+                    <video
+                      src={project.image}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                    />
+                  ) : (
+                    <img
+                      src={project.image}
+                      alt={project.title}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+                      loading="lazy"
+                    />
+                  )}
+                </div>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>
-
-      {/* Clients Section */}
-      <LogoCloud />
-
-      {/* What I Do Section */}
-      <WhatIDo />
-
-      {/* Services Section */}
-      <Services />
-
-      {/* Testimonials Section */}
-      <Testimonials />
-
-      {/* About Me Section */}
-      <AboutMe />
 
       {/* Footer */}
       <footer className="w-full max-w-[1200px] mx-auto px-8 py-8 hidden md:flex justify-between items-center text-sm font-medium text-text-secondary">
@@ -366,7 +196,10 @@ function App() {
           <span>&copy; 2026 - Harish Tirunahari</span>
         </div>
         <div className="flex items-center gap-1">
-          <span>Have a nice {new Date().toLocaleDateString(undefined, { weekday: 'long' })} :)</span>
+          <span>
+            Have a nice{" "}
+            {new Date().toLocaleDateString(undefined, { weekday: "long" })} :)
+          </span>
         </div>
       </footer>
 
@@ -381,7 +214,7 @@ function App() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
-              style={{ willChange: 'opacity' }}
+              style={{ willChange: "opacity" }}
             />
 
             {/* Scrollable Container */}
@@ -396,15 +229,19 @@ function App() {
                   initial={{ y: "100%", opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   exit={{ y: "100%", opacity: 0 }}
-                  transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+                  transition={{ type: "spring", damping: 25, stiffness: 200 }}
                   onClick={(e) => e.stopPropagation()}
-                  style={{ willChange: 'transform, opacity' }}
+                  style={{ willChange: "transform, opacity" }}
                 >
                   {/* Media Content - Full Bleed Top Image/Video */}
                   <div className="w-full relative flex items-center justify-center overflow-hidden">
-                    {(selectedProject.coverImage || selectedProject.image).match(/\.(mp4|webm|ogg)($|\?)/i) ? (
+                    {(
+                      selectedProject.coverImage || selectedProject.image
+                    ).match(/\.(mp4|webm|ogg)($|\?)/i) ? (
                       <video
-                        src={selectedProject.coverImage || selectedProject.image}
+                        src={
+                          selectedProject.coverImage || selectedProject.image
+                        }
                         className="w-full h-auto aspect-[1120/630] object-cover block scale-[1.01] transform-gpu"
                         autoPlay
                         loop
@@ -413,7 +250,9 @@ function App() {
                       />
                     ) : (
                       <img
-                        src={selectedProject.coverImage || selectedProject.image}
+                        src={
+                          selectedProject.coverImage || selectedProject.image
+                        }
                         alt={selectedProject.title}
                         className="w-full h-auto aspect-[1120/630] object-cover block scale-[1.01] transform-gpu"
                       />
@@ -435,8 +274,12 @@ function App() {
                       <div className="flex flex-col gap-6">
                         {selectedProject.client && (
                           <div className="flex flex-col gap-1.5">
-                            <span className="text-[13px] font-bold text-text-secondary">Client</span>
-                            <span className="text-[15px] text-text">{selectedProject.client}</span>
+                            <span className="text-[13px] font-bold text-text-secondary">
+                              Client
+                            </span>
+                            <span className="text-[15px] text-text">
+                              {selectedProject.client}
+                            </span>
                           </div>
                         )}
                         {/* {selectedProject.role && (
@@ -445,14 +288,17 @@ function App() {
                             <span className="text-[15px] text-text">{selectedProject.role}</span>
                           </div>
                         )} */}
-                        {selectedProject.services && selectedProject.services.length > 0 && (
-                          <div className="flex flex-col gap-1.5">
-                            <span className="text-[13px] font-bold text-text-secondary">Services</span>
-                            <span className="text-[15px] text-text capitalize">
-                              {selectedProject.services.join(', ')}
-                            </span>
-                          </div>
-                        )}
+                        {selectedProject.services &&
+                          selectedProject.services.length > 0 && (
+                            <div className="flex flex-col gap-1.5">
+                              <span className="text-[13px] font-bold text-text-secondary">
+                                Services
+                              </span>
+                              <span className="text-[15px] text-text capitalize">
+                                {selectedProject.services.join(", ")}
+                              </span>
+                            </div>
+                          )}
                         {/* {selectedProject.year && (
                           <div className="flex flex-col gap-1.5">
                             <span className="text-[13px] font-bold text-text-secondary">Year</span>
@@ -464,8 +310,12 @@ function App() {
                       </div>
 
                       {selectedProject.liveLink && (
-                        <a href={selectedProject.liveLink} target="_blank" rel="noopener noreferrer"
-                          className="inline-flex items-center justify-between gap-3 px-5 py-2.5 bg-white border border-black/10 text-black font-medium text-[14px] rounded-full transition-all duration-300 hover:scale-[1.02] hover:bg-black/5 shadow-sm self-start">
+                        <a
+                          href={selectedProject.liveLink}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center justify-between gap-3 px-5 py-2.5 bg-white border border-black/10 text-black font-medium text-[14px] rounded-full transition-all duration-300 hover:scale-[1.02] hover:bg-black/5 shadow-sm self-start"
+                        >
                           Live link <ArrowUpRight size={16} />
                         </a>
                       )}
@@ -487,31 +337,36 @@ function App() {
                   </div>
 
                   {/* Sequential Content Images */}
-                  {selectedProject.contentImages && selectedProject.contentImages.length > 0 && (
-                    <div className="w-full flex flex-col gap-6 md:gap-10 px-6 md:px-12 lg:px-16 pb-12 md:pb-16 lg:pb-20">
-                      {selectedProject.contentImages.map((img, index) => (
-                        <div key={index} className="w-full rounded-[16px] md:rounded-[24px] overflow-hidden flex items-center justify-center">
-                          {img.match(/\.(mp4|webm|ogg)($|\?)/i) ? (
-                            <video
-                              src={img}
-                              className="w-full h-auto object-contain block scale-[1.01] transform-gpu"
-                              autoPlay
-                              loop
-                              muted
-                              playsInline
-                            />
-                          ) : (
-                            <img
-                              src={img}
-                              alt={`${selectedProject.title} workflow ${index + 1}`}
-                              className="w-full h-auto object-contain block scale-[1.01] transform-gpu"
-                            />
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  )}
-
+                  {selectedProject.contentImages &&
+                    selectedProject.contentImages.length > 0 && (
+                      <div className="w-full flex flex-col gap-6 md:gap-10 px-6 md:px-12 lg:px-16 pb-12 md:pb-16 lg:pb-20">
+                        {selectedProject.contentImages.map((img, index) => (
+                          <div
+                            key={index}
+                            className="w-full rounded-[16px] md:rounded-[24px] overflow-hidden flex items-center justify-center"
+                          >
+                            {img.match(/\.(mp4|webm|ogg)($|\?)/i) ? (
+                              <video
+                                src={img}
+                                className="w-full h-auto object-contain block scale-[1.01] transform-gpu"
+                                autoPlay
+                                loop
+                                muted
+                                playsInline
+                              />
+                            ) : (
+                              <img
+                                src={img}
+                                alt={`${selectedProject.title} workflow ${
+                                  index + 1
+                                }`}
+                                className="w-full h-auto object-contain block scale-[1.01] transform-gpu"
+                              />
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    )}
                 </motion.div>
               </div>
             </div>

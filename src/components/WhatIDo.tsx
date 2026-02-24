@@ -1,9 +1,6 @@
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 import {
-    PiColorPaletteStroke,
-    PiCurlyBracesCodeDefaultStroke,
-    PiToolsStroke,
 } from './icons/pikaicons-react';
 
 const stackItems = [
@@ -74,7 +71,6 @@ const WhatIDo = () => {
                     >
                         <div className="flex items-center gap-4 mb-6">
                             {/* <div className="w-12 h-12 rounded-xl bg-surface-hover flex items-center justify-center flex-shrink-0">
-                                <PiColorPaletteStroke className="w-6 h-6 text-text" />
                             </div> */}
                             <h3 className="text-2xl font-bold text-text">Product Design</h3>
                         </div>
@@ -105,7 +101,6 @@ const WhatIDo = () => {
                     >
                         <div className="flex items-center gap-4 mb-6">
                             {/* <div className="w-12 h-12 rounded-xl bg-surface-hover flex items-center justify-center flex-shrink-0">
-                                <PiCurlyBracesCodeDefaultStroke className="w-6 h-6 text-text" />
                             </div> */}
                             <h3 className="text-2xl font-bold text-text">Software Engineering</h3>
                         </div>
@@ -137,7 +132,6 @@ const WhatIDo = () => {
                 >
                     <div className="flex items-center gap-4 mb-8">
                         {/* <div className="w-12 h-12 rounded-xl bg-surface-hover flex items-center justify-center flex-shrink-0">
-                            <PiToolsStroke className="w-6 h-6 text-text" />
                         </div> */}
                         <h3 className="text-2xl font-bold text-text">Stack</h3>
                     </div>
