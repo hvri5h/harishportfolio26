@@ -5,7 +5,7 @@ import {
 
 const stackItems = [
     { name: 'React', icon: '/icons/react-logo.svg', description: 'JavaScript library' },
-    { name: 'Next.js', icon: '/icons/nextjs-logotype-light-background.svg', description: 'React framework' },
+    { name: 'Next.js', icon: '/icons/nextjs-logotype-light-background.svg', description: 'React framework', className: 'scale-150' },
     { name: 'TypeScript', icon: '/icons/typescript-logo.svg', description: 'Typed JavaScript' },
     { name: 'Tailwind', icon: '/icons/tailwindcss-logo.svg', description: 'CSS framework' },
     { name: 'Figma', icon: '/icons/figma-logo.svg', description: 'Design software' },
@@ -146,7 +146,7 @@ const WhatIDo = () => {
                                         <img
                                             src={item.icon}
                                             alt={item.name}
-                                            className="w-10 h-10 object-contain"
+                                            className={`w-10 h-10 object-contain ${item.className || ''}`}
                                         />
                                     </div>
                                 </motion.div>
