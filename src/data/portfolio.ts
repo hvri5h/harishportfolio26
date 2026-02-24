@@ -1,10 +1,10 @@
 import lj from "../assets/work/lj-2.png";
 import watercoola from "../assets/work/watercoola-2.png";
 import audiobook from "../assets/work/audiobook-2.png";
-import superbnb from "../assets/work/superbnb-2.png";
+import sbnbBanner from "../assets/work/superbnb/_banner.png";
 import tpb from "../assets/work/tpb-3.png";
 import nearmap from "../assets/work/nearmap.png";
-import qantas from "../assets/work/qantas-shopping.png";
+import qantasBanner from "../assets/work/qantas/_banner.png";
 import wooflysplash from "../assets/work/woofly-2.png";
 import reachout from "../assets/work/reachout.png";
 import canon from "../assets/work/canon-2.png";
@@ -34,6 +34,10 @@ export interface Project {
   contentImages?: string[];
   /** Folder name under src/assets/work/ — images auto-discovered via glob */
   slug?: string;
+  /** Choose between standard full modal or simply an enlarged visual */
+  modalVariant?: "full" | "imageOnly";
+  /** Hide the project from the main grid */
+  isHidden?: boolean;
 }
 
 export interface Client {
@@ -52,12 +56,13 @@ export interface Testimonial {
 const createProject = (
   id: string,
   src: string,
+  slug: string,
   isMobile: boolean,
   type: "image" | "video",
   title: string,
   description: string,
   services: string[],
-  overrides?: Partial<Project>
+  overrides?: Omit<Partial<Project>, "slug">
 ): Project => ({
   id,
   title,
@@ -77,6 +82,7 @@ const createProject = (
   collaborators: "Alex Rivera, Taylor Swift",
   client: "Confidential Client",
   subtitle: "A closer look at the process and outcomes of this project.",
+  slug,
   ...overrides,
 });
 
@@ -85,6 +91,7 @@ export const projects: Project[] = [
   createProject(
     "mob-1",
     wooflysplash,
+    "woofly",
     true,
     "image",
     "Woofly",
@@ -98,12 +105,48 @@ export const projects: Project[] = [
       role: "Product Designer",
       timeline: "8 Weeks",
       bgColor: "#FF6B00",
-      slug: "woofly",
+    }
+  ),
+  createProject(
+    "mob-2",
+    watercoola,
+    "watercoola", // Optional fallback
+    true,
+    "image",
+    "Watercoola",
+    "Connecting remote teams asynchronously through immersive virtual environments.",
+    ["product design", "branding"],
+    {
+      client: "Watercoola Inc.",
+      team: "Myself, 2 Frontend Engineers",
+      year: "2024",
+      timeline: "6 Weeks",
+      bgColor: "#0EA5E9",
+      modalVariant: "imageOnly",
+    }
+  ),
+  createProject(
+    "mob-3",
+    audiobook,
+    "audiobook",
+    true,
+    "image",
+    "Audiobook app concept",
+    "Listen to your favorite books on the go with this modern, accessible player.",
+    ["product design"],
+    {
+      client: "Personal Project",
+      team: "Myself",
+      year: "2025",
+      timeline: "2 Weeks",
+      bgColor: "#8B5CF6",
+      modalVariant: "imageOnly",
     }
   ),
   createProject(
     "mob-4",
     lj,
+    "", // Need a generic slug or empty string here
     true,
     "image",
     "LJ Hooker",
@@ -117,43 +160,13 @@ export const projects: Project[] = [
       role: "Product Designer",
       timeline: "4 Months",
       bgColor: "#1A1A2E",
-    }
-  ),
-  createProject(
-    "mob-2",
-    watercoola,
-    true,
-    "image",
-    "Watercoola",
-    "Connecting remote teams asynchronously through immersive virtual environments.",
-    ["product design", "branding"],
-    {
-      client: "Watercoola Inc.",
-      team: "Myself, 2 Frontend Engineers",
-      year: "2024",
-      timeline: "6 Weeks",
-      bgColor: "#0EA5E9",
-    }
-  ),
-  createProject(
-    "mob-3",
-    audiobook,
-    true,
-    "image",
-    "Audiobook app concept",
-    "Listen to your favorite books on the go with this modern, accessible player.",
-    ["product design"],
-    {
-      client: "Personal Project",
-      team: "Myself",
-      year: "2025",
-      timeline: "2 Weeks",
-      bgColor: "#8B5CF6",
+      isHidden: true,
     }
   ),
   createProject(
     "desk-1",
-    superbnb,
+    sbnbBanner,
+    "superbnb",
     false,
     "image",
     "Superbnb",
@@ -172,6 +185,7 @@ export const projects: Project[] = [
   createProject(
     "desk-2",
     tpb,
+    "",
     false,
     "image",
     "The Professional Builder",
@@ -185,11 +199,13 @@ export const projects: Project[] = [
       role: "Product Designer & Engineer",
       timeline: "6 Months",
       bgColor: "#059669",
-    }
+      isHidden: true,
+    },
   ),
   createProject(
     "desk-3",
     nearmap,
+    "nearmap",
     false,
     "image",
     "Nearmap",
@@ -203,30 +219,33 @@ export const projects: Project[] = [
       role: "Frontend Engineer",
       timeline: "5 Months",
       bgColor: "#0284C7",
-      slug: "nearmap",
       liveLink: "https://www.nearmap.com.au",
     }
   ),
   createProject(
     "desk-4",
-    qantas,
+    qantasBanner,
+    "qantas",
     false,
     "image",
-    "Qantas",
-    "Loyalty program shopping portal",
+    "Qantas Shopping",
+    "I was part of a team that built this greenfield end-to-end rewards platform from scratch, featuring complex integrations with numerous third-party services including external vendors and credit card companies.",
     ["fullstack engineering"],
     {
+      subtitle: "Loyalty program shopping portal",
       client: "Qantas Airways",
-      team: "5 Engineers, 2 Designers, 1 PM",
+      team: "5 Engineers, 2 Designers, 2 PMs",
       role: "Fullstack Engineer",
       year: "2023",
       timeline: "8 Months",
       bgColor: "#DC2626",
+      liveLink: "https://shopping.qantas.com/",
     }
   ),
   createProject(
     "desk-6",
     canon,
+    "",
     false,
     "image",
     "Canon",
@@ -239,11 +258,13 @@ export const projects: Project[] = [
       year: "2024",
       timeline: "4 Months",
       bgColor: "#EA580C",
+      isHidden: true,
     }
   ),
   createProject(
     "desk-7",
     reachout,
+    "",
     false,
     "image",
     "Reachout",
@@ -256,6 +277,7 @@ export const projects: Project[] = [
       year: "2023",
       timeline: "6 Months",
       bgColor: "#4F46E5",
+      isHidden: true,
     }
   ),
 ];

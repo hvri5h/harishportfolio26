@@ -27,7 +27,15 @@ function getSortedFolderImages(
     .sort(([a], [b]) => {
       const nameA = a.split("/").pop() || "";
       const nameB = b.split("/").pop() || "";
-      return nameA.localeCompare(nameB, undefined, { numeric: true });
+
+      const aIsBanner = nameA.toLowerCase().includes("banner");
+      const bIsBanner = nameB.toLowerCase().includes("banner");
+      if (aIsBanner && !bIsBanner) return -1;
+      if (!aIsBanner && bIsBanner) return 1;
+
+      const cleanA = nameA.replace(/^_/, "");
+      const cleanB = nameB.replace(/^_/, "");
+      return cleanA.localeCompare(cleanB, undefined, { numeric: true });
     })
     .map(([path, url]) => ({
       url,
@@ -47,14 +55,14 @@ export interface GridItem {
 
 function loadImageDimensions(
   src: string
-): Promise<{ src: string; width: number }> {
+): Promise<{ src: string; width: number; height: number }> {
   if (isVideo(src)) {
-    return Promise.resolve({ src, width: 9999 });
+    return Promise.resolve({ src, width: 1920, height: 1080 }); // assume landscape
   }
   return new Promise((resolve) => {
     const img = new Image();
-    img.onload = () => resolve({ src, width: img.naturalWidth });
-    img.onerror = () => resolve({ src, width: 9999 });
+    img.onload = () => resolve({ src, width: img.naturalWidth, height: img.naturalHeight });
+    img.onerror = () => resolve({ src, width: 9999, height: 5624 });
     img.src = src;
   });
 }
@@ -84,10 +92,13 @@ export function useProjectGrid(projects: Project[]): GridItem[] | null {
         const maxWidth = Math.max(...dims.map((d) => d.width));
 
         for (const d of dims) {
+          const aspectRatio = d.width / d.height;
+          const isLandscape = aspectRatio > 1.1;
+
           allItems.push({
             src: d.src,
             project,
-            span: d.width >= maxWidth * 0.6 ? 2 : 1,
+            span: isLandscape && d.width >= maxWidth * 0.6 ? 2 : 1,
           });
         }
       }

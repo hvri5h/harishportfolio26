@@ -46,7 +46,7 @@ const Tooltip = ({ name, description, children }: TooltipProps) => {
 
 const WhatIDo = () => {
     return (
-        <section id="about" className="py-24 bg-bg relative z-30">
+        <section className="py-24 bg-bg relative z-30">
             <div className="max-w-[1200px] mx-auto px-8 max-sm:px-6">
 
                 {/* Header content */}
@@ -59,7 +59,7 @@ const WhatIDo = () => {
                     <motion.p
                         className="font-display font-medium text-2xl text-text-secondary max-w-[700px] max-md:text-xl"
                     >
-                        I work across design, code, and product owning everything from concept to implementation.
+                        I span design, code, and product, owning every step from concept to implementation.
                     </motion.p>
                 </div>
 
@@ -67,7 +67,7 @@ const WhatIDo = () => {
                 <div className="grid grid-cols-2 gap-8 mb-8 max-md:grid-cols-1">
                     {/* Product Design */}
                     <motion.div
-                        className="p-10 bg-surface border border-border-light rounded-2xl flex flex-col h-full hover:shadow-xl transition-shadow duration-300"
+                        className="p-10 bg-surface border border-border-light rounded-2xl flex flex-col h-full"
                     >
                         <div className="flex items-center gap-4 mb-6">
                             {/* <div className="w-12 h-12 rounded-xl bg-surface-hover flex items-center justify-center flex-shrink-0">
@@ -97,7 +97,7 @@ const WhatIDo = () => {
 
                     {/* Software Engineering */}
                     <motion.div
-                        className="p-10 bg-surface border border-border-light rounded-2xl flex flex-col h-full hover:shadow-xl transition-shadow duration-300"
+                        className="p-10 bg-surface border border-border-light rounded-2xl flex flex-col h-full"
                     >
                         <div className="flex items-center gap-4 mb-6">
                             {/* <div className="w-12 h-12 rounded-xl bg-surface-hover flex items-center justify-center flex-shrink-0">

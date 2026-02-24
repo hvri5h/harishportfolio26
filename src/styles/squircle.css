@@ -1,0 +1,13 @@
+.apple-squircle {
+  border-radius: 32px;
+}
+@media (min-width: 768px) {
+  .apple-squircle {
+    border-radius: 48px;
+  }
+}
+@supports (corner-shape: squircle) {
+  .apple-squircle {
+    corner-shape: squircle;
+  }
+}

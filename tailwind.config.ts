@@ -33,6 +33,8 @@ export default {
                 base: '250ms',
                 slow: '400ms',
             },
+            keyframes: {},
+            animation: {}
         },
     },
     plugins: [],

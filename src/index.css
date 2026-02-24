@@ -114,3 +114,20 @@
   background-color: #FC6407;
   color: #ffffff;
 }
+
+@layer utilities {
+  @supports (corner-shape: squircle) {
+    .squircle {
+      corner-shape: squircle;
+    }
+  }
+}
+
+@keyframes ticker {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(var(--scroll-width));
+  }
+}
