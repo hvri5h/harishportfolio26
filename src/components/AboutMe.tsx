@@ -7,20 +7,12 @@ const AboutMe = () => {
             <div className="max-w-[800px] mx-auto px-6 text-center">
                 <motion.h2
                     className="font-display font-black text-[60px] leading-[1.1] tracking-[-0.01em] text-text mb-12 max-md:text-5xl max-sm:text-4xl"
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5 }}
                 >
                     Who I am
                 </motion.h2>
 
                 <motion.div
                     className="mb-8 flex justify-center"
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: 0.1 }}
                 >
                     <img
                         src={avatar}
@@ -31,10 +23,6 @@ const AboutMe = () => {
 
                 <motion.div
                     className="space-y-6"
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: 0.2 }}
                 >
                     <p className="font-display font-medium text-xl text-text-secondary leading-relaxed max-md:text-xl max-w-[500px] mx-auto">
                         I'm Harish — an Independent Design Engineer originally from New Zealand, currently based in Australia.
@@ -47,10 +35,6 @@ const AboutMe = () => {
 
                 <motion.div
                     className="mt-12"
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: 0.3 }}
                 >
                     <a
                         href="mailto:hello@example.com"

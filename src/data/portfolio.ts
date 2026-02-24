@@ -39,7 +39,8 @@ import woofly4 from '../assets/work/woofly/4.png';
 import woofly5 from '../assets/work/woofly/5.png';
 import reachout from '../assets/work/reachout.png';
 import canon from '../assets/work/canon-2.png';
-import nearmapBanner from '../assets/work/nearmap/banner.png';
+import nearmapLanding from '../assets/work/nearmap/landing.png';
+import nearmapLandingVid from '../assets/work/nearmap/landing-vid.mp4';
 
 export interface Project {
   id: string;
@@ -163,15 +164,16 @@ export const projects: Project[] = [
   }),
   {
     ...createProject('desk-3', nearmap, false, 'image', 'Nearmap', "A brand refresh for Australia's leading aerial imagery company — new marketing website and a scalable design system to support future work.", ['frontend engineering'], {
-      subtitle: 'Brand refresh and marketing website',
+      subtitle: 'Turn location data into insightful answers',
       client: 'Nearmap',
       team: '3 Engineers, 2 Designers, PM',
       year: '2024',
       role: 'Frontend Engineer',
       timeline: '5 Months'
     }),
-    coverImage: nearmapBanner,
-    contentImages: [],
+    liveLink: 'https://www.nearmap.com.au',
+    coverImage: nearmapLandingVid,
+    contentImages: [nearmapLanding],
   },
   createProject('desk-4', qantas, false, 'image', 'Qantas', 'Loyalty program shopping portal', ['fullstack engineering'], {
     client: 'Qantas Airways',

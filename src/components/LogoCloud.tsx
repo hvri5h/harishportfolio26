@@ -36,7 +36,7 @@ export default function LogoCloud() {
                 <h2 className="text-center text-[clamp(1.5rem,3vw,1.5rem)] font-semibold leading-[1.3] text-text-secondary mb-16">
                     For 12+ years, I've shipped digital products at every scale and phase.
                 </h2>
-                <div className="mx-auto grid grid-cols-3 items-center justify-items-center gap-x-16 gap-y-12 max-w-3xl opacity-60 hover:opacity-100 transition-opacity duration-300">
+                <div className="mx-auto grid grid-cols-3 items-center justify-items-center gap-x-16 gap-y-12 max-w-3xl opacity-60 transition-opacity duration-300">
                     {logos.slice(0, 6).map((logo, index) => (
                         <img
                             key={index}

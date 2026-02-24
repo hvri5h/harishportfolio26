@@ -39,10 +39,6 @@ const Column = ({
         <motion.div
           key={project.id}
           className="relative w-full cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:z-10 group"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-50px' }}
-          transition={{ duration: 0.5 }}
           onClick={() => setSelectedProject(project)}
         >
           <div className="flex flex-col gap-3 p-3 bg-[#f0f0f0]/50 backdrop-blur-[20px] backdrop-saturate-[180%] border border-white/50 rounded-[48px] [corner-shape:squircle] shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1),0_2px_4px_-1px_rgba(0,0,0,0.06),0_0_0_1px_rgba(0,0,0,0.05)] transition-all duration-base hover:bg-[#f5f5f5]/80 hover:shadow-[0_10px_15px_-3px_rgba(0,0,0,0.1),0_4px_6px_-2px_rgba(0,0,0,0.05),0_0_0_1px_rgba(0,0,0,0.05)]">
@@ -309,9 +305,6 @@ function App() {
         <div className="max-w-[1200px] mx-auto px-8 w-full">
           <motion.div
             className="max-w-[900px] mx-auto flex flex-col items-center text-center"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: [0.25, 0.1, 0.25, 1] }}
           >
             <div className="mb-6 h-[250px] w-[250px] max-md:h-[200px] max-md:w-[200px] overflow-visible">
               <div className="h-[350px] w-[320px] -translate-x-[35px] -translate-y-[60px] max-md:h-[260px] max-md:w-[260px] max-md:-translate-x-[30px] max-md:-translate-y-[30px]">
@@ -408,11 +401,11 @@ function App() {
                   style={{ willChange: 'transform, opacity' }}
                 >
                   {/* Media Content - Full Bleed Top Image/Video */}
-                  <div className="w-full relative bg-black/5 flex items-center justify-center">
-                    {selectedProject.type === 'video' ? (
+                  <div className="w-full relative flex items-center justify-center overflow-hidden">
+                    {(selectedProject.coverImage || selectedProject.image).match(/\.(mp4|webm|ogg)($|\?)/i) ? (
                       <video
                         src={selectedProject.coverImage || selectedProject.image}
-                        className="w-full h-auto aspect-[1120/630] object-cover block"
+                        className="w-full h-auto aspect-[1120/630] object-cover block scale-[1.01] transform-gpu"
                         autoPlay
                         loop
                         muted
@@ -422,7 +415,7 @@ function App() {
                       <img
                         src={selectedProject.coverImage || selectedProject.image}
                         alt={selectedProject.title}
-                        className="w-full h-auto aspect-[1120/630] object-cover block"
+                        className="w-full h-auto aspect-[1120/630] object-cover block scale-[1.01] transform-gpu"
                       />
                     )}
                     {/* Close Button overlaying top right of image */}
@@ -440,14 +433,34 @@ function App() {
                     {/* Left Column (Meta & Link) */}
                     <div className="w-full md:w-[200px] lg:w-[250px] flex-shrink-0 flex flex-col gap-8 md:gap-10">
                       <div className="flex flex-col gap-6">
-                        <div className="flex flex-col gap-1.5">
-                          <span className="text-[13px] font-bold text-text-secondary">Role</span>
-                          <span className="text-[15px] text-text">{selectedProject.role}</span>
-                        </div>
-                        <div className="flex flex-col gap-1.5">
-                          <span className="text-[13px] font-bold text-text-secondary">Client</span>
-                          <span className="text-[15px] text-text">{selectedProject.client}</span>
-                        </div>
+                        {selectedProject.client && (
+                          <div className="flex flex-col gap-1.5">
+                            <span className="text-[13px] font-bold text-text-secondary">Client</span>
+                            <span className="text-[15px] text-text">{selectedProject.client}</span>
+                          </div>
+                        )}
+                        {/* {selectedProject.role && (
+                          <div className="flex flex-col gap-1.5">
+                            <span className="text-[13px] font-bold text-text-secondary">Role</span>
+                            <span className="text-[15px] text-text">{selectedProject.role}</span>
+                          </div>
+                        )} */}
+                        {selectedProject.services && selectedProject.services.length > 0 && (
+                          <div className="flex flex-col gap-1.5">
+                            <span className="text-[13px] font-bold text-text-secondary">Services</span>
+                            <span className="text-[15px] text-text capitalize">
+                              {selectedProject.services.join(', ')}
+                            </span>
+                          </div>
+                        )}
+                        {/* {selectedProject.year && (
+                          <div className="flex flex-col gap-1.5">
+                            <span className="text-[13px] font-bold text-text-secondary">Year</span>
+                            <span className="text-[15px] text-text capitalize">
+                              {selectedProject.year}
+                            </span>
+                          </div>
+                        )} */}
                       </div>
 
                       {selectedProject.liveLink && (
@@ -477,12 +490,23 @@ function App() {
                   {selectedProject.contentImages && selectedProject.contentImages.length > 0 && (
                     <div className="w-full flex flex-col gap-6 md:gap-10 px-6 md:px-12 lg:px-16 pb-12 md:pb-16 lg:pb-20">
                       {selectedProject.contentImages.map((img, index) => (
-                        <div key={index} className="w-full rounded-[16px] md:rounded-[24px] overflow-hidden bg-black/5 flex items-center justify-center">
-                          <img
-                            src={img}
-                            alt={`${selectedProject.title} workflow ${index + 1}`}
-                            className="w-full h-auto object-contain block"
-                          />
+                        <div key={index} className="w-full rounded-[16px] md:rounded-[24px] overflow-hidden flex items-center justify-center">
+                          {img.match(/\.(mp4|webm|ogg)($|\?)/i) ? (
+                            <video
+                              src={img}
+                              className="w-full h-auto object-contain block scale-[1.01] transform-gpu"
+                              autoPlay
+                              loop
+                              muted
+                              playsInline
+                            />
+                          ) : (
+                            <img
+                              src={img}
+                              alt={`${selectedProject.title} workflow ${index + 1}`}
+                              className="w-full h-auto object-contain block scale-[1.01] transform-gpu"
+                            />
+                          )}
                         </div>
                       ))}
                     </div>

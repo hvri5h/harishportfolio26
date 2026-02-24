@@ -50,19 +50,11 @@ const Services = () => {
                 <div className="flex flex-col items-center text-center mb-24">
                     <motion.h2
                         className="font-display font-black text-[60px] leading-[1.1] tracking-[-0.01em] text-text mb-6 max-md:text-5xl max-sm:text-4xl"
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.5 }}
                     >
                         What I can do for you
                     </motion.h2>
                     <motion.p
                         className="font-display font-medium text-2xl text-text-secondary max-w-[600px] max-md:text-xl"
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.5, delay: 0.1 }}
                     >
                         I collaborate efficiently, solve problems,<br />ship fast, and get sh*t done.
                     </motion.p>
@@ -71,14 +63,10 @@ const Services = () => {
                 {/* Grid Container with Dotted Border Effect */}
                 <div className="relative">
                     <div className="grid grid-cols-3 gap-8 max-md:grid-cols-2 max-sm:grid-cols-1">
-                        {services.map((service, index) => (
+                        {services.map((service) => (
                             <motion.div
                                 key={service.title}
-                                className="bg-surface border border-border-light rounded-2xl p-10 flex flex-col items-center text-center hover:shadow-lg transition-all duration-300 group hover:-translate-y-1"
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ duration: 0.5, delay: index * 0.1 }}
+                                className="bg-surface border border-border-light rounded-2xl p-10 flex flex-col items-center text-center"
                             >
                                 <div className="w-14 h-14 rounded-2xl bg-surface-hover flex items-center justify-center mb-6 text-text transition-colors duration-300">
                                     <service.icon className="w-6 h-6 text-text" />

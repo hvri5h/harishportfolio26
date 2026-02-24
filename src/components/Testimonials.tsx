@@ -34,19 +34,11 @@ const Testimonials = () => {
             <div className="max-w-[1200px] mx-auto px-8 max-sm:px-6 mb-24 text-center">
                 <motion.h2
                     className="font-display font-black text-[60px] leading-[1.1] tracking-[-0.01em] text-text mb-6 max-md:text-5xl max-sm:text-4xl"
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5 }}
                 >
                     Who I've worked with
                 </motion.h2>
                 <motion.p
                     className="font-display font-medium text-2xl text-text-secondary max-w-[600px] mx-auto max-md:text-xl"
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: 0.1 }}
                 >
                     Some important people saying<br />nice things about me.
                 </motion.p>
