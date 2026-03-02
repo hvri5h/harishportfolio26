@@ -5,7 +5,8 @@ import sbnbBanner from "../assets/work/superbnb/_banner.webp";
 import tpb from "../assets/work/tpb-3.webp";
 import nearmap from "../assets/work/nearmap.webp";
 import qantasBanner from "../assets/work/qantas/_banner.webp";
-import wooflysplash from "../assets/work/woofly-2.webp";
+import wooflySplash from "../assets/work/woofly-2.webp";
+import wooflyCover from "../assets/work/woofly/2.webp";
 import reachout from "../assets/work/reachout.webp";
 import canon from "../assets/work/canon-2.webp";
 
@@ -38,6 +39,10 @@ export interface Project {
   modalVariant?: "full" | "imageOnly";
   /** Hide the project from the main grid */
   isHidden?: boolean;
+  /** Override which image appears on the home grid */
+  gridImage?: string;
+  /** Override the grid column span (1 = half row, 2 = full row) */
+  gridSpan?: 1 | 2;
 }
 
 export interface Client {
@@ -90,7 +95,7 @@ const createProject = (
 export const projects: Project[] = [
   createProject(
     "mob-1",
-    wooflysplash,
+    wooflySplash,
     "woofly",
     true,
     "image",
@@ -105,6 +110,8 @@ export const projects: Project[] = [
       role: "Product Designer",
       timeline: "8 Weeks",
       bgColor: "#FF6B00",
+      gridSpan: 2,
+      gridImage: wooflyCover,
     }
   ),
   createProject(

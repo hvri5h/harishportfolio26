@@ -11,7 +11,7 @@ import AboutMe from "./components/AboutMe";
 import {
   isVideo,
   useProjectGrid,
-  getAllProjectFolderImages,
+  getProjectFolderImages,
 } from "./lib/projectImages";
 
 function App() {
@@ -357,7 +357,7 @@ function App() {
                 >
                   {(() => {
                     const allImages = selectedProject.slug
-                      ? getAllProjectFolderImages(selectedProject.slug)
+                      ? getProjectFolderImages(selectedProject.slug)
                       : [];
                     const coverSrc =
                       allImages[0] ||
