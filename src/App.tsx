@@ -15,6 +15,48 @@ import {
   getProjectFolderImages,
 } from "./lib/projectImages";
 
+function MelbourneClock() {
+  const [now, setNow] = useState(new Date());
+  const [colonVisible, setColonVisible] = useState(true);
+
+  useEffect(() => {
+    const tick = setInterval(() => setNow(new Date()), 1000);
+    const blink = setInterval(() => setColonVisible((v) => !v), 500);
+    return () => {
+      clearInterval(tick);
+      clearInterval(blink);
+    };
+  }, []);
+
+  const melb = new Date(
+    now.toLocaleString("en-US", { timeZone: "Australia/Melbourne" }),
+  );
+  const h = melb.getHours().toString();
+  const m = melb.getMinutes().toString().padStart(2, "0");
+  const colon = colonVisible ? ":" : "\u00A0";
+  const period = melb.getHours() >= 12 ? "PM" : "AM";
+
+  const date = melb
+    .toLocaleDateString("en-GB", {
+      weekday: "short",
+      day: "numeric",
+      month: "short",
+    })
+    .replace(/,/g, "");
+
+  return (
+    <span>
+      {date} · {h}
+      <span
+        style={{ opacity: colonVisible ? 1 : 0, transition: "opacity 0.15s" }}
+      >
+        :
+      </span>
+      {m} {period}
+    </span>
+  );
+}
+
 function App() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [isCopied, setIsCopied] = useState(false);
@@ -23,7 +65,7 @@ function App() {
   const [activeSection, setActiveSection] = useState("work");
   const visibleProjects = useMemo(
     () => projects.filter((p) => !p.isHidden),
-    []
+    [],
   );
   const gridItems = useProjectGrid(visibleProjects);
 
@@ -143,16 +185,7 @@ function App() {
         </div>
         <div className="pointer-events-auto flex flex-col items-end gap-1">
           <span>Melbourne, Australia</span>
-          <span>
-            {new Date()
-              .toLocaleDateString("en-GB", {
-                weekday: "short",
-                day: "numeric",
-                month: "short",
-                year: "numeric",
-              })
-              .replace(/,/g, "")}
-          </span>
+          <MelbourneClock />
         </div>
       </div>
 
@@ -197,10 +230,10 @@ function App() {
                 delay: 0.3,
                 ease: [0.16, 1, 0.3, 1],
               }}
-              className="font-display font-medium text-2xl text-text-secondary leading-[1.4] max-w-[500px] mb-6"
+              className="font-display font-medium text-2xl text-text-secondary leading-[1.4] max-w-[400px] mb-6"
             >
-              Design + Engineering partner for startups and agencies who value
-              craft and speed.
+              <span data-cursor-figma>Design</span> + <span data-cursor-code>Engineering</span> partner for startups that value craft and
+              speed.
             </motion.p>
             <motion.div
               initial={{ opacity: 0, y: 30 }}
@@ -240,7 +273,11 @@ function App() {
                 <motion.div
                   {...animateProps}
                   key={`${item.project.id}-${i}`}
-                  data-cursor-label={item.project.modalVariant === "imageOnly" ? "Enlarge" : "Open case study"}
+                  data-cursor-label={
+                    item.project.modalVariant === "imageOnly"
+                      ? "Enlarge"
+                      : "Open case study"
+                  }
                   className={`relative rounded-[32px] md:rounded-[48px] overflow-hidden transition-transform duration-[400ms] ease-[cubic-bezier(0.16,1,0.3,1)] hover:scale-[1.02] ${
                     item.span === 2
                       ? "col-span-2"
