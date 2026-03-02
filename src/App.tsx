@@ -8,6 +8,7 @@ import LogoCloud from "./components/LogoCloud";
 import WhatIDo from "./components/WhatIDo";
 import Services from "./components/Services";
 import AboutMe from "./components/AboutMe";
+import { CustomCursor } from "./components/CustomCursor";
 import {
   isVideo,
   useProjectGrid,
@@ -86,6 +87,7 @@ function App() {
 
   return (
     <div className="min-h-screen">
+      <CustomCursor />
       {/* Loading Screen */}
       <AnimatePresence>
         {isLoading && (
@@ -111,51 +113,51 @@ function App() {
         onSectionChange={handleSectionChange}
       />
 
-      {/* Hero Section */}
-      <header className="relative h-auto min-h-[85vh] flex items-start justify-center pt-[160px] pb-16 max-sm:h-[calc(100vh-60px)] max-sm:px-8">
-        {/* Header Content - Top Frame */}
-        <div className="absolute top-8 left-0 right-0 max-w-[1200px] mx-auto px-8 hidden md:flex justify-between items-center h-[54px] text-sm font-medium text-text-secondary pointer-events-none">
-          <div className="pointer-events-auto flex flex-col items-start gap-1">
-            <div className="flex items-center gap-2">
-              <div className="flex items-center justify-center w-[14px]">
-                <div className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-                </div>
+      {/* Header Content - Top Frame */}
+      <div className="absolute top-8 left-0 right-0 z-[2] max-w-[1200px] mx-auto px-8 hidden md:flex justify-between items-center h-[54px] text-sm font-medium text-text-secondary pointer-events-none">
+        <div className="pointer-events-auto flex flex-col items-start gap-1">
+          <div className="flex items-center gap-2">
+            <div className="flex items-center justify-center w-[14px]">
+              <div className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
               </div>
-              <span>Available for work Mar 2026</span>
             </div>
-            <div className="flex items-center gap-2">
-              <button
-                onClick={handleCopyEmail}
-                className="flex items-center justify-center w-[14px] text-text-secondary hover:text-text transition-colors focus:outline-none"
-                title="Copy email address"
-              >
-                {isCopied ? <Check size={14} /> : <Copy size={14} />}
-              </button>
-              <a
-                href="mailto:htiruna@gmail.com"
-                className="hover:text-text transition-colors"
-              >
-                htiruna@gmail.com
-              </a>
-            </div>
+            <span>Available for work Mar 2026</span>
           </div>
-          <div className="pointer-events-auto flex flex-col items-end gap-1">
-            <span>Melbourne, Australia</span>
-            <span>
-              {new Date()
-                .toLocaleDateString("en-GB", {
-                  weekday: "short",
-                  day: "numeric",
-                  month: "short",
-                  year: "numeric",
-                })
-                .replace(/,/g, "")}
-            </span>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={handleCopyEmail}
+              className="flex items-center justify-center w-[14px] text-text-secondary hover:text-text transition-colors focus:outline-none"
+              title="Copy email address"
+            >
+              {isCopied ? <Check size={14} /> : <Copy size={14} />}
+            </button>
+            <a
+              href="mailto:htiruna@gmail.com"
+              className="hover:text-text transition-colors"
+            >
+              htiruna@gmail.com
+            </a>
           </div>
         </div>
+        <div className="pointer-events-auto flex flex-col items-end gap-1">
+          <span>Melbourne, Australia</span>
+          <span>
+            {new Date()
+              .toLocaleDateString("en-GB", {
+                weekday: "short",
+                day: "numeric",
+                month: "short",
+                year: "numeric",
+              })
+              .replace(/,/g, "")}
+          </span>
+        </div>
+      </div>
 
+      {/* Hero Section */}
+      <header className="relative h-auto min-h-[85vh] flex items-start justify-center pt-[160px] pb-16 max-sm:h-[calc(100vh-60px)] max-sm:px-8">
         <div className="max-w-[1200px] mx-auto px-8 w-full">
           <motion.div className="max-w-[900px] mx-auto flex flex-col items-center text-center">
             <motion.div
@@ -238,7 +240,8 @@ function App() {
                 <motion.div
                   {...animateProps}
                   key={`${item.project.id}-${i}`}
-                  className={`relative cursor-pointer rounded-[32px] md:rounded-[48px] overflow-hidden transition-transform duration-[400ms] ease-[cubic-bezier(0.16,1,0.3,1)] hover:scale-[1.02] ${
+                  data-cursor-label={item.project.modalVariant === "imageOnly" ? "Enlarge" : "Open case study"}
+                  className={`relative rounded-[32px] md:rounded-[48px] overflow-hidden transition-transform duration-[400ms] ease-[cubic-bezier(0.16,1,0.3,1)] hover:scale-[1.02] ${
                     item.span === 2
                       ? "col-span-2"
                       : "col-span-1 aspect-[3/4] md:aspect-[4/5]"
@@ -298,6 +301,9 @@ function App() {
           </span>
         </div>
       </footer>
+
+      {/* Top blur overlay */}
+      <div className="fixed top-0 left-0 right-0 h-32 pointer-events-none z-[1] backdrop-blur-[12px] [mask-image:linear-gradient(to_top,transparent,black)]" />
 
       {/* Project Modal */}
       <AnimatePresence>

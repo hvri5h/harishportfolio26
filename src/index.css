@@ -37,6 +37,12 @@
 @tailwind components;
 @tailwind utilities;
 
+@media (pointer: fine) {
+  *, *::before, *::after {
+    cursor: none !important;
+  }
+}
+
 @layer base {
   :root {
     --color-bg: #fafafa;
