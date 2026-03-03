@@ -57,13 +57,21 @@ function MelbourneClock() {
         ? `${melbOffset}h ahead of you`
         : `${Math.abs(melbOffset)}h behind you`;
 
+  const dateStr = melb.toLocaleDateString("en-US", {
+    month: "short",
+    day: "2-digit",
+    timeZone: "Australia/Melbourne",
+  });
+
   return (
     <span
-      className="flex items-center"
+      className="flex items-center gap-1.5"
       {...(tooltipText ? { "data-cursor-label": tooltipText } : {})}
     >
-      <span className="font-mono font-medium text-[0.9em] inline-flex items-center gap-0.5">
-        <span className="inline-flex items-center gap-0.5">
+      <span>{dateStr}</span>
+      <span className="text-text-secondary text-[5px]">&bull;</span>
+      <span className="font-medium inline-flex items-center gap-px">
+        <span className="inline-flex items-center gap-px">
           <SlidingNumber value={h12} />
           <span className="text-text-secondary">:</span>
           <SlidingNumber value={minutes} padStart />

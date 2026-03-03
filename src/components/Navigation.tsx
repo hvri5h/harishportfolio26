@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 
 interface NavigationProps {
@@ -44,6 +44,9 @@ export function Navigation({ activeSection, onSectionChange }: NavigationProps) 
     };
   }, [onSectionChange]);
 
+  const [hoveredSection, setHoveredSection] = useState<string | null>(null);
+  const highlightTarget = hoveredSection ?? activeSection;
+
   const handleClick = (sectionId: string) => {
     const element = document.getElementById(sectionId);
     if (element) {
@@ -55,22 +58,26 @@ export function Navigation({ activeSection, onSectionChange }: NavigationProps) 
     <motion.nav
       className="fixed top-8 left-0 right-0 z-[100] flex justify-center pointer-events-none"
     >
-      <div className="flex items-center bg-[#f0f0f0]/50 backdrop-blur-[20px] backdrop-saturate-[180%] border border-white/50 rounded-full p-[6px] gap-1 shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1),0_2px_4px_-1px_rgba(0,0,0,0.06),0_0_0_1px_rgba(0,0,0,0.05)] pointer-events-auto transition-all duration-base hover:bg-[#f5f5f5]/80 hover:shadow-[0_10px_15px_-3px_rgba(0,0,0,0.1),0_4px_6px_-2px_rgba(0,0,0,0.05),0_0_0_1px_rgba(0,0,0,0.05)]">
+      <div
+        className="flex items-center bg-[#f0f0f0]/50 backdrop-blur-[20px] backdrop-saturate-[180%] rounded-full p-[6px] gap-1 pointer-events-auto transition-all duration-base shadow-[0_0_0_1px_rgba(0,0,0,0.08)]"
+        onMouseLeave={() => setHoveredSection(null)}
+      >
         {navItems.map((item) => (
           <button
             key={item.id}
-            className={`relative px-6 py-2 text-[0.9375rem] font-medium text-black/60 rounded-full transition-colors duration-fast z-10 bg-transparent cursor-pointer leading-normal hover:text-black/90 ${activeSection === item.id ? 'text-black font-semibold' : ''
+            className={`relative px-6 py-2 text-[0.9375rem] font-medium rounded-full transition-colors duration-300 z-10 bg-transparent cursor-pointer leading-normal ${highlightTarget === item.id ? 'text-black' : 'text-black/50'
               }`}
             onClick={() => handleClick(item.id)}
+            onMouseEnter={() => setHoveredSection(item.id)}
           >
-            {activeSection === item.id && (
+            {highlightTarget === item.id && (
               <motion.div
                 className="absolute inset-0 bg-white rounded-full shadow-[0_2px_5px_rgba(0,0,0,0.05),0_1px_2px_rgba(0,0,0,0.1)] -z-10"
                 layoutId="nav-highlight"
                 transition={{
                   type: 'spring',
-                  stiffness: 500,
-                  damping: 35,
+                  stiffness: 300,
+                  damping: 30,
                 }}
               />
             )}
