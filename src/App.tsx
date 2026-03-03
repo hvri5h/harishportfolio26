@@ -2,6 +2,9 @@ import { useState, useEffect, useCallback, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X as XIcon, Check, Copy, ArrowUpRight } from "lucide-react";
 import Spline from "@splinetool/react-spline";
+import {
+  PiSparkleAi02Stroke,
+} from "./components/icons/pikaicons-react";
 import { projects, type Project } from "./data/portfolio";
 import { Navigation } from "./components/Navigation";
 import LogoCloud from "./components/LogoCloud";
@@ -9,6 +12,9 @@ import WhatIDo from "./components/WhatIDo";
 import Services from "./components/Services";
 import AboutMe from "./components/AboutMe";
 import { CustomCursor } from "./components/CustomCursor";
+import Footer from "./components/Footer";
+import { SlidingNumber } from "./components/ui/sliding-number";
+import { BasicNumberTicker } from "./components/ui/basic-number-ticker";
 import {
   isVideo,
   useProjectGrid,
@@ -17,24 +23,20 @@ import {
 
 function MelbourneClock() {
   const [now, setNow] = useState(new Date());
-  const [colonVisible, setColonVisible] = useState(true);
 
   useEffect(() => {
     const tick = setInterval(() => setNow(new Date()), 1000);
-    const blink = setInterval(() => setColonVisible((v) => !v), 500);
-    return () => {
-      clearInterval(tick);
-      clearInterval(blink);
-    };
+    return () => clearInterval(tick);
   }, []);
 
   const melb = new Date(
     now.toLocaleString("en-US", { timeZone: "Australia/Melbourne" }),
   );
-  const h = melb.getHours().toString();
-  const m = melb.getMinutes().toString().padStart(2, "0");
-  const colon = colonVisible ? ":" : "\u00A0";
-  const period = melb.getHours() >= 12 ? "PM" : "AM";
+  const hours = melb.getHours();
+  const minutes = melb.getMinutes();
+  const seconds = melb.getSeconds();
+  const period = hours >= 12 ? "PM" : "AM";
+  const h12 = hours % 12 || 12;
 
   const date = melb
     .toLocaleDateString("en-GB", {
@@ -45,14 +47,16 @@ function MelbourneClock() {
     .replace(/,/g, "");
 
   return (
-    <span>
-      {date} · {h}
-      <span
-        style={{ opacity: colonVisible ? 1 : 0, transition: "opacity 0.15s" }}
-      >
-        :
-      </span>
-      {m} {period}
+    <span className="font-mono flex items-center">
+      {date} ·{" "}
+      <span className="inline-flex items-center gap-0.5 ml-1">
+        <SlidingNumber value={h12} />
+        <span className="text-text-secondary">:</span>
+        <SlidingNumber value={minutes} padStart />
+        <span className="text-text-secondary">:</span>
+        <SlidingNumber value={seconds} padStart />
+      </span>{" "}
+      {period}
     </span>
   );
 }
@@ -130,214 +134,243 @@ function App() {
   return (
     <div className="min-h-screen">
       <CustomCursor />
-      {/* Loading Screen */}
-      <AnimatePresence>
-        {isLoading && (
-          <motion.div
-            initial={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed inset-0 z-[9999] bg-bg flex flex-col items-center justify-center"
-          >
-            <div className="relative font-display font-black text-7xl md:text-9xl text-text tracking-tighter">
-              {progress}
-              <span className="inline-block ml-2 text-4xl md:text-6xl text-text">
-                %
-              </span>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
 
-      {/* Navigation */}
-      <Navigation
-        activeSection={activeSection}
-        onSectionChange={handleSectionChange}
-      />
+      {/* Navigation — hidden while loading */}
+      {!isLoading && (
+        <Navigation
+          activeSection={activeSection}
+          onSectionChange={handleSectionChange}
+        />
+      )}
 
-      {/* Header Content - Top Frame */}
-      <div className="absolute top-8 left-0 right-0 z-[2] max-w-[1200px] mx-auto px-8 hidden md:flex justify-between items-center h-[54px] text-sm font-medium text-text-secondary pointer-events-none">
-        <div className="pointer-events-auto flex flex-col items-start gap-1">
-          <div className="flex items-center gap-2">
-            <div className="flex items-center justify-center w-[14px]">
-              <div className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+      {/* Main content wrapper — sits above the footer for reveal effect */}
+      <div className="relative z-10 bg-bg">
+        {/* Loading Screen */}
+        <AnimatePresence>
+          {isLoading && (
+            <motion.div
+              initial={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+              className="fixed inset-0 z-[9999] bg-bg flex flex-col items-center justify-center"
+            >
+              <div className="relative font-display font-black text-7xl md:text-9xl text-text tracking-tighter tabular-nums">
+                <BasicNumberTicker
+                  from={0}
+                  target={progress}
+                  transition={{ duration: 0.35, type: "tween", ease: "easeOut" }}
+                  className="text-text"
+                />
+                <span className="inline-block ml-2 text-4xl md:text-6xl text-text">
+                  %
+                </span>
               </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Header Content - Top Frame */}
+        <div className="absolute top-8 left-0 right-0 z-[2] max-w-[1200px] mx-auto px-8 hidden md:flex justify-between items-center h-[54px] text-sm font-medium text-text-secondary pointer-events-none">
+          <div className="pointer-events-auto flex flex-col items-start gap-1">
+            <div className="flex items-center gap-2">
+              <div className="flex items-center justify-center w-[14px]">
+                <div className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                </div>
+              </div>
+              <span>Available for work Mar 2026</span>
             </div>
-            <span>Available for work Mar 2026</span>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={handleCopyEmail}
+                className="flex items-center justify-center w-[14px] text-text-secondary hover:text-text transition-colors focus:outline-none"
+                title="Copy email address"
+              >
+                {isCopied ? <Check size={14} /> : <Copy size={14} />}
+              </button>
+              <a
+                href="mailto:htiruna@gmail.com"
+                className="hover:text-text transition-colors"
+              >
+                htiruna@gmail.com
+              </a>
+            </div>
           </div>
-          <div className="flex items-center gap-2">
-            <button
-              onClick={handleCopyEmail}
-              className="flex items-center justify-center w-[14px] text-text-secondary hover:text-text transition-colors focus:outline-none"
-              title="Copy email address"
-            >
-              {isCopied ? <Check size={14} /> : <Copy size={14} />}
-            </button>
-            <a
-              href="mailto:htiruna@gmail.com"
-              className="hover:text-text transition-colors"
-            >
-              htiruna@gmail.com
-            </a>
+          <div className="pointer-events-auto flex flex-col items-end gap-1">
+            <span>Melbourne, Australia</span>
+            <MelbourneClock />
           </div>
         </div>
-        <div className="pointer-events-auto flex flex-col items-end gap-1">
-          <span>Melbourne, Australia</span>
-          <MelbourneClock />
-        </div>
+
+        {/* Hero Section */}
+        <header className="relative h-auto min-h-[85vh] flex items-start justify-center pt-[160px] pb-16 max-sm:h-[calc(100vh-60px)] max-sm:px-8">
+          <div className="max-w-[1200px] mx-auto px-8 w-full">
+            <motion.div className="max-w-[900px] mx-auto flex flex-col items-center text-center">
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={!isLoading ? { opacity: 1, y: 0 } : {}}
+                transition={{
+                  duration: 0.8,
+                  delay: 0.1,
+                  ease: [0.16, 1, 0.3, 1],
+                }}
+                className="mb-6 h-[250px] w-[250px] max-md:h-[200px] max-md:w-[200px] overflow-visible"
+              >
+                <div className="h-[350px] w-[320px] -translate-x-[35px] -translate-y-[60px] max-md:h-[260px] max-md:w-[260px] max-md:-translate-x-[30px] max-md:-translate-y-[30px]">
+                  <Spline
+                    scene="https://prod.spline.design/zy5bc6-NJcpDwB1Y/scene.splinecode"
+                    onLoad={handleSplineLoad}
+                  />
+                </div>
+              </motion.div>
+              <motion.h1
+                initial={{ opacity: 0, y: 30 }}
+                animate={!isLoading ? { opacity: 1, y: 0 } : {}}
+                transition={{
+                  duration: 0.8,
+                  delay: 0.2,
+                  ease: [0.16, 1, 0.3, 1],
+                }}
+                className="font-display font-black text-[5rem] tracking-[-0.03em] leading-none text-text mb-4 max-md:text-[clamp(2.5rem,8vw,4rem)] max-sm:text-[1.75rem] z-10"
+              >
+                Harish
+              </motion.h1>
+              <motion.p
+                initial={{ opacity: 0, y: 30 }}
+                animate={!isLoading ? { opacity: 1, y: 0 } : {}}
+                transition={{
+                  duration: 0.8,
+                  delay: 0.3,
+                  ease: [0.16, 1, 0.3, 1],
+                }}
+                className="font-display font-medium text-2xl text-text-secondary leading-[1.4] max-w-[400px] mb-6"
+              >
+                <span className="relative inline-block">
+                  <span
+                    data-cursor-label="AI-native"
+                    className="absolute -left-5 -top-3 inline-flex items-center"
+                  >
+                    <PiSparkleAi02Stroke className="w-6 h-6 text-text-secondary" />
+                  </span>
+                  <span data-cursor-figma>Design</span>
+                </span>{" "}
+                + <span data-cursor-code>Engineering</span> partner for startups
+                that value craft and speed.
+              </motion.p>
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={!isLoading ? { opacity: 1, y: 0 } : {}}
+                transition={{
+                  duration: 0.8,
+                  delay: 0.4,
+                  ease: [0.16, 1, 0.3, 1],
+                }}
+                className="w-full"
+              >
+                <LogoCloud />
+              </motion.div>
+            </motion.div>
+          </div>
+        </header>
+
+        {/* Work Section */}
+        <section id="work" className="pt-8 pb-32 relative">
+          <div className="max-w-[1200px] mx-auto px-3 md:px-8">
+            <div className="grid grid-cols-2 gap-4 md:gap-6 lg:gap-8">
+              {gridItems?.map((item, i) => {
+                const animateProps =
+                  i === 0
+                    ? {
+                        initial: { opacity: 0 },
+                        animate: !isLoading ? { opacity: 1 } : {},
+                        transition: {
+                          duration: 0.8,
+                          delay: 0.5,
+                          ease: [0.16, 1, 0.3, 1] as const,
+                        },
+                      }
+                    : {};
+
+                return (
+                  <motion.div
+                    {...animateProps}
+                    key={`${item.project.id}-${i}`}
+                    data-cursor-label={
+                      item.project.modalVariant === "imageOnly"
+                        ? "Enlarge"
+                        : "Open case study"
+                    }
+                    className={`relative rounded-[32px] md:rounded-[48px] overflow-hidden transition-transform duration-[400ms] ease-[cubic-bezier(0.16,1,0.3,1)] hover:scale-[1.02] ${
+                      item.span === 2
+                        ? "col-span-2"
+                        : "col-span-1 aspect-[3/4] md:aspect-[4/5]"
+                    }`}
+                    style={{
+                      backgroundColor: item.project.bgColor,
+                      WebkitMaskImage: "-webkit-radial-gradient(white, black)",
+                    }}
+                    onClick={() => setSelectedProject(item.project)}
+                  >
+                    {isVideo(item.src) ? (
+                      <video
+                        src={item.src}
+                        className={
+                          item.span === 2
+                            ? "w-full h-auto block transform-gpu"
+                            : "absolute inset-0 w-full h-full object-cover block transform-gpu"
+                        }
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                      />
+                    ) : (
+                      <img
+                        src={item.src}
+                        alt={`${item.project.title} screen`}
+                        className={
+                          item.span === 2
+                            ? "w-full h-auto block transform-gpu"
+                            : "absolute inset-0 w-full h-full object-cover block transform-gpu"
+                        }
+                        loading="lazy"
+                      />
+                    )}
+                  </motion.div>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
+        <WhatIDo />
+        <Services />
+        {/* <Testimonials /> */}
+        <AboutMe />
+
+        {/* Contact scroll sentinel for nav observer */}
+        <div id="contact" />
+
+        {/* Close main content wrapper */}
       </div>
 
-      {/* Hero Section */}
-      <header className="relative h-auto min-h-[85vh] flex items-start justify-center pt-[160px] pb-16 max-sm:h-[calc(100vh-60px)] max-sm:px-8">
-        <div className="max-w-[1200px] mx-auto px-8 w-full">
-          <motion.div className="max-w-[900px] mx-auto flex flex-col items-center text-center">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={!isLoading ? { opacity: 1, y: 0 } : {}}
-              transition={{
-                duration: 0.8,
-                delay: 0.1,
-                ease: [0.16, 1, 0.3, 1],
-              }}
-              className="mb-6 h-[250px] w-[250px] max-md:h-[200px] max-md:w-[200px] overflow-visible"
-            >
-              <div className="h-[350px] w-[320px] -translate-x-[35px] -translate-y-[60px] max-md:h-[260px] max-md:w-[260px] max-md:-translate-x-[30px] max-md:-translate-y-[30px]">
-                <Spline
-                  scene="https://prod.spline.design/zy5bc6-NJcpDwB1Y/scene.splinecode"
-                  onLoad={handleSplineLoad}
-                />
-              </div>
-            </motion.div>
-            <motion.h1
-              initial={{ opacity: 0, y: 30 }}
-              animate={!isLoading ? { opacity: 1, y: 0 } : {}}
-              transition={{
-                duration: 0.8,
-                delay: 0.2,
-                ease: [0.16, 1, 0.3, 1],
-              }}
-              className="font-display font-black text-[5rem] tracking-[-0.03em] leading-none text-text mb-4 max-md:text-[clamp(2.5rem,8vw,4rem)] max-sm:text-[1.75rem] z-10"
-            >
-              Harish
-            </motion.h1>
-            <motion.p
-              initial={{ opacity: 0, y: 30 }}
-              animate={!isLoading ? { opacity: 1, y: 0 } : {}}
-              transition={{
-                duration: 0.8,
-                delay: 0.3,
-                ease: [0.16, 1, 0.3, 1],
-              }}
-              className="font-display font-medium text-2xl text-text-secondary leading-[1.4] max-w-[400px] mb-6"
-            >
-              <span data-cursor-figma>Design</span> + <span data-cursor-code>Engineering</span> partner for startups that value craft and
-              speed.
-            </motion.p>
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={!isLoading ? { opacity: 1, y: 0 } : {}}
-              transition={{
-                duration: 0.8,
-                delay: 0.4,
-                ease: [0.16, 1, 0.3, 1],
-              }}
-              className="w-full"
-            >
-              <LogoCloud />
-            </motion.div>
-          </motion.div>
-        </div>
-      </header>
+      {/* Curved edge — overlaps the footer top */}
+      <div className="relative z-10 -mb-[200px] pointer-events-none">
+        <svg
+          viewBox="0 0 1440 200"
+          preserveAspectRatio="none"
+          className="w-full h-[200px] block"
+        >
+          <path
+            d="M0,0 L0,200 C360,40 1080,40 1440,200 L1440,0 Z"
+            fill="var(--color-bg)"
+          />
+        </svg>
+      </div>
 
-      {/* Work Section */}
-      <section id="work" className="pt-8 pb-32 relative">
-        <div className="max-w-[1200px] mx-auto px-3 md:px-8">
-          <div className="grid grid-cols-2 gap-4 md:gap-6 lg:gap-8">
-            {gridItems?.map((item, i) => {
-              const animateProps =
-                i === 0
-                  ? {
-                      initial: { opacity: 0 },
-                      animate: !isLoading ? { opacity: 1 } : {},
-                      transition: {
-                        duration: 0.8,
-                        delay: 0.5,
-                        ease: [0.16, 1, 0.3, 1] as const,
-                      },
-                    }
-                  : {};
-
-              return (
-                <motion.div
-                  {...animateProps}
-                  key={`${item.project.id}-${i}`}
-                  data-cursor-label={
-                    item.project.modalVariant === "imageOnly"
-                      ? "Enlarge"
-                      : "Open case study"
-                  }
-                  className={`relative rounded-[32px] md:rounded-[48px] overflow-hidden transition-transform duration-[400ms] ease-[cubic-bezier(0.16,1,0.3,1)] hover:scale-[1.02] ${
-                    item.span === 2
-                      ? "col-span-2"
-                      : "col-span-1 aspect-[3/4] md:aspect-[4/5]"
-                  }`}
-                  style={{
-                    backgroundColor: item.project.bgColor,
-                    WebkitMaskImage: "-webkit-radial-gradient(white, black)",
-                  }}
-                  onClick={() => setSelectedProject(item.project)}
-                >
-                  {isVideo(item.src) ? (
-                    <video
-                      src={item.src}
-                      className={
-                        item.span === 2
-                          ? "w-full h-auto block transform-gpu"
-                          : "absolute inset-0 w-full h-full object-cover block transform-gpu"
-                      }
-                      autoPlay
-                      loop
-                      muted
-                      playsInline
-                    />
-                  ) : (
-                    <img
-                      src={item.src}
-                      alt={`${item.project.title} screen`}
-                      className={
-                        item.span === 2
-                          ? "w-full h-auto block transform-gpu"
-                          : "absolute inset-0 w-full h-full object-cover block transform-gpu"
-                      }
-                      loading="lazy"
-                    />
-                  )}
-                </motion.div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      <WhatIDo />
-      <Services />
-      {/* <Testimonials /> */}
-      <AboutMe />
-
-      {/* Footer */}
-      <footer className="w-full max-w-[1200px] mx-auto px-8 py-8 hidden md:flex justify-between items-center text-sm font-medium text-text-secondary">
-        <div className="flex items-center gap-1">
-          <span>&copy; 2026 - Harish Tirunahari</span>
-        </div>
-        <div className="flex items-center gap-1">
-          <span>
-            Have a nice{" "}
-            {new Date().toLocaleDateString(undefined, { weekday: "long" })} :)
-          </span>
-        </div>
-      </footer>
+      {/* Footer — revealed from behind as you scroll */}
+      <Footer />
 
       {/* Top blur overlay */}
       <div className="fixed top-0 left-0 right-0 h-32 pointer-events-none z-[1] backdrop-blur-[12px] [mask-image:linear-gradient(to_top,transparent,black)]" />

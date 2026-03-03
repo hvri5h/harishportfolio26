@@ -1,162 +1,146 @@
-import { motion } from 'framer-motion';
-import { useState } from 'react';
-import {
-} from './icons/pikaicons-react';
+import { motion } from "framer-motion";
+import { useState } from "react";
+
+const designSkills = [
+  "Visual Design",
+  "Branding",
+  "Interaction Design",
+  "User Experience",
+  "Prototyping",
+  "Product Design",
+];
+
+const engineeringSkills = [
+  "Javascript",
+  "Typescript",
+  "Tailwind CSS",
+  "Framer Motion",
+  "Node.js",
+  "Next.js",
+  "React.js",
+];
 
 const stackItems = [
-    { name: 'React', icon: '/icons/react-logo.svg', description: 'JavaScript library' },
-    { name: 'Next.js', icon: '/icons/nextjs-logotype-light-background.svg', description: 'React framework', className: 'scale-150' },
-    { name: 'TypeScript', icon: '/icons/typescript-logo.svg', description: 'Typed JavaScript' },
-    { name: 'Tailwind', icon: '/icons/tailwindcss-logo.svg', description: 'CSS framework' },
-    { name: 'Figma', icon: '/icons/figma-logo.svg', description: 'Design software' },
-    { name: 'Supabase', icon: '/icons/supabase-logo.svg', description: 'Backend platform' },
-    { name: 'Motion', icon: '/icons/motion.svg', description: 'Animation library' },
+  { name: "React", icon: "/icons/react-logo.svg" },
+  {
+    name: "Next.js",
+    icon: "/icons/nextjs-logotype-light-background.svg",
+    className: "scale-150",
+  },
+  { name: "TypeScript", icon: "/icons/typescript-logo.svg" },
+  { name: "Tailwind", icon: "/icons/tailwindcss-logo.svg" },
+  { name: "Figma", icon: "/icons/figma-logo.svg" },
+  { name: "Supabase", icon: "/icons/supabase-logo.svg" },
+  { name: "Motion", icon: "/icons/motion.svg" },
 ];
 
 interface TooltipProps {
-    name: string;
-    description: string;
-    children: React.ReactNode;
+  name: string;
+  children: React.ReactNode;
 }
 
-const Tooltip = ({ name, description, children }: TooltipProps) => {
-    const [isVisible, setIsVisible] = useState(false);
+const Tooltip = ({ name, children }: TooltipProps) => {
+  const [isVisible, setIsVisible] = useState(false);
 
-    return (
-        <div
-            className="relative"
-            onMouseEnter={() => setIsVisible(true)}
-            onMouseLeave={() => setIsVisible(false)}
-        >
-            {children}
-            {isVisible && (
-                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 z-50 pointer-events-none">
-                    <div className="bg-[#1a1a1a] text-white px-3.5 py-2.5 rounded-xl shadow-xl whitespace-nowrap">
-                        <div className="text-[13px] font-semibold">{name}</div>
-                        <div className="text-[11px] text-gray-400">{description}</div>
-                    </div>
-                    <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-1">
-                        <div className="w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[6px] border-t-[#1a1a1a]" />
-                    </div>
-                </div>
-            )}
+  return (
+    <div
+      className="relative"
+      onMouseEnter={() => setIsVisible(true)}
+      onMouseLeave={() => setIsVisible(false)}
+    >
+      {children}
+      {isVisible && (
+        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 z-50 pointer-events-none">
+          <div className="bg-[#1a1a1a] text-white px-3.5 py-2 rounded-xl shadow-xl whitespace-nowrap">
+            <div className="text-[13px] font-semibold">{name}</div>
+          </div>
+          <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-1">
+            <div className="w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[6px] border-t-[#1a1a1a]" />
+          </div>
         </div>
-    );
+      )}
+    </div>
+  );
 };
 
+const SkillTag = ({ label }: { label: string }) => (
+  <span className="px-4 py-2 bg-bg border border-border rounded-full text-sm font-medium text-text-secondary transition-colors hover:border-text-tertiary hover:text-text cursor-default">
+    {label}
+  </span>
+);
+
 const WhatIDo = () => {
-    return (
-        <section id="about" className="py-24 bg-bg relative z-30">
-            <div className="max-w-[1200px] mx-auto px-8 max-sm:px-6">
+  return (
+    <section id="about" className="py-24 bg-bg relative z-30">
+      <div className="max-w-[1200px] mx-auto px-8 max-sm:px-6">
+        {/* Header */}
+        <div className="flex flex-col items-center text-center mb-16">
+          <motion.h2 className="font-display font-black text-[56px] leading-[1.1] tracking-[-0.01em] text-text mb-6 max-md:text-5xl max-sm:text-4xl">
+            What I do
+          </motion.h2>
+          <motion.p className="font-display font-medium text-2xl text-text-secondary max-w-[500px]">
+            I work across design, code, and product, owning everything from
+            concept to implementation.
+          </motion.p>
+        </div>
 
-                {/* Header content */}
-                <div className="flex flex-col items-center text-center mb-20">
-                    <motion.h2
-                        className="font-display font-black text-[60px] leading-[1.1] tracking-[-0.01em] text-text mb-6 max-md:text-5xl max-sm:text-4xl"
-                    >
-                        What I do
-                    </motion.h2>
-                    <motion.p
-                        className="font-display font-medium text-2xl text-text-secondary max-w-[700px] max-md:text-xl"
-                    >
-                        I work across design, code, and product, owning everything from concept to implementation.
-                    </motion.p>
-                </div>
-
-                {/* Cards */}
-                <div className="grid grid-cols-2 gap-8 mb-8 max-md:grid-cols-1">
-                    {/* Product Design */}
-                    <motion.div
-                        className="p-10 bg-surface border border-border-light rounded-2xl flex flex-col h-full"
-                    >
-                        <div className="flex items-center gap-4 mb-6">
-                            {/* <div className="w-12 h-12 rounded-xl bg-surface-hover flex items-center justify-center flex-shrink-0">
-                            </div> */}
-                            <h3 className="text-2xl font-bold text-text">Product Design</h3>
-                        </div>
-                        <p className="text-lg text-text-secondary mb-8 leading-relaxed">
-                            I design interfaces people actually enjoy using. Real product thinking with attention to craft, typography, and how things feel.
-                        </p>
-
-                        <div className="mt-auto">
-                            <div className="flex flex-wrap gap-2.5">
-                                {[
-                                    "UX/UI Design", "Prototyping", "Product Thinking",
-                                    "Interaction Design"
-                                ].map((skill) => (
-                                    <span
-                                        key={skill}
-                                        className="px-4 py-2 bg-bg border border-border rounded-full text-sm font-medium text-text-secondary transition-colors hover:border-text-tertiary hover:text-text cursor-default"
-                                    >
-                                        {skill}
-                                    </span>
-                                ))}
-                            </div>
-                        </div>
-                    </motion.div>
-
-                    {/* Software Engineering */}
-                    <motion.div
-                        className="p-10 bg-surface border border-border-light rounded-2xl flex flex-col h-full"
-                    >
-                        <div className="flex items-center gap-4 mb-6">
-                            {/* <div className="w-12 h-12 rounded-xl bg-surface-hover flex items-center justify-center flex-shrink-0">
-                            </div> */}
-                            <h3 className="text-2xl font-bold text-text">Software Engineering</h3>
-                        </div>
-                        <p className="text-lg text-text-secondary mb-8 leading-relaxed">
-                            Over a decade of writing code. Frontend is my sweet spot: React, Next.js, animations, the works. I don't just make things look right, I make them work right.
-                        </p>
-
-                        <div className="mt-auto">
-                            <div className="flex flex-wrap gap-2.5">
-                                {[
-                                    "React", "Next.js", "TypeScript", "Tailwind CSS",
-                                    "Framer Motion", "Mobile Apps"
-                                ].map((skill) => (
-                                    <span
-                                        key={skill}
-                                        className="px-4 py-2 bg-bg border border-border rounded-full text-sm font-medium text-text-secondary transition-colors hover:border-text-tertiary hover:text-text cursor-default"
-                                    >
-                                        {skill}
-                                    </span>
-                                ))}
-                            </div>
-                        </div>
-                    </motion.div>
-                </div>
-
-                {/* Stack */}
-                <motion.div
-                    className="p-10 bg-surface border border-border-light rounded-2xl"
-                >
-                    <div className="flex items-center gap-4 mb-8">
-                        {/* <div className="w-12 h-12 rounded-xl bg-surface-hover flex items-center justify-center flex-shrink-0">
-                        </div> */}
-                        <h3 className="text-2xl font-bold text-text">Stack</h3>
-                    </div>
-
-                    <div className="grid grid-cols-7 gap-4 max-lg:grid-cols-4 max-sm:grid-cols-3">
-                        {stackItems.map((item) => (
-                            <Tooltip key={item.name} name={item.name} description={item.description}>
-                                <motion.div
-                                    className="group flex items-center justify-center p-5 bg-bg border border-border-light rounded-xl transition-all duration-300 hover:border-border hover:shadow-md aspect-square cursor-pointer"
-                                >
-                                    <div className="w-10 h-10 flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
-                                        <img
-                                            src={item.icon}
-                                            alt={item.name}
-                                            className={`w-10 h-10 object-contain ${item.className || ''}`}
-                                        />
-                                    </div>
-                                </motion.div>
-                            </Tooltip>
-                        ))}
-                    </div>
-                </motion.div>
+        {/* Bento: Design & Engineering */}
+        <div className="grid grid-cols-2 gap-6 mb-6 max-md:grid-cols-1">
+          {/* Design */}
+          <div className="p-8 bg-surface border border-border-light rounded-2xl flex flex-col min-h-[280px]">
+            <h3 className="text-xl font-bold text-text mb-3">Design</h3>
+            <p className="text-base text-text-secondary leading-relaxed mb-8">
+              I design interfaces people actually enjoy using. Real product
+              thinking with attention to craft, typography, and how things feel.
+            </p>
+            <div className="mt-auto flex flex-wrap gap-2">
+              {designSkills.map((skill) => (
+                <SkillTag key={skill} label={skill} />
+              ))}
             </div>
-        </section>
-    );
+          </div>
+
+          {/* Engineering */}
+          <div className="p-8 bg-surface border border-border-light rounded-2xl flex flex-col min-h-[280px]">
+            <h3 className="text-xl font-bold text-text mb-3">Engineering</h3>
+            <p className="text-base text-text-secondary leading-relaxed mb-8">
+              Over a decade of writing code. Frontend is my sweet spot: React,
+              Next.js, animations, the works. I don't just make things look
+              right, I make them work right.
+            </p>
+            <div className="mt-auto flex flex-wrap gap-2">
+              {engineeringSkills.map((skill) => (
+                <SkillTag key={skill} label={skill} />
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Stack */}
+        <div className="p-8 bg-surface border border-border-light rounded-2xl">
+          <h3 className="text-lg font-bold text-text mb-8">Stack</h3>
+          <div className="flex items-center justify-between max-sm:grid max-sm:grid-cols-4 max-sm:gap-6">
+            {stackItems.map((item) => (
+              <Tooltip key={item.name} name={item.name}>
+                <div className="flex flex-col items-center gap-3 cursor-pointer group">
+                  <div className="w-12 h-12 flex items-center justify-center rounded-xl border border-border-light bg-bg transition-all duration-300 group-hover:border-border group-hover:shadow-sm">
+                    <img
+                      src={item.icon}
+                      alt={item.name}
+                      className={`w-6 h-6 object-contain ${item.className || ""}`}
+                    />
+                  </div>
+                  <span className="text-xs text-text-secondary font-medium">
+                    {item.name}
+                  </span>
+                </div>
+              </Tooltip>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
 };
 
 export default WhatIDo;

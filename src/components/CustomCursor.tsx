@@ -13,6 +13,7 @@ export function CustomCursor() {
   const [hoverLabel, setHoverLabel] = useState<string | null>(null);
   const [figmaMode, setFigmaMode] = useState(false);
   const [codeMode, setCodeMode] = useState(false);
+  const [darkBg, setDarkBg] = useState(false);
   const [visible, setVisible] = useState(false);
   const [pillWidth, setPillWidth] = useState(DOT_SIZE);
   const isExpanded = hoverLabel !== null;
@@ -57,6 +58,10 @@ export function CustomCursor() {
       const codeTarget = (e.target as HTMLElement).closest(
         "[data-cursor-code]",
       );
+      const darkTarget = (e.target as HTMLElement).closest(
+        "[data-cursor-dark]",
+      );
+      if (darkTarget) setDarkBg(true);
       if (figmaTarget) {
         setFigmaMode(true);
       } else if (codeTarget) {
@@ -75,6 +80,10 @@ export function CustomCursor() {
       const codeTarget = (e.target as HTMLElement).closest(
         "[data-cursor-code]",
       );
+      const darkTarget = (e.target as HTMLElement).closest(
+        "[data-cursor-dark]",
+      );
+      if (darkTarget) setDarkBg(false);
       if (figmaTarget) setFigmaMode(false);
       if (codeTarget) setCodeMode(false);
       if (labelTarget) setHoverLabel(null);
@@ -141,7 +150,7 @@ export function CustomCursor() {
         height,
         translateX: "-50%",
         translateY: "-50%",
-        backgroundColor: "#1a1a1a",
+        backgroundColor: darkBg ? "#ffffff" : "#1a1a1a",
         opacity: visible ? 1 : 0,
       }}
     >
@@ -152,7 +161,7 @@ export function CustomCursor() {
         {hoverLabel}
       </span>
       <motion.span
-        className="text-white text-[13px] font-medium whitespace-nowrap select-none"
+        className={`${darkBg ? "text-[#1a1a1a]" : "text-white"} text-[13px] font-medium whitespace-nowrap select-none`}
         animate={{ opacity: isExpanded ? 1 : 0 }}
         transition={{ duration: 0.15, delay: isExpanded ? 0.05 : 0 }}
       >
