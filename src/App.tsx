@@ -40,8 +40,28 @@ function MelbourneClock() {
   const period = hours >= 12 ? "PM" : "AM";
   const h12 = hours % 12 || 12;
 
+  // Calculate timezone difference
+  const melbOffset = (() => {
+    const localHour = now.getHours() + now.getMinutes() / 60;
+    const melbHour = melb.getHours() + melb.getMinutes() / 60;
+    let diff = Math.round(melbHour - localHour);
+    if (diff > 12) diff -= 24;
+    if (diff < -12) diff += 24;
+    return diff;
+  })();
+
+  const tooltipText =
+    melbOffset === 0
+      ? ""
+      : melbOffset > 0
+        ? `${melbOffset}h ahead of you`
+        : `${Math.abs(melbOffset)}h behind you`;
+
   return (
-    <span className="flex items-center">
+    <span
+      className="flex items-center"
+      {...(tooltipText ? { "data-cursor-label": tooltipText } : {})}
+    >
       <span className="font-mono font-medium text-[0.9em] inline-flex items-center gap-0.5">
         <span className="inline-flex items-center gap-0.5">
           <SlidingNumber value={h12} />
