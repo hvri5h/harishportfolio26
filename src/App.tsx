@@ -1,6 +1,10 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import { X as XIcon, Check, Copy, ArrowUpRight } from "lucide-react";
+import { X as XIcon, ArrowUpRight } from "lucide-react";
+import {
+  PiCopyDefaultStroke,
+  PiCopyCopiedStroke,
+} from "./components/icons/pikaicons-react";
 import Spline from "@splinetool/react-spline";
 import { PiSparkleAi02Stroke } from "./components/icons/pikaicons-react";
 import { projects, type Project } from "./data/portfolio";
@@ -56,13 +60,13 @@ function App() {
   const shouldReduceMotion = useReducedMotion();
   const modalEnterSpring = {
     type: "spring",
-    duration: 0.48,
-    bounce: 0.14,
+    duration: 0.6,
+    bounce: 0.08,
   } as const;
   const modalExitSpring = {
     type: "spring",
-    duration: 0.36,
-    bounce: 0.08,
+    duration: 0.45,
+    bounce: 0.05,
   } as const;
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [isCopied, setIsCopied] = useState(false);
@@ -196,7 +200,11 @@ function App() {
                 className="flex items-center justify-center w-[14px] text-text-secondary hover:text-text transition-colors focus:outline-none"
                 title="Copy email address"
               >
-                {isCopied ? <Check size={14} /> : <Copy size={14} />}
+                {isCopied ? (
+                  <PiCopyCopiedStroke className="w-4 h-4" />
+                ) : (
+                  <PiCopyDefaultStroke className="w-4 h-4" />
+                )}
               </button>
               <a
                 href="mailto:htiruna@gmail.com"
@@ -580,10 +588,10 @@ function App() {
                               )}
                             </div>
                             <div className="flex-grow flex flex-col items-start min-w-0">
-                              <h2 className="font-display font-bold text-3xl md:text-4xl lg:text-[2.5rem] tracking-tight text-text mb-1 md:mb-2 leading-tight">
+                              <h2 className="font-display font-bold text-3xl md:text-4xl lg:text-[2.5rem] tracking-[-0.03em] text-text mb-1 md:mb-2 leading-tight">
                                 {selectedProject.title}
                               </h2>
-                              <h3 className="text-xl md:text-2xl text-text-secondary mb-8 md:mb-10 leading-snug">
+                              <h3 className="text-xl md:text-2xl tracking-[-0.03em] text-text-secondary mb-8 md:mb-10 leading-snug">
                                 {selectedProject.subtitle}
                               </h3>
                               <div className="text-[15px] md:text-base text-text leading-relaxed whitespace-pre-line max-w-[650px]">

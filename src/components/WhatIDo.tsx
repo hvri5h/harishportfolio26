@@ -75,10 +75,10 @@ const WhatIDo = () => {
       <div className="max-w-[1200px] mx-auto px-8 max-sm:px-6">
         {/* Header */}
         <div className="flex flex-col items-center text-center mb-16">
-          <motion.h2 className="font-display font-black text-[56px] leading-[1.1] tracking-[-0.01em] text-text mb-6 max-md:text-5xl max-sm:text-4xl">
+          <motion.h2 className="font-display font-black text-[56px] leading-[1.1] tracking-[-0.03em] text-text mb-6 max-md:text-5xl max-sm:text-4xl">
             What I do
           </motion.h2>
-          <motion.p className="font-display font-medium text-2xl text-text-secondary max-w-[500px]">
+          <motion.p className="font-display font-medium text-2xl text-text-secondary max-w-[600px]">
             I work across design, code, and product, owning everything from
             concept to implementation.
           </motion.p>
@@ -88,7 +88,9 @@ const WhatIDo = () => {
         <div className="grid grid-cols-2 gap-6 mb-6 max-md:grid-cols-1">
           {/* Design */}
           <div className="p-8 bg-surface border border-border-light rounded-2xl flex flex-col min-h-[280px]">
-            <h3 className="text-xl font-bold text-text mb-3">Design</h3>
+            <h3 className="text-xl font-bold tracking-[-0.03em] text-text mb-3">
+              Design
+            </h3>
             <p className="text-base text-text-secondary leading-relaxed mb-8">
               I design interfaces people actually enjoy using. Real product
               thinking with attention to craft, typography, and how things feel.
@@ -102,7 +104,9 @@ const WhatIDo = () => {
 
           {/* Engineering */}
           <div className="p-8 bg-surface border border-border-light rounded-2xl flex flex-col min-h-[280px]">
-            <h3 className="text-xl font-bold text-text mb-3">Engineering</h3>
+            <h3 className="text-xl font-bold tracking-[-0.03em] text-text mb-3">
+              Engineering
+            </h3>
             <p className="text-base text-text-secondary leading-relaxed mb-8">
               Over a decade of writing code. Frontend is my sweet spot: React,
               Next.js, animations, the works. I don't just make things look
@@ -118,7 +122,9 @@ const WhatIDo = () => {
 
         {/* Stack */}
         <div className="p-8 bg-surface border border-border-light rounded-2xl">
-          <h3 className="text-lg font-bold text-text mb-8">Stack</h3>
+          <h3 className="text-lg font-bold tracking-[-0.03em] text-text mb-8">
+            Stack
+          </h3>
           <div className="flex items-center justify-between max-sm:grid max-sm:grid-cols-4 max-sm:gap-6">
             {stackItems.map((item) => (
               <Tooltip key={item.name} name={item.name}>

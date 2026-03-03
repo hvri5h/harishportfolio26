@@ -33,7 +33,7 @@ const Testimonials = () => {
         <section className="py-32 bg-bg relative z-30 overflow-hidden">
             <div className="max-w-[1200px] mx-auto px-8 max-sm:px-6 mb-24 text-center">
                 <motion.h2
-                    className="font-display font-black text-[60px] leading-[1.1] tracking-[-0.01em] text-text mb-6 max-md:text-5xl max-sm:text-4xl"
+                    className="font-display font-black text-[60px] leading-[1.1] tracking-[-0.03em] text-text mb-6 max-md:text-5xl max-sm:text-4xl"
                 >
                     Who I've worked with
                 </motion.h2>
@@ -74,7 +74,7 @@ const Testimonials = () => {
                                     className="w-12 h-12 rounded-full object-cover shadow-sm bg-white"
                                 />
                                 <div className="text-left">
-                                    <h4 className="text-[1rem] font-bold text-text leading-tight">
+                                    <h4 className="text-[1rem] font-bold tracking-[-0.03em] text-text leading-tight">
                                         {testimonial.author}
                                     </h4>
                                     <p className="text-[0.875rem] text-text-tertiary">
