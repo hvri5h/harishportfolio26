@@ -21,14 +21,14 @@ const AboutMe = () => {
 
         {/* Bio */}
         <div className="space-y-6 font-medium">
-          <p className="text-lg text-text-secondary leading-relaxed">
+          {/* <p className="text-lg text-text-secondary leading-relaxed">
             I like to make things — apps, websites, brands, animations. I focus
             on consumer products because I spend a lot of time thinking about
             people.
-          </p>
+          </p> */}
 
           <p className="text-lg text-text-secondary leading-relaxed">
-            I'm a design engineer based in Australia, originally from New
+            I'm a Design Engineer based in Australia, originally from New
             Zealand. I spent over a decade as a software engineer shipping
             products across the full stack. Along the way I kept getting pulled
             toward design: how things look, how they feel, why certain

@@ -207,10 +207,10 @@ function App() {
                 )}
               </button>
               <a
-                href="mailto:htiruna@gmail.com"
+                href="mailto:hello@hari.sh"
                 className="hover:text-text transition-colors"
               >
-                htiruna@gmail.com
+                hello@hari.sh
               </a>
             </div>
           </div>
