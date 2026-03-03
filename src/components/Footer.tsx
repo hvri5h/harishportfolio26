@@ -74,13 +74,17 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Watermark image — in flow so nothing overlaps */}
-        <div className="select-none pointer-events-none mt-6 mb-4">
+        {/* Watermark image with dark fade overlay */}
+        <div className="relative select-none pointer-events-none mt-6 mb-4 overflow-hidden">
           <img
             src={footerBranding}
             alt=""
             className="w-full"
             draggable={false}
+          />
+          <div
+            className="absolute inset-0 bg-gradient-to-t from-[#141414] via-[#141414]/50 to-transparent"
+            aria-hidden="true"
           />
         </div>
 

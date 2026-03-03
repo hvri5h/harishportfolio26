@@ -1,10 +1,8 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { X as XIcon, Check, Copy, ArrowUpRight } from "lucide-react";
 import Spline from "@splinetool/react-spline";
-import {
-  PiSparkleAi02Stroke,
-} from "./components/icons/pikaicons-react";
+import { PiSparkleAi02Stroke } from "./components/icons/pikaicons-react";
 import { projects, type Project } from "./data/portfolio";
 import { Navigation } from "./components/Navigation";
 import LogoCloud from "./components/LogoCloud";
@@ -38,30 +36,34 @@ function MelbourneClock() {
   const period = hours >= 12 ? "PM" : "AM";
   const h12 = hours % 12 || 12;
 
-  const date = melb
-    .toLocaleDateString("en-GB", {
-      weekday: "short",
-      day: "numeric",
-      month: "short",
-    })
-    .replace(/,/g, "");
-
   return (
-    <span className="font-mono flex items-center">
-      {date} ·{" "}
-      <span className="inline-flex items-center gap-0.5 ml-1">
-        <SlidingNumber value={h12} />
-        <span className="text-text-secondary">:</span>
-        <SlidingNumber value={minutes} padStart />
-        <span className="text-text-secondary">:</span>
-        <SlidingNumber value={seconds} padStart />
-      </span>{" "}
-      {period}
+    <span className="flex items-center">
+      <span className="font-mono font-medium text-[0.9em] inline-flex items-center gap-0.5">
+        <span className="inline-flex items-center gap-0.5">
+          <SlidingNumber value={h12} />
+          <span className="text-text-secondary">:</span>
+          <SlidingNumber value={minutes} padStart />
+          <span className="text-text-secondary">:</span>
+          <SlidingNumber value={seconds} padStart />
+        </span>
+        <span>{period}</span>
+      </span>
     </span>
   );
 }
 
 function App() {
+  const shouldReduceMotion = useReducedMotion();
+  const modalEnterSpring = {
+    type: "spring",
+    duration: 0.48,
+    bounce: 0.14,
+  } as const;
+  const modalExitSpring = {
+    type: "spring",
+    duration: 0.36,
+    bounce: 0.08,
+  } as const;
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [isCopied, setIsCopied] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -145,6 +147,9 @@ function App() {
 
       {/* Main content wrapper — sits above the footer for reveal effect */}
       <div className="relative z-10 bg-bg">
+        {/* Top blur overlay */}
+        <div className="fixed top-0 left-0 right-0 h-40 pointer-events-none z-[5] backdrop-blur-[12px] [mask-image:linear-gradient(to_top,transparent,black)]" />
+
         {/* Loading Screen */}
         <AnimatePresence>
           {isLoading && (
@@ -158,7 +163,11 @@ function App() {
                 <BasicNumberTicker
                   from={0}
                   target={progress}
-                  transition={{ duration: 0.35, type: "tween", ease: "easeOut" }}
+                  transition={{
+                    duration: 0.35,
+                    type: "tween",
+                    ease: "easeOut",
+                  }}
                   className="text-text"
                 />
                 <span className="inline-block ml-2 text-4xl md:text-6xl text-text">
@@ -170,7 +179,7 @@ function App() {
         </AnimatePresence>
 
         {/* Header Content - Top Frame */}
-        <div className="absolute top-8 left-0 right-0 z-[2] max-w-[1200px] mx-auto px-8 hidden md:flex justify-between items-center h-[54px] text-sm font-medium text-text-secondary pointer-events-none">
+        <div className="absolute top-8 left-0 right-0 z-[10] max-w-[1200px] mx-auto px-8 hidden md:flex justify-between items-center h-[54px] text-sm font-medium text-text-secondary pointer-events-none">
           <div className="pointer-events-auto flex flex-col items-start gap-1">
             <div className="flex items-center gap-2">
               <div className="flex items-center justify-center w-[14px]">
@@ -197,7 +206,7 @@ function App() {
               </a>
             </div>
           </div>
-          <div className="pointer-events-auto flex flex-col items-end gap-1">
+          <div className="pointer-events-auto flex flex-col items-end gap-0.5">
             <span>Melbourne, Australia</span>
             <MelbourneClock />
           </div>
@@ -233,6 +242,7 @@ function App() {
                   ease: [0.16, 1, 0.3, 1],
                 }}
                 className="font-display font-black text-[5rem] tracking-[-0.03em] leading-none text-text mb-4 max-md:text-[clamp(2.5rem,8vw,4rem)] max-sm:text-[1.75rem] z-10"
+                data-cursor-label="hah-REESH"
               >
                 Harish
               </motion.h1>
@@ -298,8 +308,8 @@ function App() {
                     key={`${item.project.id}-${i}`}
                     data-cursor-label={
                       item.project.modalVariant === "imageOnly"
-                        ? "Enlarge"
-                        : "Open case study"
+                        ? "View image"
+                        : "View case study"
                     }
                     className={`relative rounded-[32px] md:rounded-[48px] overflow-hidden transition-transform duration-[400ms] ease-[cubic-bezier(0.16,1,0.3,1)] hover:scale-[1.02] ${
                       item.span === 2
@@ -372,20 +382,29 @@ function App() {
       {/* Footer — revealed from behind as you scroll */}
       <Footer />
 
-      {/* Top blur overlay */}
-      <div className="fixed top-0 left-0 right-0 h-32 pointer-events-none z-[1] backdrop-blur-[12px] [mask-image:linear-gradient(to_top,transparent,black)]" />
+      {/* Top blur overlay - moved to inside content wrapper */}
 
       {/* Project Modal */}
-      <AnimatePresence>
+      <AnimatePresence mode="wait">
         {selectedProject && (
-          <div className="fixed inset-0 z-[1000] pointer-events-none">
+          <motion.div
+            key="project-modal"
+            className="fixed inset-0 z-[1000] pointer-events-none"
+          >
             {/* Backdrop */}
             <motion.div
               className="absolute inset-0 bg-[#0f0f11]/90 pointer-events-auto"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
+              initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0 }}
+              animate={
+                shouldReduceMotion
+                  ? { opacity: 1 }
+                  : { opacity: 1, transition: modalEnterSpring }
+              }
+              exit={
+                shouldReduceMotion
+                  ? { opacity: 0 }
+                  : { opacity: 0, transition: modalExitSpring }
+              }
               style={{ willChange: "opacity" }}
             />
 
@@ -404,15 +423,37 @@ function App() {
               >
                 {/* Modal Container */}
                 <motion.div
-                  className={`w-full pointer-events-auto relative overflow-hidden flex flex-col squircle ${
+                  className={`w-full pointer-events-auto relative overflow-hidden flex flex-col squircle transform-gpu ${
                     selectedProject?.modalVariant === "imageOnly"
                       ? "max-w-[1120px] bg-transparent justify-center items-center cursor-pointer"
                       : "mt-auto md:m-auto rounded-t-[48px] md:rounded-[56px] max-w-[1120px] bg-white shadow-2xl"
                   }`}
-                  initial={{ y: "100%", opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  exit={{ y: "100%", opacity: 0 }}
-                  transition={{ type: "spring", damping: 25, stiffness: 200 }}
+                  initial={
+                    shouldReduceMotion
+                      ? { opacity: 1 }
+                      : {
+                          transform: "translate3d(0, 100vh, 0)",
+                          opacity: 1,
+                        }
+                  }
+                  animate={
+                    shouldReduceMotion
+                      ? { opacity: 1 }
+                      : {
+                          transform: "translate3d(0, 0, 0)",
+                          opacity: 1,
+                          transition: modalEnterSpring,
+                        }
+                  }
+                  exit={
+                    shouldReduceMotion
+                      ? { opacity: 1 }
+                      : {
+                          transform: "translate3d(0, 100vh, 0)",
+                          opacity: 1,
+                          transition: modalExitSpring,
+                        }
+                  }
                   onClick={(e) => {
                     // Only prevent propagation for the standard modal wrapper, or let the inner actual content stop propagation for imageOnly
                     if (selectedProject?.modalVariant !== "imageOnly") {
@@ -492,7 +533,7 @@ function App() {
                             />
                           )}
                           <button
-                            className="absolute top-4 right-4 md:top-6 md:right-6 w-11 h-11 flex items-center justify-center rounded-full bg-white/80 text-black backdrop-blur-md transition-all duration-300 hover:scale-105 hover:bg-white z-50 shadow-lg border border-black/5"
+                            className="absolute top-4 right-4 md:top-6 md:right-6 w-11 h-11 flex items-center justify-center rounded-full bg-white/80 text-black backdrop-blur-md transition-all duration-150 ease-out active:scale-95 sm:hover:scale-105 hover:bg-white z-50 shadow-lg border border-black/5"
                             onClick={() => setSelectedProject(null)}
                             aria-label="Close modal"
                           >
@@ -592,7 +633,7 @@ function App() {
                 </motion.div>
               </div>
             </div>
-          </div>
+          </motion.div>
         )}
       </AnimatePresence>
     </div>

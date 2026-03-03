@@ -54,6 +54,7 @@ export default function LogoCloud() {
   const trackRef = useRef<HTMLDivElement>(null);
   const setRef = useRef<HTMLDivElement>(null);
   const [scrollWidth, setScrollWidth] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
 
   useEffect(() => {
     if (!setRef.current) return;
@@ -110,11 +111,14 @@ export default function LogoCloud() {
       >
         <div
           ref={trackRef}
-          className="flex items-center will-change-transform hover:[animation-play-state:paused]"
+          className="flex items-center will-change-transform"
           style={{
             animation: scrollWidth ? `ticker 30s linear infinite` : 'none',
+            animationPlayState: isPaused ? 'paused' : 'running',
             ['--scroll-width' as string]: `-${scrollWidth}px`,
           }}
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
         >
           <div ref={setRef} className="flex items-center gap-x-12 md:gap-x-16 pr-12 md:pr-16 flex-shrink-0">
             <LogoSet />
