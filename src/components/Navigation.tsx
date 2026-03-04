@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
-import { motion } from 'framer-motion';
+import { useEffect, useRef, useState } from "react";
+import { motion } from "framer-motion";
 
 interface NavigationProps {
   activeSection: string;
@@ -7,18 +7,21 @@ interface NavigationProps {
 }
 
 const navItems = [
-  { id: 'work', label: 'Work' },
-  { id: 'about', label: 'About' },
-  { id: 'contact', label: 'Contact' },
+  { id: "work", label: "Work" },
+  { id: "about", label: "About" },
+  { id: "contact", label: "Contact" },
 ];
 
-export function Navigation({ activeSection, onSectionChange }: NavigationProps) {
+export function Navigation({
+  activeSection,
+  onSectionChange,
+}: NavigationProps) {
   const observerRef = useRef<IntersectionObserver | null>(null);
 
   useEffect(() => {
     const options = {
       root: null,
-      rootMargin: '-40% 0px -20% 0px',
+      rootMargin: "-40% 0px -20% 0px",
       threshold: 0,
     };
 
@@ -50,14 +53,12 @@ export function Navigation({ activeSection, onSectionChange }: NavigationProps) 
   const handleClick = (sectionId: string) => {
     const element = document.getElementById(sectionId);
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      element.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   };
 
   return (
-    <motion.nav
-      className="fixed top-8 left-0 right-0 z-[100] flex justify-center pointer-events-none"
-    >
+    <motion.nav className="fixed top-8 left-0 right-0 z-[100] flex justify-center pointer-events-none">
       <div
         className="flex items-center bg-[#f0f0f0]/50 backdrop-blur-[20px] backdrop-saturate-[180%] rounded-full p-[6px] gap-1 pointer-events-auto transition-all duration-base shadow-[0_0_0_1px_rgba(0,0,0,0.08)]"
         onMouseLeave={() => setHoveredSection(null)}
@@ -65,8 +66,9 @@ export function Navigation({ activeSection, onSectionChange }: NavigationProps) 
         {navItems.map((item) => (
           <button
             key={item.id}
-            className={`relative px-6 py-2 text-[0.9375rem] font-medium rounded-full transition-colors duration-300 z-10 bg-transparent cursor-pointer leading-normal ${highlightTarget === item.id ? 'text-black' : 'text-black/50'
-              }`}
+            className={`relative px-6 py-2 text-[0.9375rem] font-medium rounded-full transition-colors duration-300 z-10 bg-transparent cursor-pointer leading-normal ${
+              highlightTarget === item.id ? "text-black" : "text-black/50"
+            }`}
             onClick={() => handleClick(item.id)}
             onMouseEnter={() => setHoveredSection(item.id)}
           >
@@ -75,7 +77,7 @@ export function Navigation({ activeSection, onSectionChange }: NavigationProps) 
                 className="absolute inset-0 bg-white rounded-full shadow-[0_2px_5px_rgba(0,0,0,0.05),0_1px_2px_rgba(0,0,0,0.1)] -z-10"
                 layoutId="nav-highlight"
                 transition={{
-                  type: 'spring',
+                  type: "spring",
                   stiffness: 300,
                   damping: 30,
                 }}

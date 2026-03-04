@@ -11,6 +11,7 @@ import { X as XIcon, ArrowUpRight, Plus } from "lucide-react";
 import {
   PiCopyDefaultStroke,
   PiCopyCopiedStroke,
+  PiEyeOnStroke,
 } from "./components/icons/pikaicons-react";
 import Spline from "@splinetool/react-spline";
 import { useDialKit } from "dialkit";
@@ -531,11 +532,7 @@ function App() {
         </header>
 
         {/* Work Section */}
-        <section
-          id="work"
-          ref={workSectionRef}
-          className="pt-8 pb-32 relative"
-        >
+        <section id="work" ref={workSectionRef} className="pt-8 pb-32 relative">
           <div className="max-w-[1200px] mx-auto px-3 md:px-8">
             <div className="grid grid-cols-2 gap-4 md:gap-6 lg:gap-8">
               {workItems.map((item, i) => {
@@ -684,12 +681,10 @@ function App() {
                   );
                   if (p) setSelectedProject(p);
                 }}
-                className="inline-flex items-center gap-3 rounded-full border border-white/20 bg-white/75 px-5 py-3 text-[15px] font-semibold text-[#15171c] shadow-[0_8px_32px_rgba(0,0,0,0.12)] backdrop-blur-xl transition-transform hover:scale-[1.03] active:scale-[0.97]"
+                className="inline-flex items-center gap-2 rounded-[64px] bg-[rgba(0,0,0,0.75)] backdrop-blur-[10px] border border-[rgba(255,255,255,0.12)] px-5 py-3 text-[15px] font-medium text-white shadow-[rgba(0,0,0,0.18)_0px_0.711334px_0.711334px_-0.75px,rgba(0,0,0,0.17)_0px_1.93715px_1.93715px_-1.5px,rgba(0,0,0,0.16)_0px_4.25329px_4.25329px_-2.25px,rgba(0,0,0,0.13)_0px_9.44132px_9.44132px_-3px,rgba(0,0,0,0.06)_0px_24px_24px_-3.75px] transition-transform hover:scale-[1.03] active:scale-[0.97]"
               >
                 <span className="tracking-[-0.01em]">View case study</span>
-                <span className="inline-flex h-[34px] w-[34px] items-center justify-center rounded-full bg-[#0A84FF] text-white shadow-sm">
-                  <Plus size={18} strokeWidth={2.5} />
-                </span>
+                <PiEyeOnStroke className="w-5 h-5" />
               </button>
             </div>
           </motion.div>
