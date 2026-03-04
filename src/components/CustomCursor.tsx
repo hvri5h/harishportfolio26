@@ -13,6 +13,7 @@ export function CustomCursor() {
   const [hoverLabel, setHoverLabel] = useState<string | null>(null);
   const [figmaMode, setFigmaMode] = useState(false);
   const [codeMode, setCodeMode] = useState(false);
+  const [nativePointerMode, setNativePointerMode] = useState(false);
   const [darkBg, setDarkBg] = useState(false);
   const [visible, setVisible] = useState(false);
   const [pillWidth, setPillWidth] = useState(DOT_SIZE);
@@ -58,9 +59,13 @@ export function CustomCursor() {
       const codeTarget = (e.target as HTMLElement).closest(
         "[data-cursor-code]",
       );
+      const nativePointerTarget = (e.target as HTMLElement).closest(
+        "[data-cursor-native-pointer]",
+      );
       const darkTarget = (e.target as HTMLElement).closest(
         "[data-cursor-dark]",
       );
+      if (nativePointerTarget) setNativePointerMode(true);
       if (darkTarget) setDarkBg(true);
       if (figmaTarget) {
         setFigmaMode(true);
@@ -80,9 +85,13 @@ export function CustomCursor() {
       const codeTarget = (e.target as HTMLElement).closest(
         "[data-cursor-code]",
       );
+      const nativePointerTarget = (e.target as HTMLElement).closest(
+        "[data-cursor-native-pointer]",
+      );
       const darkTarget = (e.target as HTMLElement).closest(
         "[data-cursor-dark]",
       );
+      if (nativePointerTarget) setNativePointerMode(false);
       if (darkTarget) setDarkBg(false);
       if (figmaTarget) setFigmaMode(false);
       if (codeTarget) setCodeMode(false);
@@ -105,6 +114,10 @@ export function CustomCursor() {
     width.set(isExpanded ? pillWidth : DOT_SIZE);
     height.set(isExpanded ? PILL_HEIGHT : DOT_SIZE);
   }, [isExpanded, hoverLabel, width, height, pillWidth]);
+
+  if (nativePointerMode) {
+    return null;
+  }
 
   if (codeMode) {
     return (

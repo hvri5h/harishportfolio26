@@ -675,6 +675,7 @@ function App() {
           >
             <div className="pointer-events-auto">
               <button
+                data-cursor-native-pointer
                 onClick={() => {
                   const p = projects.find(
                     (p) => p.id === activeStackedProjectId,
