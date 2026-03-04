@@ -7,14 +7,13 @@ import {
   useMotionValueEvent,
   useInView,
 } from "framer-motion";
-import { X as XIcon, ArrowUpRight, Plus } from "lucide-react";
+import { X as XIcon, ArrowUpRight } from "lucide-react";
 import {
   PiCopyDefaultStroke,
   PiCopyCopiedStroke,
   PiEyeOnStroke,
 } from "./components/icons/pikaicons-react";
 import Spline from "@splinetool/react-spline";
-import { useDialKit } from "dialkit";
 import { PiSparkleAi02Stroke } from "./components/icons/pikaicons-react";
 import { projects, type Project } from "./data/portfolio";
 import { Navigation } from "./components/Navigation";
@@ -198,7 +197,7 @@ function StackProjectSection({
             className="h-[72vh] md:h-[80vh] lg:h-[88vh]"
           >
             <motion.div
-              data-cursor-label="View case study"
+              data-cursor-magnify="true"
               className="relative w-full h-[82%] rounded-[32px] md:rounded-[48px] overflow-hidden transition-transform duration-[400ms] ease-[cubic-bezier(0.16,1,0.3,1)] hover:scale-[1.01] cursor-pointer"
               style={{
                 backgroundColor: project.bgColor,
@@ -233,44 +232,28 @@ function StackProjectSection({
 
 function App() {
   const shouldReduceMotion = useReducedMotion() ?? false;
-  const blurTuning = useDialKit("Bottom Liquid Blur", {
-    Trigger: {
-      heroInViewAmount: [0.2, 0.05, 0.6, 0.01] as [
-        number,
-        number,
-        number,
-        number,
-      ],
-      footerInViewAmount: [0.2, 0.05, 0.8, 0.01] as [
-        number,
-        number,
-        number,
-        number,
-      ],
-    },
-    Layout: {
-      heightMobile: [108, 24, 260] as [number, number, number],
-      heightDesktop: [144, 32, 320] as [number, number, number],
-      zIndex: [50, 1, 200] as [number, number, number],
-    },
-    Visual: {
-      blurPx: [8, 0, 24] as [number, number, number],
-      alphaBottom: [0.08, 0, 0.4, 0.01] as [number, number, number, number],
-      alphaMiddle: [0.04, 0, 0.28, 0.01] as [number, number, number, number],
-      alphaUpper: [0.01, 0, 0.2, 0.01] as [number, number, number, number],
-      maskMiddleAlpha: [0.45, 0, 1, 0.01] as [number, number, number, number],
-      maskMiddleStop: [50, 10, 90, 1] as [number, number, number, number],
-    },
-    Motion: {
-      fadeInMs: [220, 50, 900] as [number, number, number],
-      fadeOutMs: [160, 50, 900] as [number, number, number],
-      reducedMotionFadeMs: [100, 20, 400] as [number, number, number],
-    },
-  });
-  const blurTrigger = blurTuning.Trigger as Record<string, number>;
-  const blurLayout = blurTuning.Layout as Record<string, number>;
-  const blurVisual = blurTuning.Visual as Record<string, number>;
-  const blurMotion = blurTuning.Motion as Record<string, number>;
+  const blurTrigger = {
+    heroInViewAmount: 0.2,
+    footerInViewAmount: 0.2,
+  };
+  const blurLayout = {
+    heightMobile: 108,
+    heightDesktop: 144,
+    zIndex: 50,
+  };
+  const blurVisual = {
+    blurPx: 8,
+    alphaBottom: 0.08,
+    alphaMiddle: 0.04,
+    alphaUpper: 0.01,
+    maskMiddleAlpha: 0.45,
+    maskMiddleStop: 50,
+  };
+  const blurMotion = {
+    fadeInMs: 220,
+    fadeOutMs: 160,
+    reducedMotionFadeMs: 100,
+  };
 
   const pillTrigger = {
     appearProgress: 0,
@@ -612,11 +595,7 @@ function App() {
                   <motion.div
                     {...animateProps}
                     key={`${item.project.id}-${i}`}
-                    data-cursor-label={
-                      item.project.modalVariant === "imageOnly"
-                        ? "View image"
-                        : "View case study"
-                    }
+                    data-cursor-magnify="true"
                     className={`relative rounded-[32px] md:rounded-[48px] overflow-hidden transition-transform duration-[400ms] ease-[cubic-bezier(0.16,1,0.3,1)] hover:scale-[1.02] ${
                       item.span === 2
                         ? "col-span-2"

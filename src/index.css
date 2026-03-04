@@ -43,12 +43,6 @@
   *::after {
     cursor: none !important;
   }
-  .dialkit-root,
-  .dialkit-root *,
-  .dialkit-root *::before,
-  .dialkit-root *::after {
-    cursor: auto !important;
-  }
 
   [data-cursor-native-pointer],
   [data-cursor-native-pointer] *,
