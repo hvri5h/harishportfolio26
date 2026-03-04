@@ -1,5 +1,4 @@
 import { motion } from "framer-motion";
-import { useDialKit } from "dialkit";
 import {
   PiRocketShipStroke,
   PiSparkleAi01Stroke,
@@ -55,40 +54,29 @@ const fontFamilyMap: Record<string, string> = {
 };
 
 const Services = () => {
-  const p = useDialKit("How I Work", {
-    Headings: {
-      sectionHeadingSize: [56, 28, 80] as [number, number, number],
-      sectionHeadingWeight: [900, 400, 900, 100] as [number, number, number, number],
-      cardHeadingSize: [22, 14, 40] as [number, number, number],
-      cardHeadingWeight: [600, 400, 900, 100] as [number, number, number, number],
-      headingLineHeight: [0.8, 0.6, 1.4, 0.05] as [number, number, number, number],
-      headingLetterSpacing: [-0.02, -0.08, 0.04, 0.005] as [number, number, number, number],
-    },
-    Body: {
-      subtitleSize: [24, 14, 40] as [number, number, number],
-      subtitleLineHeight: [1.5, 1.0, 2.0, 0.05] as [number, number, number, number],
-      bodySize: [17, 12, 24] as [number, number, number],
-      bodyWeight: [400, 300, 700, 100] as [number, number, number, number],
-      bodyLineHeight: [1.65, 1.0, 2.2, 0.05] as [number, number, number, number],
-      bodyLetterSpacing: [0, -0.04, 0.04, 0.005] as [number, number, number, number],
-      iconSize: [36, 16, 64] as [number, number, number],
-    },
-    Colors: {
-      headingColor: { type: "color" as const, default: "#1a1a1a" },
-      secondaryColor: { type: "color" as const, default: "#666666" },
-    },
-    Typeface: {
-      headingTypeface: { type: "select" as const, options: ["Saans", "Inter", "System"], default: "Saans" },
-      bodyTypeface: { type: "select" as const, options: ["Saans", "Inter", "System"], default: "Saans" },
-    },
-  });
-
-  const h = p.Headings as Record<string, number>;
-  const b = p.Body as Record<string, number>;
-  const c = p.Colors as Record<string, string>;
-  const tf = p.Typeface as Record<string, string>;
-  const headingFont = fontFamilyMap[tf.headingTypeface] || fontFamilyMap.Saans;
-  const bodyFont = fontFamilyMap[tf.bodyTypeface] || fontFamilyMap.Saans;
+  const h = {
+    sectionHeadingSize: 56,
+    sectionHeadingWeight: 900,
+    cardHeadingSize: 22,
+    cardHeadingWeight: 600,
+    headingLineHeight: 0.8,
+    headingLetterSpacing: -0.02,
+  };
+  const b = {
+    subtitleSize: 24,
+    subtitleLineHeight: 1.5,
+    bodySize: 17,
+    bodyWeight: 400,
+    bodyLineHeight: 1.65,
+    bodyLetterSpacing: 0,
+    iconSize: 36,
+  };
+  const c = {
+    headingColor: "#1a1a1a",
+    secondaryColor: "#666666",
+  };
+  const headingFont = fontFamilyMap.Saans;
+  const bodyFont = fontFamilyMap.Saans;
 
   return (
     <section className="py-32 bg-bg relative z-30" style={{ fontFamily: bodyFont }}>

@@ -1,11 +1,19 @@
-import { useState, useEffect, useCallback, useMemo } from "react";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import { X as XIcon, ArrowUpRight } from "lucide-react";
+import { useState, useEffect, useCallback, useMemo, useRef } from "react";
+import {
+  motion,
+  AnimatePresence,
+  useReducedMotion,
+  useScroll,
+  useMotionValueEvent,
+  useInView,
+} from "framer-motion";
+import { X as XIcon, ArrowUpRight, Plus } from "lucide-react";
 import {
   PiCopyDefaultStroke,
   PiCopyCopiedStroke,
 } from "./components/icons/pikaicons-react";
 import Spline from "@splinetool/react-spline";
+import { useDialKit } from "dialkit";
 import { PiSparkleAi02Stroke } from "./components/icons/pikaicons-react";
 import { projects, type Project } from "./data/portfolio";
 import { Navigation } from "./components/Navigation";
@@ -100,8 +108,157 @@ function MelbourneClock() {
   );
 }
 
+type StackProjectSectionProps = {
+  project: Project;
+  stackImages: string[];
+  animateProps: Record<string, unknown>;
+  onSelectProject: (project: Project) => void;
+  onActiveChange: (projectId: string, isActive: boolean) => void;
+  appearProgress: number;
+  disappearProgress: number;
+};
+
+function StackProjectSection({
+  project,
+  stackImages,
+  animateProps,
+  onSelectProject,
+  onActiveChange,
+  appearProgress,
+  disappearProgress,
+}: StackProjectSectionProps) {
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const isActiveRef = useRef(false);
+  const isSectionInView = useInView(sectionRef, { amount: 0.01 });
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end end"],
+  });
+
+  const onActiveChangeRef = useRef(onActiveChange);
+  useEffect(() => {
+    onActiveChangeRef.current = onActiveChange;
+  }, [onActiveChange]);
+
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    if (!isSectionInView) {
+      if (isActiveRef.current) {
+        isActiveRef.current = false;
+        onActiveChangeRef.current(project.id, false);
+      }
+      return;
+    }
+
+    // Hysteresis guard to prevent bobbing when sticky cards overlap.
+    const minAppear = 0.05;
+    const minGap = 0.02;
+    const clampedAppear = Math.max(minAppear, Math.min(0.45, appearProgress));
+    const clampedDisappear = Math.max(
+      0,
+      Math.min(clampedAppear - minGap, disappearProgress),
+    );
+
+    const enteringRange =
+      latest >= clampedAppear && latest <= 1 - clampedAppear;
+    const stayingRange =
+      latest >= clampedDisappear && latest <= 1 - clampedDisappear;
+    const nextActive = isActiveRef.current ? stayingRange : enteringRange;
+
+    if (nextActive !== isActiveRef.current) {
+      isActiveRef.current = nextActive;
+      onActiveChangeRef.current(project.id, nextActive);
+    }
+  });
+
+  useEffect(() => {
+    return () => {
+      if (isActiveRef.current) {
+        onActiveChangeRef.current(project.id, false);
+      }
+    };
+  }, [project.id]);
+
+  return (
+    <motion.div
+      {...animateProps}
+      ref={sectionRef}
+      key={`${project.id}-stack`}
+      className="col-span-2 relative"
+    >
+      <StackingCards
+        totalCards={stackImages.length}
+        className="w-full"
+        scaleMultiplier={0.035}
+      >
+        {stackImages.map((src, index) => (
+          <StackingCardItem
+            key={`${project.id}-${index}`}
+            index={index}
+            className="h-[72vh] md:h-[80vh] lg:h-[88vh]"
+          >
+            <motion.div
+              data-cursor-label="View case study"
+              className="relative w-full h-[82%] rounded-[32px] md:rounded-[48px] overflow-hidden transition-transform duration-[400ms] ease-[cubic-bezier(0.16,1,0.3,1)] hover:scale-[1.01] cursor-pointer"
+              style={{
+                backgroundColor: project.bgColor,
+                WebkitMaskImage: "-webkit-radial-gradient(white, black)",
+              }}
+              onClick={() => onSelectProject(project)}
+            >
+              {isVideo(src) ? (
+                <video
+                  src={src}
+                  className="w-full h-full object-cover block transform-gpu"
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                />
+              ) : (
+                <img
+                  src={src}
+                  alt={`${project.title} ${index + 1}`}
+                  className="w-full h-full object-cover block transform-gpu"
+                  loading="lazy"
+                />
+              )}
+            </motion.div>
+          </StackingCardItem>
+        ))}
+      </StackingCards>
+    </motion.div>
+  );
+}
+
 function App() {
-  const shouldReduceMotion = useReducedMotion();
+  const shouldReduceMotion = useReducedMotion() ?? false;
+  const pillTuning = useDialKit("Case Study Pill", {
+    Trigger: {
+      appearProgress: [0, 0, 0.3, 0.01] as [number, number, number, number],
+      disappearProgress: [0.04, 0, 0.2, 0.01] as [
+        number,
+        number,
+        number,
+        number,
+      ],
+    },
+    Motion: {
+      enterYOffset: [120, 20, 240] as [number, number, number],
+      exitYOffset: [140, 20, 260] as [number, number, number],
+      enterScale: [0.94, 0.8, 1] as [number, number, number],
+      exitScale: [0.94, 0.8, 1] as [number, number, number],
+      springStiffness: [260, 80, 420] as [number, number, number],
+      springDamping: [26, 10, 50] as [number, number, number],
+      springMass: [0.8, 0.3, 1.5, 0.05] as [number, number, number, number],
+      reducedMotionFadeMs: [150, 40, 400] as [number, number, number],
+    },
+    Layout: {
+      bottomOffset: [24, 0, 72] as [number, number, number],
+    },
+  });
+  const pillTrigger = pillTuning.Trigger as Record<string, number>;
+  const pillMotion = pillTuning.Motion as Record<string, number>;
+  const pillLayout = pillTuning.Layout as Record<string, number>;
   const modalEnterSpring = {
     type: "spring",
     duration: 0.6,
@@ -117,6 +274,13 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [progress, setProgress] = useState(0);
   const [activeSection, setActiveSection] = useState("work");
+
+  // Track the currently active stacked project ID for the page-level CTA
+  const [activeStackedProjectId, setActiveStackedProjectId] = useState<
+    string | null
+  >(null);
+  const workSectionRef = useRef<HTMLElement>(null);
+  const isWorkSectionInView = useInView(workSectionRef, { amount: 0.01 });
   const visibleProjects = useMemo(
     () => projects.filter((p) => !p.isHidden),
     [],
@@ -367,7 +531,11 @@ function App() {
         </header>
 
         {/* Work Section */}
-        <section id="work" className="pt-8 pb-32 relative">
+        <section
+          id="work"
+          ref={workSectionRef}
+          className="pt-8 pb-32 relative"
+        >
           <div className="max-w-[1200px] mx-auto px-3 md:px-8">
             <div className="grid grid-cols-2 gap-4 md:gap-6 lg:gap-8">
               {workItems.map((item, i) => {
@@ -386,54 +554,21 @@ function App() {
 
                 if (item.kind === "stack") {
                   return (
-                    <motion.div
-                      {...animateProps}
+                    <StackProjectSection
                       key={`${item.project.id}-stack`}
-                      className="col-span-2"
-                    >
-                      <StackingCards
-                        totalCards={item.stackImages.length}
-                        className="w-full"
-                        scaleMultiplier={0.035}
-                      >
-                        {item.stackImages.map((src, index) => (
-                          <StackingCardItem
-                            key={`${item.project.id}-${index}`}
-                            index={index}
-                            className="h-[72vh] md:h-[80vh] lg:h-[88vh]"
-                          >
-                            <div
-                              data-cursor-label="View case study"
-                              className="w-full h-[82%] rounded-[32px] md:rounded-[48px] overflow-hidden transition-transform duration-[400ms] ease-[cubic-bezier(0.16,1,0.3,1)] hover:scale-[1.01] cursor-pointer"
-                              style={{
-                                backgroundColor: item.project.bgColor,
-                                WebkitMaskImage:
-                                  "-webkit-radial-gradient(white, black)",
-                              }}
-                              onClick={() => setSelectedProject(item.project)}
-                            >
-                              {isVideo(src) ? (
-                                <video
-                                  src={src}
-                                  className="w-full h-full object-cover block transform-gpu"
-                                  autoPlay
-                                  loop
-                                  muted
-                                  playsInline
-                                />
-                              ) : (
-                                <img
-                                  src={src}
-                                  alt={`${item.project.title} ${index + 1}`}
-                                  className="w-full h-full object-cover block transform-gpu"
-                                  loading="lazy"
-                                />
-                              )}
-                            </div>
-                          </StackingCardItem>
-                        ))}
-                      </StackingCards>
-                    </motion.div>
+                      project={item.project}
+                      stackImages={item.stackImages}
+                      animateProps={animateProps}
+                      onSelectProject={setSelectedProject}
+                      appearProgress={pillTrigger.appearProgress}
+                      disappearProgress={pillTrigger.disappearProgress}
+                      onActiveChange={(id, isActive) => {
+                        setActiveStackedProjectId((prev) => {
+                          if (isActive) return id;
+                          return prev === id ? null : prev;
+                        });
+                      }}
+                    />
                   );
                 }
 
@@ -499,6 +634,67 @@ function App() {
 
         {/* Close main content wrapper */}
       </div>
+
+      {/* Global Context-Aware Pill */}
+      <AnimatePresence>
+        {isWorkSectionInView && activeStackedProjectId && (
+          <motion.div
+            key="global-case-study-pill"
+            className="fixed left-0 right-0 z-[100] flex justify-center pointer-events-none"
+            style={{ bottom: pillLayout.bottomOffset }}
+            initial={
+              shouldReduceMotion
+                ? { opacity: 0 }
+                : {
+                    opacity: 0,
+                    y: pillMotion.enterYOffset,
+                    scale: pillMotion.enterScale,
+                  }
+            }
+            animate={
+              shouldReduceMotion
+                ? { opacity: 1 }
+                : { opacity: 1, y: 0, scale: 1 }
+            }
+            exit={
+              shouldReduceMotion
+                ? { opacity: 0 }
+                : {
+                    opacity: 0,
+                    y: pillMotion.exitYOffset,
+                    scale: pillMotion.exitScale,
+                  }
+            }
+            transition={
+              shouldReduceMotion
+                ? { duration: pillMotion.reducedMotionFadeMs / 1000 }
+                : {
+                    type: "spring",
+                    stiffness: pillMotion.springStiffness,
+                    damping: pillMotion.springDamping,
+                    mass: pillMotion.springMass,
+                  }
+            }
+          >
+            <div className="pointer-events-auto">
+              <button
+                onClick={() => {
+                  const p = projects.find(
+                    (p) => p.id === activeStackedProjectId,
+                  );
+                  if (p) setSelectedProject(p);
+                }}
+                className="inline-flex items-center gap-3 rounded-full border border-white/20 bg-white/75 px-5 py-3 text-[15px] font-semibold text-[#15171c] shadow-[0_8px_32px_rgba(0,0,0,0.12)] backdrop-blur-xl transition-transform hover:scale-[1.03] active:scale-[0.97]"
+              >
+                <span className="tracking-[-0.01em]">View case study</span>
+                <span className="inline-flex h-[34px] w-[34px] items-center justify-center rounded-full bg-[#0A84FF] text-white shadow-sm">
+                  <Plus size={18} strokeWidth={2.5} />
+                </span>
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Curved edge — overlaps the footer top */}
       <div className="relative z-10 -mb-[200px] pointer-events-none">
