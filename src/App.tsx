@@ -576,7 +576,7 @@ function App() {
                 }}
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
-                className="inline-flex items-center px-7 py-3.5 bg-text text-bg font-semibold text-lg rounded-full shadow-sm"
+                className="inline-flex items-center px-6 py-3.5 bg-text text-bg font-semibold text-lg rounded-full shadow-sm"
                 data-cursor-native-pointer
               >
                 Get in touch
@@ -591,9 +591,9 @@ function App() {
                 }}
                 className="w-full mt-14"
               >
-                <p className="text-sm font-medium text-text-secondary text-center mb-5">
+                {/* <p className="text-sm font-medium text-text-secondary text-center mb-5">
                   12+ years of shipping digital products
-                </p>
+                </p> */}
                 <LogoCloud />
               </motion.div>
             </motion.div>
