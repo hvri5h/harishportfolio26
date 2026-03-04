@@ -122,8 +122,6 @@ type StackProjectSectionProps = {
   animateProps: Record<string, unknown>;
   onImageClick: (imageId: string, src: string, isVideoSrc: boolean) => void;
   onActiveChange: (projectId: string, isActive: boolean) => void;
-  appearProgress: number;
-  disappearProgress: number;
 };
 
 function StackProjectSection({
@@ -132,15 +130,17 @@ function StackProjectSection({
   animateProps,
   onImageClick,
   onActiveChange,
-  appearProgress,
-  disappearProgress,
 }: StackProjectSectionProps) {
   const sectionRef = useRef<HTMLDivElement>(null);
   const isActiveRef = useRef(false);
   const isSectionInView = useInView(sectionRef, { amount: 0.01 });
+  const isSectionInViewRef = useRef(false);
   const { scrollYProgress } = useScroll({
     target: sectionRef,
-    offset: ["start start", "end end"],
+    // Start tracking when section top enters at viewport 70% (not at viewport
+    // top) so the pill can activate on the first scroll-down approach, while
+    // cards are already visible in the lower portion of the screen.
+    offset: ["start 70%", "end end"],
   });
 
   const onActiveChangeRef = useRef(onActiveChange);
@@ -148,8 +148,11 @@ function StackProjectSection({
     onActiveChangeRef.current = onActiveChange;
   }, [onActiveChange]);
 
-  useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    if (!isSectionInView) {
+  const evaluateActivationRef = useRef<
+    (latest: number, inView: boolean) => void
+  >(() => {});
+  evaluateActivationRef.current = (latest: number, inView: boolean) => {
+    if (!inView) {
       if (isActiveRef.current) {
         isActiveRef.current = false;
         onActiveChangeRef.current(project.id, false);
@@ -157,26 +160,34 @@ function StackProjectSection({
       return;
     }
 
-    // Hysteresis guard to prevent bobbing when sticky cards overlap.
-    const minAppear = 0.05;
-    const minGap = 0.02;
-    const clampedAppear = Math.max(minAppear, Math.min(0.45, appearProgress));
-    const clampedDisappear = Math.max(
-      0,
-      Math.min(clampedAppear - minGap, disappearProgress),
-    );
+    // Asymmetric thresholds: early top-appear without lingering at the bottom.
+    const topAppear = 0.05;
+    const bottomExit = 0.06;
+    const hysteresisGap = 0.02;
+
+    const topDisappear = Math.max(0, topAppear - hysteresisGap);
+    const bottomDisappear = Math.max(0, bottomExit - hysteresisGap);
 
     const enteringRange =
-      latest >= clampedAppear && latest <= 1 - clampedAppear;
+      latest >= topAppear && latest <= 1 - bottomExit;
     const stayingRange =
-      latest >= clampedDisappear && latest <= 1 - clampedDisappear;
+      latest >= topDisappear && latest <= 1 - bottomDisappear;
     const nextActive = isActiveRef.current ? stayingRange : enteringRange;
 
     if (nextActive !== isActiveRef.current) {
       isActiveRef.current = nextActive;
       onActiveChangeRef.current(project.id, nextActive);
     }
+  };
+
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    evaluateActivationRef.current(latest, isSectionInViewRef.current);
   });
+
+  useEffect(() => {
+    isSectionInViewRef.current = isSectionInView;
+    evaluateActivationRef.current(scrollYProgress.get(), isSectionInView);
+  }, [isSectionInView, scrollYProgress]);
 
   useEffect(() => {
     return () => {
@@ -220,11 +231,7 @@ function StackProjectSection({
                 scale: { duration: 0.4, ease: [0.16, 1, 0.3, 1] },
               }}
               onClick={() =>
-                onImageClick(
-                  `${project.id}-${index}`,
-                  src,
-                  isVideo(src),
-                )
+                onImageClick(`${project.id}-${index}`, src, isVideo(src))
               }
             >
               {isVideo(src) ? (
@@ -277,10 +284,6 @@ function App() {
     reducedMotionFadeMs: 100,
   };
 
-  const pillTrigger = {
-    appearProgress: 0,
-    disappearProgress: 0.04,
-  };
   const pillMotion = {
     enterYOffset: 120,
     exitYOffset: 140,
@@ -612,8 +615,6 @@ function App() {
                           bgColor: item.project.bgColor,
                         });
                       }}
-                      appearProgress={pillTrigger.appearProgress}
-                      disappearProgress={pillTrigger.disappearProgress}
                       onActiveChange={(id, isActive) => {
                         setActiveStackedProjectId((prev) => {
                           if (isActive) return id;
@@ -851,9 +852,7 @@ function App() {
           <motion.div
             key="lightbox-expanded"
             layoutId={
-              shouldReduceMotion
-                ? undefined
-                : `project-image-${activeImage.id}`
+              shouldReduceMotion ? undefined : `project-image-${activeImage.id}`
             }
             initial={shouldReduceMotion ? { opacity: 0 } : undefined}
             animate={shouldReduceMotion ? { opacity: 1 } : undefined}
@@ -887,7 +886,10 @@ function App() {
             )}
             <motion.button
               initial={{ opacity: 0 }}
-              animate={{ opacity: 1, transition: { delay: 0.15, duration: 0.15 } }}
+              animate={{
+                opacity: 1,
+                transition: { delay: 0.15, duration: 0.15 },
+              }}
               exit={{ opacity: 0, transition: { duration: 0.1 } }}
               className="absolute top-4 right-4 md:top-6 md:right-6 w-11 h-11 flex items-center justify-center rounded-full bg-white/80 text-black backdrop-blur-md transition-all duration-150 ease-out active:scale-95 sm:hover:scale-105 hover:bg-white z-50 shadow-lg border border-black/5"
               onClick={() => setActiveImage(null)}
