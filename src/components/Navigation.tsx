@@ -60,14 +60,14 @@ export function Navigation({
   return (
     <motion.nav className="fixed top-8 left-0 right-0 z-[100] flex justify-center pointer-events-none">
       <div
-        className="flex items-center bg-[#f0f0f0]/50 backdrop-blur-[20px] backdrop-saturate-[180%] rounded-full p-[6px] gap-1 pointer-events-auto transition-all duration-base shadow-[0_0_0_1px_rgba(0,0,0,0.08)]"
+        className="flex items-center bg-[#f0f0f0]/50 backdrop-blur-[20px] backdrop-saturate-[180%] border border-white/50 rounded-full p-[6px] gap-1 shadow-[0_2px_6px_rgba(0,0,0,0.06),0_0_0_1px_rgba(0,0,0,0.06)] pointer-events-auto transition-all duration-base hover:bg-[#f5f5f5]/80"
         onMouseLeave={() => setHoveredSection(null)}
       >
         {navItems.map((item) => (
           <button
             key={item.id}
-            className={`relative px-6 py-2 text-[0.9375rem] font-medium rounded-full transition-colors duration-300 z-10 bg-transparent cursor-pointer leading-normal ${
-              highlightTarget === item.id ? "text-black" : "text-black/50"
+            className={`relative px-6 py-2 text-[0.9375rem] font-medium rounded-full transition-colors duration-fast z-10 bg-transparent cursor-pointer leading-normal hover:text-black ${
+              highlightTarget === item.id ? "text-black" : "text-text-secondary"
             }`}
             onClick={() => handleClick(item.id)}
             onMouseEnter={() => setHoveredSection(item.id)}

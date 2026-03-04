@@ -233,33 +233,62 @@ function StackProjectSection({
 
 function App() {
   const shouldReduceMotion = useReducedMotion() ?? false;
-  const pillTuning = useDialKit("Case Study Pill", {
+  const blurTuning = useDialKit("Bottom Liquid Blur", {
     Trigger: {
-      appearProgress: [0, 0, 0.3, 0.01] as [number, number, number, number],
-      disappearProgress: [0.04, 0, 0.2, 0.01] as [
+      heroInViewAmount: [0.2, 0.05, 0.6, 0.01] as [
+        number,
+        number,
+        number,
+        number,
+      ],
+      footerInViewAmount: [0.2, 0.05, 0.8, 0.01] as [
         number,
         number,
         number,
         number,
       ],
     },
-    Motion: {
-      enterYOffset: [120, 20, 240] as [number, number, number],
-      exitYOffset: [140, 20, 260] as [number, number, number],
-      enterScale: [0.94, 0.8, 1] as [number, number, number],
-      exitScale: [0.94, 0.8, 1] as [number, number, number],
-      springStiffness: [260, 80, 420] as [number, number, number],
-      springDamping: [26, 10, 50] as [number, number, number],
-      springMass: [0.8, 0.3, 1.5, 0.05] as [number, number, number, number],
-      reducedMotionFadeMs: [150, 40, 400] as [number, number, number],
-    },
     Layout: {
-      bottomOffset: [24, 0, 72] as [number, number, number],
+      heightMobile: [108, 24, 260] as [number, number, number],
+      heightDesktop: [144, 32, 320] as [number, number, number],
+      zIndex: [50, 1, 200] as [number, number, number],
+    },
+    Visual: {
+      blurPx: [8, 0, 24] as [number, number, number],
+      alphaBottom: [0.08, 0, 0.4, 0.01] as [number, number, number, number],
+      alphaMiddle: [0.04, 0, 0.28, 0.01] as [number, number, number, number],
+      alphaUpper: [0.01, 0, 0.2, 0.01] as [number, number, number, number],
+      maskMiddleAlpha: [0.45, 0, 1, 0.01] as [number, number, number, number],
+      maskMiddleStop: [50, 10, 90, 1] as [number, number, number, number],
+    },
+    Motion: {
+      fadeInMs: [220, 50, 900] as [number, number, number],
+      fadeOutMs: [160, 50, 900] as [number, number, number],
+      reducedMotionFadeMs: [100, 20, 400] as [number, number, number],
     },
   });
-  const pillTrigger = pillTuning.Trigger as Record<string, number>;
-  const pillMotion = pillTuning.Motion as Record<string, number>;
-  const pillLayout = pillTuning.Layout as Record<string, number>;
+  const blurTrigger = blurTuning.Trigger as Record<string, number>;
+  const blurLayout = blurTuning.Layout as Record<string, number>;
+  const blurVisual = blurTuning.Visual as Record<string, number>;
+  const blurMotion = blurTuning.Motion as Record<string, number>;
+
+  const pillTrigger = {
+    appearProgress: 0,
+    disappearProgress: 0.04,
+  };
+  const pillMotion = {
+    enterYOffset: 120,
+    exitYOffset: 140,
+    enterScale: 0.94,
+    exitScale: 0.94,
+    springStiffness: 260,
+    springDamping: 26,
+    springMass: 0.8,
+    reducedMotionFadeMs: 150,
+  };
+  const pillLayout = {
+    bottomOffset: 24,
+  };
   const modalEnterSpring = {
     type: "spring",
     duration: 0.6,
@@ -280,8 +309,18 @@ function App() {
   const [activeStackedProjectId, setActiveStackedProjectId] = useState<
     string | null
   >(null);
+  const heroSectionRef = useRef<HTMLElement>(null);
+  const isHeroSectionInView = useInView(heroSectionRef, {
+    amount: blurTrigger.heroInViewAmount,
+  });
+  const footerSectionRef = useRef<HTMLElement>(null);
+  const isFooterSectionInView = useInView(footerSectionRef, {
+    amount: blurTrigger.footerInViewAmount,
+  });
   const workSectionRef = useRef<HTMLElement>(null);
   const isWorkSectionInView = useInView(workSectionRef, { amount: 0.01 });
+  const showBottomLiquidBlur =
+    !isLoading && !isHeroSectionInView && !isFooterSectionInView;
   const visibleProjects = useMemo(
     () => projects.filter((p) => !p.isHidden),
     [],
@@ -390,9 +429,6 @@ function App() {
 
       {/* Main content wrapper — sits above the footer for reveal effect */}
       <div className="relative z-10 bg-bg">
-        {/* Top blur overlay */}
-        <div className="fixed top-0 left-0 right-0 h-40 pointer-events-none z-[5] backdrop-blur-[12px] [mask-image:linear-gradient(to_top,transparent,black)]" />
-
         {/* Loading Screen */}
         <AnimatePresence>
           {isLoading && (
@@ -460,7 +496,10 @@ function App() {
         </div>
 
         {/* Hero Section */}
-        <header className="relative h-auto min-h-[85vh] flex items-start justify-center pt-[160px] pb-16 max-sm:h-[calc(100vh-60px)] max-sm:px-8">
+        <header
+          ref={heroSectionRef}
+          className="relative h-auto min-h-[85vh] flex items-start justify-center pt-[160px] pb-16 max-sm:h-[calc(100vh-60px)] max-sm:px-8"
+        >
           <div className="max-w-[1200px] mx-auto px-8 w-full">
             <motion.div className="max-w-[900px] mx-auto flex flex-col items-center text-center">
               <motion.div
@@ -692,6 +731,48 @@ function App() {
         )}
       </AnimatePresence>
 
+      {/* Bottom liquid blur overlay (post-hero only) */}
+      <AnimatePresence>
+        {showBottomLiquidBlur && (
+          <motion.div
+            key="bottom-liquid-blur"
+            className="fixed bottom-0 left-0 right-0 pointer-events-none"
+            initial={{ opacity: 0 }}
+            animate={{
+              opacity: 1,
+              transition: {
+                duration: shouldReduceMotion
+                  ? blurMotion.reducedMotionFadeMs / 1000
+                  : blurMotion.fadeInMs / 1000,
+              },
+            }}
+            exit={{
+              opacity: 0,
+              transition: {
+                duration: shouldReduceMotion
+                  ? blurMotion.reducedMotionFadeMs / 1000
+                  : blurMotion.fadeOutMs / 1000,
+              },
+            }}
+            style={{
+              height: `clamp(${blurLayout.heightMobile}px, 14vh, ${blurLayout.heightDesktop}px)`,
+              zIndex: blurLayout.zIndex,
+            }}
+          >
+            <div
+              className="absolute inset-0"
+              style={{
+                backdropFilter: `blur(${blurVisual.blurPx}px)`,
+                WebkitBackdropFilter: `blur(${blurVisual.blurPx}px)`,
+                background: `linear-gradient(to top, rgba(255,255,255,${blurVisual.alphaBottom}), rgba(255,255,255,${blurVisual.alphaMiddle}), rgba(255,255,255,${blurVisual.alphaUpper}), transparent)`,
+                maskImage: `linear-gradient(to top, black 0%, rgba(0,0,0,${blurVisual.maskMiddleAlpha}) ${blurVisual.maskMiddleStop}%, transparent 100%)`,
+                WebkitMaskImage: `linear-gradient(to top, black 0%, rgba(0,0,0,${blurVisual.maskMiddleAlpha}) ${blurVisual.maskMiddleStop}%, transparent 100%)`,
+              }}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Curved edge — overlaps the footer top */}
       <div className="relative z-10 -mb-[200px] pointer-events-none">
         <svg
@@ -707,9 +788,9 @@ function App() {
       </div>
 
       {/* Footer — revealed from behind as you scroll */}
-      <Footer />
-
-      {/* Top blur overlay - moved to inside content wrapper */}
+      <section ref={footerSectionRef}>
+        <Footer />
+      </section>
 
       {/* Project Modal */}
       <AnimatePresence mode="wait">
