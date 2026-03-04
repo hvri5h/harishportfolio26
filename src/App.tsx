@@ -168,8 +168,7 @@ function StackProjectSection({
     const topDisappear = Math.max(0, topAppear - hysteresisGap);
     const bottomDisappear = Math.max(0, bottomExit - hysteresisGap);
 
-    const enteringRange =
-      latest >= topAppear && latest <= 1 - bottomExit;
+    const enteringRange = latest >= topAppear && latest <= 1 - bottomExit;
     const stayingRange =
       latest >= topDisappear && latest <= 1 - bottomDisappear;
     const nextActive = isActiveRef.current ? stayingRange : enteringRange;
@@ -511,7 +510,7 @@ function App() {
         {/* Hero Section */}
         <header
           ref={heroSectionRef}
-          className="relative h-auto min-h-[85vh] flex items-start justify-center pt-[160px] pb-16 max-sm:h-[calc(100vh-60px)] max-sm:px-8"
+          className="relative flex items-start justify-center pt-[100px] md:pt-[120px] pb-12 max-sm:px-8"
         >
           <div className="max-w-[1200px] mx-auto px-8 w-full">
             <motion.div className="max-w-[900px] mx-auto flex flex-col items-center text-center">
@@ -523,9 +522,9 @@ function App() {
                   delay: 0.1,
                   ease: [0.16, 1, 0.3, 1],
                 }}
-                className="mb-6 h-[250px] w-[250px] max-md:h-[200px] max-md:w-[200px] overflow-visible"
+                className="mt-6 mb-10 h-[200px] w-[200px] max-md:h-[160px] max-md:w-[160px] overflow-visible"
               >
-                <div className="h-[350px] w-[320px] -translate-x-[35px] -translate-y-[60px] max-md:h-[260px] max-md:w-[260px] max-md:-translate-x-[30px] max-md:-translate-y-[30px]">
+                <div className="h-[300px] w-[280px] -translate-x-[40px] -translate-y-[55px] max-md:h-[220px] max-md:w-[220px] max-md:-translate-x-[30px] max-md:-translate-y-[30px]">
                   <Spline
                     scene="https://prod.spline.design/zy5bc6-NJcpDwB1Y/scene.splinecode"
                     onLoad={handleSplineLoad}
@@ -566,16 +565,35 @@ function App() {
                 <span data-cursor-code>engineer</span> for startups that value
                 craft and speed.
               </motion.p>
+              <motion.a
+                href="mailto:hello@hari.sh"
+                initial={{ opacity: 0, y: 30 }}
+                animate={!isLoading ? { opacity: 1, y: 0 } : {}}
+                transition={{
+                  duration: 0.8,
+                  delay: 0.35,
+                  ease: [0.16, 1, 0.3, 1],
+                }}
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+                className="inline-flex items-center px-7 py-3.5 bg-text text-bg font-semibold text-lg rounded-full shadow-sm"
+                data-cursor-native-pointer
+              >
+                Get in touch
+              </motion.a>
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 animate={!isLoading ? { opacity: 1, y: 0 } : {}}
                 transition={{
                   duration: 0.8,
-                  delay: 0.4,
+                  delay: 0.45,
                   ease: [0.16, 1, 0.3, 1],
                 }}
-                className="w-full"
+                className="w-full mt-14"
               >
+                <p className="text-sm font-medium text-text-secondary text-center mb-5">
+                  12+ years of shipping digital products
+                </p>
                 <LogoCloud />
               </motion.div>
             </motion.div>
@@ -583,7 +601,7 @@ function App() {
         </header>
 
         {/* Work Section */}
-        <section id="work" ref={workSectionRef} className="pt-8 pb-32 relative">
+        <section id="work" ref={workSectionRef} className="pt-2 pb-32 relative">
           <div className="max-w-[1200px] mx-auto px-3 md:px-8">
             <div className="grid grid-cols-2 gap-4 md:gap-6 lg:gap-8">
               {workItems.map((item, i) => {

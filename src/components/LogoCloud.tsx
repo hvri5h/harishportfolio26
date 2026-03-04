@@ -131,7 +131,7 @@ export default function LogoCloud() {
   }, []);
 
   return (
-    <div className="flex flex-col items-center justify-center w-full max-w-full overflow-hidden mt-24 pb-2">
+    <div className="flex flex-col items-center justify-center w-full max-w-full overflow-hidden mt-4 pb-2">
       <div
         className="w-full relative flex items-center max-w-[800px] mx-auto overflow-hidden"
         style={{
