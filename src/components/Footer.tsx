@@ -6,6 +6,7 @@ import {
   PiYoutubeStroke,
   PiCopyDefaultStroke,
   PiCopyCopiedStroke,
+  PiCalendarDefaultStroke,
 } from "./icons/pikaicons-react";
 
 const EMAIL = "hello@hari.sh";
@@ -43,36 +44,44 @@ const Footer = () => {
             Let's connect
           </h2>
           <p className="font-display font-medium text-2xl text-[rgba(255,255,255,0.5)] max-w-[600px] mb-16 leading-[1.55]">
-            Have a project in mind or need a partner that does both design and
+            Have a project in mind and need someone that does both design and
             engineering? I'd love to hear from you :)
           </p>
 
           {/* Email pill + Social icons row */}
-          <div className="flex items-center gap-4 max-sm:flex-col">
+          <div className="flex items-center gap-3 max-sm:flex-col">
             {/* Email pill with copy */}
-            <div className="flex items-center bg-white rounded-full pl-8 pr-2 py-2 gap-4">
-              <a
-                href={`mailto:${EMAIL}`}
-                className="font-display font-semibold text-xl text-[#141414] tracking-[-0.02em] hover:opacity-70 transition-opacity"
-              >
+            <button
+              onClick={() => {
+                navigator.clipboard.writeText(EMAIL);
+                setIsCopied(true);
+                setTimeout(() => setIsCopied(false), 2000);
+              }}
+              className="flex items-center bg-white rounded-full pl-6 pr-2 py-2 gap-1"
+              data-cursor-label="Copy email"
+            >
+              <span className="font-display font-semibold text-xl text-[#141414] tracking-[-0.02em]">
                 {EMAIL}
-              </a>
-              <button
-                onClick={() => {
-                  navigator.clipboard.writeText(EMAIL);
-                  setIsCopied(true);
-                  setTimeout(() => setIsCopied(false), 2000);
-                }}
-                className="w-10 h-10 rounded-full flex items-center justify-center text-[#141414]/50 hover:text-[#141414] transition-colors cursor-pointer"
-                title="Copy email"
-              >
+              </span>
+              <div className="w-10 h-10 rounded-full flex items-center justify-center text-[#141414]/50">
                 {isCopied ? (
                   <PiCopyCopiedStroke className="w-5 h-5" />
                 ) : (
                   <PiCopyDefaultStroke className="w-5 h-5" />
                 )}
-              </button>
-            </div>
+              </div>
+            </button>
+
+            {/* Book a call */}
+            <a
+              href="https://cal.com/htiruna"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2.5 h-[56px] px-6 rounded-full border border-[rgba(255,255,255,0.2)] font-display font-medium text-lg text-[rgba(255,255,255,0.7)] hover:text-white hover:border-[rgba(255,255,255,0.5)] transition-colors"
+            >
+              <PiCalendarDefaultStroke className="w-5 h-5" />
+              Book a call
+            </a>
 
             {/* Social icons */}
             <div className="flex items-center gap-3">

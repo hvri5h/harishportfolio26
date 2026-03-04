@@ -7,15 +7,45 @@ import qantasLogo from "../assets/logos/qantas.webp";
 import reachoutLogo from "../assets/logos/reachout.webp";
 
 const logos = [
-  { src: qantasLogo, alt: "Qantas", className: "h-4 md:h-5", href: "https://qantas.com" },
-  { src: optusLogo, alt: "Optus", className: "h-3.5 md:h-[18px]", href: "https://optus.com.au" },
-  { src: canonLogo, alt: "Canon", className: "h-4 md:h-5", href: "https://canon.com.au" },
-  { src: nearmapLogo, alt: "Nearmap", className: "h-4 md:h-[26px]", href: "https://nearmap.com.au" },
-  { src: ljhookerLogo, alt: "LJ Hooker", className: "h-5 md:h-7", href: "https://ljhooker.com.au" },
-  { src: reachoutLogo, alt: "ReachOut", className: "h-[18px] md:h-6", href: "https://reachout.com.au" },
+  {
+    src: qantasLogo,
+    alt: "Qantas",
+    className: "h-4 md:h-5",
+    href: "https://qantas.com",
+  },
+  {
+    src: optusLogo,
+    alt: "Optus",
+    className: "h-3.5 md:h-[18px]",
+    href: "https://optus.com.au",
+  },
+  {
+    src: canonLogo,
+    alt: "Canon",
+    className: "h-4 md:h-5",
+    href: "https://canon.com.au",
+  },
+  {
+    src: nearmapLogo,
+    alt: "Nearmap",
+    className: "h-4 md:h-[26px]",
+    href: "https://nearmap.com.au",
+  },
+  {
+    src: ljhookerLogo,
+    alt: "LJ Hooker",
+    className: "h-5 md:h-7",
+    href: "https://ljhooker.com.au",
+  },
+  {
+    src: reachoutLogo,
+    alt: "ReachOut",
+    className: "h-[18px] md:h-6",
+    href: "https://reachout.com.au",
+  },
 ];
 
-function LogoItem({ logo }: { logo: typeof logos[number] }) {
+function LogoItem({ logo }: { logo: (typeof logos)[number] }) {
   const imageElement = (
     <img
       className={`${logo.className} w-auto object-contain opacity-40 brightness-0 transition-opacity duration-300 hover:opacity-100 flex-shrink-0 transform-gpu cursor-pointer`}
@@ -105,22 +135,27 @@ export default function LogoCloud() {
       <div
         className="w-full relative flex items-center max-w-[800px] mx-auto overflow-hidden"
         style={{
-          maskImage: 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)',
-          WebkitMaskImage: 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)'
+          maskImage:
+            "linear-gradient(to right, transparent, black 15%, black 85%, transparent)",
+          WebkitMaskImage:
+            "linear-gradient(to right, transparent, black 15%, black 85%, transparent)",
         }}
       >
         <div
           ref={trackRef}
           className="flex items-center will-change-transform"
           style={{
-            animation: scrollWidth ? `ticker 30s linear infinite` : 'none',
-            animationPlayState: isPaused ? 'paused' : 'running',
-            ['--scroll-width' as string]: `-${scrollWidth}px`,
+            animation: scrollWidth ? `ticker 30s linear infinite` : "none",
+            animationPlayState: isPaused ? "paused" : "running",
+            ["--scroll-width" as string]: `-${scrollWidth}px`,
           }}
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
         >
-          <div ref={setRef} className="flex items-center gap-x-12 md:gap-x-16 pr-12 md:pr-16 flex-shrink-0">
+          <div
+            ref={setRef}
+            className="flex items-center gap-x-12 md:gap-x-16 pr-12 md:pr-16 flex-shrink-0"
+          >
             <LogoSet />
           </div>
           <div className="flex items-center gap-x-12 md:gap-x-16 pr-12 md:pr-16 flex-shrink-0">

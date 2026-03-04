@@ -33,6 +33,7 @@ import {
 import StackingCards, {
   StackingCardItem,
 } from "./components/fancy/blocks/stacking-cards";
+import { TextShimmer } from "./components/motion-primitives/text-shimmer";
 
 type WorkRenderItem =
   | {
@@ -525,17 +526,16 @@ function App() {
                 }}
                 className="font-display font-medium text-2xl text-text-secondary leading-[1.4] max-w-[400px] mb-6"
               >
-                <span className="relative inline-block">
-                  <span
-                    data-cursor-label="AI-native"
-                    className="absolute -left-5 -top-3 inline-flex items-center"
-                  >
-                    <PiSparkleAi02Stroke className="w-6 h-6 text-text-secondary" />
-                  </span>
-                  <span data-cursor-figma>Design</span>
-                </span>{" "}
-                + <span data-cursor-code>Engineering</span> partner for startups
-                that value craft and speed.
+                <TextShimmer
+                  as="span"
+                  duration={1}
+                  className="[--base-color:var(--color-text-secondary)] [--base-gradient-color:var(--color-text)]"
+                >
+                  AI-native
+                </TextShimmer>{" "}
+                <span data-cursor-figma>design</span>{" "}
+                <span data-cursor-code>engineer</span> for startups that value
+                craft and speed.
               </motion.p>
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
