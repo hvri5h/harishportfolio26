@@ -19,9 +19,25 @@ import { SlidingNumber } from "./components/ui/sliding-number";
 import { BasicNumberTicker } from "./components/ui/basic-number-ticker";
 import {
   isVideo,
-  useProjectGrid,
   getProjectFolderImages,
+  getProjectGridImage,
 } from "./lib/projectImages";
+import StackingCards, {
+  StackingCardItem,
+} from "./components/fancy/blocks/stacking-cards";
+
+type WorkRenderItem =
+  | {
+      kind: "stack";
+      project: Project;
+      stackImages: string[];
+    }
+  | {
+      kind: "grid";
+      project: Project;
+      src: string;
+      span: 1 | 2;
+    };
 
 function MelbourneClock() {
   const [now, setNow] = useState(new Date());
@@ -105,7 +121,37 @@ function App() {
     () => projects.filter((p) => !p.isHidden),
     [],
   );
-  const gridItems = useProjectGrid(visibleProjects);
+  const workItems = useMemo<WorkRenderItem[]>(
+    () =>
+      visibleProjects.map((project) => {
+        const folderImages = project.slug
+          ? getProjectFolderImages(project.slug)
+          : [];
+        const shouldStack =
+          folderImages.length > 1 && project.modalVariant !== "imageOnly";
+
+        if (shouldStack) {
+          return {
+            kind: "stack",
+            project,
+            stackImages: folderImages,
+          };
+        }
+
+        const src =
+          project.gridImage ??
+          (project.slug ? getProjectGridImage(project.slug) : undefined) ??
+          project.image;
+
+        return {
+          kind: "grid",
+          project,
+          src,
+          span: project.gridSpan ?? (project.isMobile ? 1 : 2),
+        };
+      }),
+    [visibleProjects],
+  );
 
   useEffect(() => {
     if (!isLoading) return;
@@ -324,7 +370,7 @@ function App() {
         <section id="work" className="pt-8 pb-32 relative">
           <div className="max-w-[1200px] mx-auto px-3 md:px-8">
             <div className="grid grid-cols-2 gap-4 md:gap-6 lg:gap-8">
-              {gridItems?.map((item, i) => {
+              {workItems.map((item, i) => {
                 const animateProps =
                   i === 0
                     ? {
@@ -337,6 +383,59 @@ function App() {
                         },
                       }
                     : {};
+
+                if (item.kind === "stack") {
+                  return (
+                    <motion.div
+                      {...animateProps}
+                      key={`${item.project.id}-stack`}
+                      className="col-span-2"
+                    >
+                      <StackingCards
+                        totalCards={item.stackImages.length}
+                        className="w-full"
+                        scaleMultiplier={0.035}
+                      >
+                        {item.stackImages.map((src, index) => (
+                          <StackingCardItem
+                            key={`${item.project.id}-${index}`}
+                            index={index}
+                            className="h-[72vh] md:h-[80vh] lg:h-[88vh]"
+                          >
+                            <div
+                              data-cursor-label="View case study"
+                              className="w-full h-[82%] rounded-[32px] md:rounded-[48px] overflow-hidden transition-transform duration-[400ms] ease-[cubic-bezier(0.16,1,0.3,1)] hover:scale-[1.01] cursor-pointer"
+                              style={{
+                                backgroundColor: item.project.bgColor,
+                                WebkitMaskImage:
+                                  "-webkit-radial-gradient(white, black)",
+                              }}
+                              onClick={() => setSelectedProject(item.project)}
+                            >
+                              {isVideo(src) ? (
+                                <video
+                                  src={src}
+                                  className="w-full h-full object-cover block transform-gpu"
+                                  autoPlay
+                                  loop
+                                  muted
+                                  playsInline
+                                />
+                              ) : (
+                                <img
+                                  src={src}
+                                  alt={`${item.project.title} ${index + 1}`}
+                                  className="w-full h-full object-cover block transform-gpu"
+                                  loading="lazy"
+                                />
+                              )}
+                            </div>
+                          </StackingCardItem>
+                        ))}
+                      </StackingCards>
+                    </motion.div>
+                  );
+                }
 
                 return (
                   <motion.div
