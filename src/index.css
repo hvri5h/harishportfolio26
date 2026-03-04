@@ -41,6 +41,9 @@
   *, *::before, *::after {
     cursor: none !important;
   }
+  .dialkit-root, .dialkit-root *, .dialkit-root *::before, .dialkit-root *::after {
+    cursor: auto !important;
+  }
 }
 
 @keyframes terminalBlink {
