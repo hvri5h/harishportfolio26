@@ -35,6 +35,13 @@ import StackingCards, {
 } from "./components/fancy/blocks/stacking-cards";
 import { TextShimmer } from "./components/motion-primitives/text-shimmer";
 
+type ActiveImage = {
+  id: string;
+  src: string;
+  isVideo: boolean;
+  bgColor: string;
+};
+
 type WorkRenderItem =
   | {
       kind: "stack";
@@ -113,7 +120,7 @@ type StackProjectSectionProps = {
   project: Project;
   stackImages: string[];
   animateProps: Record<string, unknown>;
-  onSelectProject: (project: Project) => void;
+  onImageClick: (imageId: string, src: string, isVideoSrc: boolean) => void;
   onActiveChange: (projectId: string, isActive: boolean) => void;
   appearProgress: number;
   disappearProgress: number;
@@ -123,7 +130,7 @@ function StackProjectSection({
   project,
   stackImages,
   animateProps,
-  onSelectProject,
+  onImageClick,
   onActiveChange,
   appearProgress,
   disappearProgress,
@@ -198,13 +205,27 @@ function StackProjectSection({
             className="h-[72vh] md:h-[80vh] lg:h-[88vh]"
           >
             <motion.div
+              layoutId={`project-image-${project.id}-${index}`}
               data-cursor-magnify="true"
-              className="relative w-full h-[82%] rounded-[32px] md:rounded-[48px] overflow-hidden transition-transform duration-[400ms] ease-[cubic-bezier(0.16,1,0.3,1)] hover:scale-[1.01] cursor-pointer"
+              className="relative w-full h-[82%] rounded-[32px] md:rounded-[48px] overflow-hidden cursor-pointer"
               style={{
                 backgroundColor: project.bgColor,
                 WebkitMaskImage: "-webkit-radial-gradient(white, black)",
+                willChange: "transform",
               }}
-              onClick={() => onSelectProject(project)}
+              whileHover={{ scale: 1.01 }}
+              whileTap={{ scale: 0.98 }}
+              transition={{
+                layout: { type: "spring", duration: 0.5, bounce: 0.1 },
+                scale: { duration: 0.4, ease: [0.16, 1, 0.3, 1] },
+              }}
+              onClick={() =>
+                onImageClick(
+                  `${project.id}-${index}`,
+                  src,
+                  isVideo(src),
+                )
+              }
             >
               {isVideo(src) ? (
                 <video
@@ -284,6 +305,7 @@ function App() {
     bounce: 0.05,
   } as const;
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [activeImage, setActiveImage] = useState<ActiveImage | null>(null);
   const [isCopied, setIsCopied] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [progress, setProgress] = useState(0);
@@ -379,7 +401,7 @@ function App() {
   };
 
   useEffect(() => {
-    if (isLoading) {
+    if (isLoading || activeImage) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "";
@@ -387,17 +409,21 @@ function App() {
     return () => {
       document.body.style.overflow = "";
     };
-  }, [isLoading]);
+  }, [isLoading, activeImage]);
 
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
-        setSelectedProject(null);
+        if (activeImage) {
+          setActiveImage(null);
+        } else {
+          setSelectedProject(null);
+        }
       }
     };
     window.addEventListener("keydown", handleEscape);
     return () => window.removeEventListener("keydown", handleEscape);
-  }, []);
+  }, [activeImage]);
 
   return (
     <div className="min-h-screen">
@@ -578,7 +604,14 @@ function App() {
                       project={item.project}
                       stackImages={item.stackImages}
                       animateProps={animateProps}
-                      onSelectProject={setSelectedProject}
+                      onImageClick={(imageId, src, isVideoSrc) => {
+                        setActiveImage({
+                          id: imageId,
+                          src,
+                          isVideo: isVideoSrc,
+                          bgColor: item.project.bgColor,
+                        });
+                      }}
                       appearProgress={pillTrigger.appearProgress}
                       disappearProgress={pillTrigger.disappearProgress}
                       onActiveChange={(id, isActive) => {
@@ -594,9 +627,10 @@ function App() {
                 return (
                   <motion.div
                     {...animateProps}
+                    layoutId={`project-image-${item.project.id}`}
                     key={`${item.project.id}-${i}`}
                     data-cursor-magnify="true"
-                    className={`relative rounded-[32px] md:rounded-[48px] overflow-hidden transition-transform duration-[400ms] ease-[cubic-bezier(0.16,1,0.3,1)] hover:scale-[1.02] ${
+                    className={`relative rounded-[32px] md:rounded-[48px] overflow-hidden cursor-pointer ${
                       item.span === 2
                         ? "col-span-2"
                         : "col-span-1 aspect-[3/4] md:aspect-[4/5]"
@@ -604,8 +638,29 @@ function App() {
                     style={{
                       backgroundColor: item.project.bgColor,
                       WebkitMaskImage: "-webkit-radial-gradient(white, black)",
+                      willChange: "transform",
                     }}
-                    onClick={() => setSelectedProject(item.project)}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    transition={{
+                      layout: {
+                        type: "spring",
+                        duration: 0.5,
+                        bounce: 0.1,
+                      },
+                      scale: {
+                        duration: 0.4,
+                        ease: [0.16, 1, 0.3, 1],
+                      },
+                    }}
+                    onClick={() =>
+                      setActiveImage({
+                        id: item.project.id,
+                        src: item.src,
+                        isVideo: isVideo(item.src),
+                        bgColor: item.project.bgColor,
+                      })
+                    }
                   >
                     {isVideo(item.src) ? (
                       <video
@@ -771,6 +826,79 @@ function App() {
         <Footer />
       </section>
 
+      {/* Image Lightbox — backdrop */}
+      <AnimatePresence>
+        {activeImage && (
+          <motion.div
+            key="lightbox-backdrop"
+            className="fixed inset-0 bg-black/80 backdrop-blur-md z-[999]"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{
+              duration: shouldReduceMotion ? 0.1 : 0.3,
+              ease: "easeOut",
+            }}
+            onClick={() => setActiveImage(null)}
+            style={{ willChange: "opacity" }}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Image Lightbox — expanded image (direct child of AnimatePresence for proper exit) */}
+      <AnimatePresence>
+        {activeImage && (
+          <motion.div
+            key="lightbox-expanded"
+            layoutId={
+              shouldReduceMotion
+                ? undefined
+                : `project-image-${activeImage.id}`
+            }
+            initial={shouldReduceMotion ? { opacity: 0 } : undefined}
+            animate={shouldReduceMotion ? { opacity: 1 } : undefined}
+            exit={shouldReduceMotion ? { opacity: 0 } : undefined}
+            className="fixed inset-0 z-[1000] m-auto w-fit h-fit pointer-events-auto overflow-hidden rounded-[32px] md:rounded-[48px]"
+            style={{
+              willChange: "transform",
+              backgroundColor: activeImage.bgColor,
+            }}
+            transition={
+              shouldReduceMotion
+                ? { duration: 0.15 }
+                : { type: "spring", duration: 0.5, bounce: 0.1 }
+            }
+          >
+            {activeImage.isVideo ? (
+              <video
+                src={activeImage.src}
+                className="block max-w-[96vw] max-h-[96vh] w-auto h-auto transform-gpu"
+                autoPlay
+                loop
+                muted
+                playsInline
+              />
+            ) : (
+              <img
+                src={activeImage.src}
+                alt=""
+                className="block max-w-[96vw] max-h-[96vh] w-auto h-auto transform-gpu"
+              />
+            )}
+            <motion.button
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1, transition: { delay: 0.15, duration: 0.15 } }}
+              exit={{ opacity: 0, transition: { duration: 0.1 } }}
+              className="absolute top-4 right-4 md:top-6 md:right-6 w-11 h-11 flex items-center justify-center rounded-full bg-white/80 text-black backdrop-blur-md transition-all duration-150 ease-out active:scale-95 sm:hover:scale-105 hover:bg-white z-50 shadow-lg border border-black/5"
+              onClick={() => setActiveImage(null)}
+              aria-label="Close lightbox"
+            >
+              <XIcon size={20} />
+            </motion.button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Project Modal */}
       <AnimatePresence mode="wait">
         {selectedProject && (
@@ -780,7 +908,7 @@ function App() {
           >
             {/* Backdrop */}
             <motion.div
-              className="absolute inset-0 bg-[#0f0f11]/90 pointer-events-auto"
+              className="absolute inset-0 bg-[#0f0f11]/90 backdrop-blur-md pointer-events-auto"
               initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0 }}
               animate={
                 shouldReduceMotion
