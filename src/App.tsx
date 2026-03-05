@@ -211,21 +211,18 @@ function StackProjectSection({
         scaleMultiplier={0.035}
       >
         {stackImages.map((src, index) => {
-          const maxTop = 5 + Math.max(0, stackImages.length - 1) * 3;
-          const cardHeight = 95 - maxTop;
-
           return (
             <StackingCardItem
               key={`${project.id}-${index}`}
               index={index}
-              className="h-[72vh] md:h-[80vh] lg:h-[88vh]"
+              className="h-screen"
             >
               <motion.div
                 layoutId={`project-image-${project.id}-${index}`}
                 data-cursor-magnify="true"
                 className="relative w-full rounded-[32px] md:rounded-[48px] overflow-hidden cursor-pointer"
                 style={{
-                  height: `${cardHeight}%`,
+                  aspectRatio: "1920 / 1280",
                   backgroundColor: project.bgColor,
                   WebkitMaskImage: "-webkit-radial-gradient(white, black)",
                   willChange: "transform",
@@ -524,7 +521,7 @@ function App() {
         {/* Hero Section */}
         <header
           ref={heroSectionRef}
-          className="relative flex items-start justify-center pt-[140px] md:pt-[180px] pb-12 max-sm:px-8"
+          className="relative flex items-start justify-center pt-[110px] md:pt-[140px] pb-4 max-sm:px-8"
         >
           <div className="max-w-[1200px] mx-auto px-8 w-full">
             <motion.div
@@ -535,7 +532,7 @@ function App() {
             >
               <motion.div
                 variants={getStaggerItem(shouldReduceMotion)}
-                className="mt-6 mb-10 h-[200px] w-[200px] max-md:h-[160px] max-md:w-[160px] overflow-visible"
+                className="mt-6 mb-6 h-[200px] w-[200px] max-md:h-[160px] max-md:w-[160px] overflow-visible"
               >
                 <div className="h-[360px] w-[340px] -translate-x-[85px] -translate-y-[95px] max-md:h-[260px] max-md:w-[250px] max-md:-translate-x-[55px] max-md:-translate-y-[55px] pointer-events-auto">
                   <Spline
@@ -578,7 +575,7 @@ function App() {
               </motion.a>
               <motion.div
                 variants={getStaggerItem(shouldReduceMotion)}
-                className="w-full mt-14"
+                className="w-full mt-10 md:mt-12"
               >
                 {/* <p className="text-sm font-medium text-text-secondary text-center mb-5">
                   12+ years of shipping digital products
@@ -1126,7 +1123,7 @@ function App() {
                             {contentSrcs.map((img, index) => (
                               <div
                                 key={index}
-                                className="w-full rounded-[32px] md:rounded-[48px] overflow-hidden flex items-center justify-center squircle"
+                                className="w-full rounded-[32px] md:rounded-[80px] overflow-hidden flex items-center justify-center squircle"
                                 style={{
                                   WebkitMaskImage:
                                     "-webkit-radial-gradient(white, black)",

@@ -19,12 +19,12 @@ const socials = [
   },
   {
     label: "X",
-    href: "https://x.com/htiruna",
+    href: "https://x.com/hvri5h",
     icon: PiXComStroke,
   },
   {
     label: "YouTube",
-    href: "https://youtube.com/@htiruna",
+    href: "https://youtube.com/@hvri5h",
     icon: PiYoutubeStroke,
   },
 ];
