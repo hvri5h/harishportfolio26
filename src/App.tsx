@@ -209,54 +209,60 @@ function StackProjectSection({
         className="w-full"
         scaleMultiplier={0.035}
       >
-        {stackImages.map((src, index) => (
-          <StackingCardItem
-            key={`${project.id}-${index}`}
-            index={index}
-            className="h-[72vh] md:h-[80vh] lg:h-[88vh]"
-          >
-            <motion.div
-              layoutId={`project-image-${project.id}-${index}`}
-              data-cursor-magnify="true"
-              className="relative w-full h-[82%] rounded-[32px] md:rounded-[48px] overflow-hidden cursor-pointer"
-              style={{
-                backgroundColor: project.bgColor,
-                WebkitMaskImage: "-webkit-radial-gradient(white, black)",
-                willChange: "transform",
-              }}
-              whileHover={{ scale: 1.01 }}
-              whileTap={{ scale: 0.98 }}
-              transition={{
-                layout: { type: "spring", duration: 0.5, bounce: 0.1 },
-                scale: { duration: 0.4, ease: [0.16, 1, 0.3, 1] },
-              }}
-              onClick={(e) => {
-                const video = e.currentTarget.querySelector("video");
-                const w = video?.videoWidth;
-                const h = video?.videoHeight;
-                onImageClick(`${project.id}-${index}`, src, isVideo(src), w, h);
-              }}
+        {stackImages.map((src, index) => {
+          const maxTop = 5 + Math.max(0, stackImages.length - 1) * 3;
+          const cardHeight = 95 - maxTop;
+
+          return (
+            <StackingCardItem
+              key={`${project.id}-${index}`}
+              index={index}
+              className="h-[72vh] md:h-[80vh] lg:h-[88vh]"
             >
-              {isVideo(src) ? (
-                <video
-                  src={src}
-                  className="w-full h-full object-cover block transform-gpu"
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                />
-              ) : (
-                <img
-                  src={src}
-                  alt={`${project.title} ${index + 1}`}
-                  className="w-full h-full object-cover block transform-gpu"
-                  loading="lazy"
-                />
-              )}
-            </motion.div>
-          </StackingCardItem>
-        ))}
+              <motion.div
+                layoutId={`project-image-${project.id}-${index}`}
+                data-cursor-magnify="true"
+                className="relative w-full rounded-[32px] md:rounded-[48px] overflow-hidden cursor-pointer"
+                style={{
+                  height: `${cardHeight}%`,
+                  backgroundColor: project.bgColor,
+                  WebkitMaskImage: "-webkit-radial-gradient(white, black)",
+                  willChange: "transform",
+                }}
+                whileHover={{ scale: 1.01 }}
+                whileTap={{ scale: 0.98 }}
+                transition={{
+                  layout: { type: "spring", duration: 0.5, bounce: 0.1 },
+                  scale: { duration: 0.4, ease: [0.16, 1, 0.3, 1] },
+                }}
+                onClick={(e) => {
+                  const video = e.currentTarget.querySelector("video");
+                  const w = video?.videoWidth;
+                  const h = video?.videoHeight;
+                  onImageClick(`${project.id}-${index}`, src, isVideo(src), w, h);
+                }}
+              >
+                {isVideo(src) ? (
+                  <video
+                    src={src}
+                    className="w-full h-full object-cover block transform-gpu"
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                  />
+                ) : (
+                  <img
+                    src={src}
+                    alt={`${project.title} ${index + 1}`}
+                    className="w-full h-full object-cover block transform-gpu"
+                    loading="lazy"
+                  />
+                )}
+              </motion.div>
+            </StackingCardItem>
+          );
+        })}
       </StackingCards>
     </motion.div>
   );
@@ -340,17 +346,20 @@ function App() {
   const workItems = useMemo<WorkRenderItem[]>(
     () =>
       visibleProjects.map((project) => {
-        const folderImages = project.slug
+        const folderImagesAll = project.slug
+          ? getProjectFolderImages(project.slug)
+          : [];
+        const folderImagesVisible = project.slug
           ? getProjectFolderImages(project.slug, { excludeHidden: true })
           : [];
         const shouldStack =
-          folderImages.length > 1 && project.modalVariant !== "imageOnly";
+          folderImagesAll.length > 1 && project.modalVariant !== "imageOnly";
 
         if (shouldStack) {
           return {
             kind: "stack",
             project,
-            stackImages: folderImages,
+            stackImages: folderImagesVisible,
           };
         }
 
