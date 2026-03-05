@@ -209,7 +209,7 @@ const WhatIDo = () => {
                   className="text-base text-text-secondary leading-relaxed max-w-[90%]"
                   style={{ fontSize: b.bodySize, fontWeight: b.bodyWeight, color: c.secondaryColor, lineHeight: b.bodyLineHeight, letterSpacing: `${b.bodyLetterSpacing}em` }}
                 >
-                  Over a decade of writing code. I build what I design — no
+                  Over a decade of writing code. I build what I design with no
                   handoff needed. From frontend to backend, I ship
                   production-ready products.
                 </p>
