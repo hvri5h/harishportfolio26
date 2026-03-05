@@ -4,21 +4,22 @@ import { getStaggerContainer, getStaggerItem } from "../lib/animations";
 import engineeringBg from "../assets/engineering-bento-bg.png";
 import designBg from "../assets/design-bento-bg.png";
 const designSkills = [
-  "Visual Design",
-  "Branding",
-  "Interaction Design",
-  "User Experience",
-  "Prototyping",
   "Product Design",
+  "Visual Design",
+  "Interaction Design",
+  "Branding",
+  "Prototyping",
+  "User Research"
 ];
 
 const engineeringSkills = [
+  "HTML/CSS",
   "Javascript",
   "Typescript",
   "Tailwind CSS",
-  "Node.js",
-  "Next.js",
-  "React.js",
+  "Framer Motion",
+  "Web Apps",
+  "Mobile Apps",
 ];
 
 type StackItem = {
@@ -37,6 +38,7 @@ const stackItems: StackItem[] = [
   { name: "Figma", icon: "/icons/figma-logo.svg" },
   { name: "Motion", icon: "/icons/motion.svg", customSize: { width: 54, height: 36 } },
   { name: "Framer", icon: "/icons/framer-logo.svg" },
+  { name: "Supabase", icon: "/icons/supabase-logo.svg" },
 ];
 
 interface TooltipProps {
@@ -207,9 +209,9 @@ const WhatIDo = () => {
                   className="text-base text-text-secondary leading-relaxed max-w-[90%]"
                   style={{ fontSize: b.bodySize, fontWeight: b.bodyWeight, color: c.secondaryColor, lineHeight: b.bodyLineHeight, letterSpacing: `${b.bodyLetterSpacing}em` }}
                 >
-                  Over a decade of writing code. Frontend is my sweet spot:
-                  React, Next.js, animations, the works. I don't just make
-                  things look right, I make them work right.
+                  Over a decade of writing code. I build what I design — no
+                  handoff needed. From frontend to backend, I ship
+                  production-ready products.
                 </p>
               </div>
               <div className="flex flex-wrap gap-2.5 mt-8 max-w-[340px] max-md:max-w-full relative z-10">
@@ -236,11 +238,11 @@ const WhatIDo = () => {
           >
             Stack
           </motion.h3>
-          <motion.div variants={getStaggerContainer()} className="flex flex-wrap items-center gap-6 max-sm:gap-3">
+          <motion.div variants={getStaggerContainer()} className="flex flex-wrap items-center gap-4 max-sm:gap-3">
             {stackItems.map((item) => (
-              <motion.div key={item.name} variants={getStaggerItem(shouldReduceMotion)}>
+              <motion.div key={item.name} variants={getStaggerItem(shouldReduceMotion)} className="flex-1">
                 <Tooltip name={item.name}>
-                  <div className="relative bg-[rgba(26,26,26,0.04)] hover:bg-[rgba(26,26,26,0.08)] rounded-xl flex-1 min-w-[100px] max-w-[114px] h-[96px] flex flex-col items-center justify-center cursor-pointer transition-colors duration-200 max-sm:min-w-[calc(25%-0.75rem)] max-sm:h-[80px]">
+                  <div className="relative bg-[rgba(26,26,26,0.04)] hover:bg-[rgba(26,26,26,0.08)] rounded-xl w-full min-w-[86px] max-w-[114px] h-[96px] flex flex-col items-center justify-center cursor-pointer transition-colors duration-200 max-sm:min-w-[calc(25%-0.75rem)] max-sm:h-[80px]">
                     <img
                       src={item.icon}
                       alt={item.name}
