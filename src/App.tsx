@@ -33,6 +33,7 @@ import StackingCards, {
   StackingCardItem,
 } from "./components/fancy/blocks/stacking-cards";
 import { TextShimmer } from "./components/motion-primitives/text-shimmer";
+import { getStaggerContainer, getStaggerItem } from "./lib/animations";
 
 type ActiveImage = {
   id: string;
@@ -526,15 +527,14 @@ function App() {
           className="relative flex items-start justify-center pt-[100px] md:pt-[120px] pb-12 max-sm:px-8"
         >
           <div className="max-w-[1200px] mx-auto px-8 w-full">
-            <motion.div className="max-w-[900px] mx-auto flex flex-col items-center text-center">
+            <motion.div
+              className="max-w-[900px] mx-auto flex flex-col items-center text-center"
+              initial="hidden"
+              animate={!isLoading ? "visible" : "hidden"}
+              variants={getStaggerContainer()}
+            >
               <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={!isLoading ? { opacity: 1, y: 0 } : {}}
-                transition={{
-                  duration: 0.8,
-                  delay: 0.1,
-                  ease: [0.16, 1, 0.3, 1],
-                }}
+                variants={getStaggerItem(shouldReduceMotion)}
                 className="mt-6 mb-10 h-[200px] w-[200px] max-md:h-[160px] max-md:w-[160px] overflow-visible"
               >
                 <div className="h-[300px] w-[280px] -translate-x-[40px] -translate-y-[55px] max-md:h-[220px] max-md:w-[220px] max-md:-translate-x-[30px] max-md:-translate-y-[30px]">
@@ -545,26 +545,14 @@ function App() {
                 </div>
               </motion.div>
               <motion.h1
-                initial={{ opacity: 0, y: 30 }}
-                animate={!isLoading ? { opacity: 1, y: 0 } : {}}
-                transition={{
-                  duration: 0.8,
-                  delay: 0.2,
-                  ease: [0.16, 1, 0.3, 1],
-                }}
+                variants={getStaggerItem(shouldReduceMotion)}
                 className="font-display font-black text-[5rem] tracking-[-0.03em] leading-none text-text mb-4 max-md:text-[clamp(2.5rem,8vw,4rem)] max-sm:text-[1.75rem] z-10"
                 data-cursor-label="hah-REESH"
               >
                 Harish
               </motion.h1>
               <motion.p
-                initial={{ opacity: 0, y: 30 }}
-                animate={!isLoading ? { opacity: 1, y: 0 } : {}}
-                transition={{
-                  duration: 0.8,
-                  delay: 0.3,
-                  ease: [0.16, 1, 0.3, 1],
-                }}
+                variants={getStaggerItem(shouldReduceMotion)}
                 className="font-display font-medium text-2xl text-text-secondary leading-[1.4] max-w-[400px] mb-6"
               >
                 <TextShimmer
@@ -580,12 +568,7 @@ function App() {
               </motion.p>
               <motion.a
                 href="mailto:hello@hari.sh"
-                initial={{ opacity: 0, y: 30 }}
-                animate={!isLoading ? { opacity: 1, y: 0 } : {}}
-                transition={{
-                  duration: 0.8,
-                  ease: [0.16, 1, 0.3, 1],
-                }}
+                variants={getStaggerItem(shouldReduceMotion)}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.97 }}
                 className="inline-flex items-center px-6 py-3.5 bg-text text-bg font-semibold rounded-full shadow-sm"
@@ -594,13 +577,7 @@ function App() {
                 Get in touch
               </motion.a>
               <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={!isLoading ? { opacity: 1, y: 0 } : {}}
-                transition={{
-                  duration: 0.8,
-                  delay: 0.45,
-                  ease: [0.16, 1, 0.3, 1],
-                }}
+                variants={getStaggerItem(shouldReduceMotion)}
                 className="w-full mt-14"
               >
                 {/* <p className="text-sm font-medium text-text-secondary text-center mb-5">

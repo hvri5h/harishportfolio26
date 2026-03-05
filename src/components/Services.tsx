@@ -1,4 +1,5 @@
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
+import { getStaggerContainer, getStaggerItem } from "../lib/animations";
 import {
   PiRocketShipStroke,
   PiSparkleAi01Stroke,
@@ -54,6 +55,7 @@ const fontFamilyMap: Record<string, string> = {
 };
 
 const Services = () => {
+  const shouldReduceMotion = useReducedMotion() ?? false;
   const h = {
     sectionHeadingSize: 56,
     sectionHeadingWeight: 900,
@@ -82,27 +84,42 @@ const Services = () => {
     <section className="py-32 bg-bg relative z-30" style={{ fontFamily: bodyFont }}>
       <div className="max-w-[1200px] mx-auto px-8 max-sm:px-6">
         {/* Header */}
-        <div className="flex flex-col items-center text-center mb-20">
+        <motion.div
+          className="flex flex-col items-center text-center mb-20"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.5 }}
+          variants={getStaggerContainer()}
+        >
           <motion.h2
+            variants={getStaggerItem(shouldReduceMotion)}
             className="font-display font-black text-[56px] leading-[0.8] tracking-[-0.02em] text-text mb-6 max-md:text-5xl max-sm:text-4xl"
             style={{ fontSize: h.sectionHeadingSize, fontWeight: h.sectionHeadingWeight, color: c.headingColor, fontFamily: headingFont, lineHeight: h.headingLineHeight, letterSpacing: `${h.headingLetterSpacing}em` }}
           >
             How I work
           </motion.h2>
           <motion.p
+            variants={getStaggerItem(shouldReduceMotion)}
             className="font-display font-medium text-2xl leading-[1.35] text-text-secondary max-w-[538px]"
             style={{ fontSize: b.subtitleSize, color: c.secondaryColor, lineHeight: b.subtitleLineHeight, letterSpacing: `${b.bodyLetterSpacing}em` }}
           >
             Whether you need a one-person product team or an extra pair of
             hands, here's how I work.
           </motion.p>
-        </div>
+        </motion.div>
 
         {/* 3x2 Grid */}
-        <div className="grid grid-cols-3 gap-6 max-md:grid-cols-2 max-sm:grid-cols-1">
+        <motion.div
+          className="grid grid-cols-3 gap-6 max-md:grid-cols-2 max-sm:grid-cols-1"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+          variants={getStaggerContainer()}
+        >
           {services.map((service) => (
-            <div
+            <motion.div
               key={service.title}
+              variants={getStaggerItem(shouldReduceMotion)}
               className="bg-[rgba(26,26,26,0.03)] rounded-[24px] p-10 flex flex-col gap-6 max-sm:p-7"
             >
               <service.icon
@@ -121,9 +138,9 @@ const Services = () => {
               >
                 {service.description}
               </p>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

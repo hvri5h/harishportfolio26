@@ -1,5 +1,6 @@
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { useState } from "react";
+import { getStaggerContainer, getStaggerItem } from "../lib/animations";
 
 const designSkills = [
   "Visual Design",
@@ -79,6 +80,7 @@ const fontFamilyMap: Record<string, string> = {
 };
 
 const WhatIDo = () => {
+  const shouldReduceMotion = useReducedMotion() ?? false;
   const h = {
     sectionHeadingSize: 56,
     sectionHeadingWeight: 900,
@@ -108,26 +110,43 @@ const WhatIDo = () => {
     <section id="about" className="py-24 bg-bg relative z-30" style={{ fontFamily: bodyFont }}>
       <div className="max-w-[1200px] mx-auto px-8 max-sm:px-6">
         {/* Header */}
-        <div className="flex flex-col items-center text-center mb-20">
+        <motion.div
+          className="flex flex-col items-center text-center mb-20"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.5 }}
+          variants={getStaggerContainer()}
+        >
           <motion.h2
+            variants={getStaggerItem(shouldReduceMotion)}
             className="font-display font-black text-[56px] leading-[0.8] tracking-[-0.02em] text-text mb-6 max-md:text-5xl max-sm:text-4xl"
             style={{ fontSize: h.sectionHeadingSize, fontWeight: h.sectionHeadingWeight, color: c.headingColor, fontFamily: headingFont, lineHeight: h.headingLineHeight, letterSpacing: `${h.headingLetterSpacing}em` }}
           >
             What I do
           </motion.h2>
           <motion.p
+            variants={getStaggerItem(shouldReduceMotion)}
             className="font-display font-medium text-2xl leading-[1.35] text-text-secondary max-w-[588px]"
             style={{ fontSize: b.subtitleSize, color: c.secondaryColor, lineHeight: b.subtitleLineHeight, letterSpacing: `${b.bodyLetterSpacing}em` }}
           >
             I work across design, code, and product, owning everything from
             concept to implementation.
           </motion.p>
-        </div>
+        </motion.div>
 
         {/* Bento: Design & Engineering */}
-        <div className="grid grid-cols-2 gap-6 mb-6 max-md:grid-cols-1">
+        <motion.div
+          className="grid grid-cols-2 gap-6 mb-6 max-md:grid-cols-1"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+          variants={getStaggerContainer()}
+        >
           {/* Design */}
-          <div className="relative bg-[rgba(26,26,26,0.03)] rounded-[24px] overflow-hidden h-[400px] max-md:h-auto max-md:min-h-[320px]">
+          <motion.div
+            variants={getStaggerItem(shouldReduceMotion)}
+            className="relative bg-[rgba(26,26,26,0.03)] rounded-[24px] overflow-hidden h-[400px] max-md:h-auto max-md:min-h-[320px]"
+          >
             <div className="absolute inset-0 p-10 flex flex-col max-md:relative max-md:p-8">
               <div className="flex flex-col gap-4 mb-auto">
                 <h3
@@ -151,10 +170,13 @@ const WhatIDo = () => {
                 ))}
               </div>
             </div>
-          </div>
+          </motion.div>
 
           {/* Engineering */}
-          <div className="relative bg-[rgba(26,26,26,0.03)] rounded-[24px] overflow-hidden h-[400px] max-md:h-auto max-md:min-h-[320px]">
+          <motion.div
+            variants={getStaggerItem(shouldReduceMotion)}
+            className="relative bg-[rgba(26,26,26,0.03)] rounded-[24px] overflow-hidden h-[400px] max-md:h-auto max-md:min-h-[320px]"
+          >
             <div className="absolute inset-0 p-10 flex flex-col max-md:relative max-md:p-8">
               <div className="flex flex-col gap-4 mb-auto">
                 <h3
@@ -178,35 +200,44 @@ const WhatIDo = () => {
                 ))}
               </div>
             </div>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
 
         {/* Stack */}
-        <div className="bg-[rgba(26,26,26,0.03)] rounded-[24px] p-10 max-md:p-8 max-sm:p-5">
-          <h3
+        <motion.div
+          className="bg-[rgba(26,26,26,0.03)] rounded-[24px] p-10 max-md:p-8 max-sm:p-5"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+          variants={getStaggerContainer()}
+        >
+          <motion.h3
+            variants={getStaggerItem(shouldReduceMotion)}
             className="text-2xl font-semibold tracking-[-0.02em] text-text mb-10 max-sm:mb-6"
             style={{ fontSize: h.cardHeadingSize, fontWeight: h.cardHeadingWeight, color: c.headingColor, fontFamily: headingFont, lineHeight: h.headingLineHeight, letterSpacing: `${h.headingLetterSpacing}em` }}
           >
             Stack
-          </h3>
-          <div className="flex flex-wrap items-center gap-6 max-sm:gap-3">
+          </motion.h3>
+          <motion.div variants={getStaggerContainer()} className="flex flex-wrap items-center gap-6 max-sm:gap-3">
             {stackItems.map((item) => (
-              <Tooltip key={item.name} name={item.name}>
-                <div className="relative bg-[rgba(26,26,26,0.04)] hover:bg-[rgba(26,26,26,0.08)] rounded-xl flex-1 min-w-[100px] max-w-[114px] h-[96px] flex flex-col items-center justify-center cursor-pointer transition-colors duration-200 max-sm:min-w-[calc(25%-0.75rem)] max-sm:h-[80px]">
-                  <img
-                    src={item.icon}
-                    alt={item.name}
-                    className={`object-contain mb-3 opacity-60 max-sm:mb-2 ${item.className || ""}`}
-                    style={{ width: b.stackIconSize, height: b.stackIconSize }}
-                  />
-                  <span className="text-sm text-text-secondary font-normal max-sm:text-xs">
-                    {item.name}
-                  </span>
-                </div>
-              </Tooltip>
+              <motion.div key={item.name} variants={getStaggerItem(shouldReduceMotion)}>
+                <Tooltip name={item.name}>
+                  <div className="relative bg-[rgba(26,26,26,0.04)] hover:bg-[rgba(26,26,26,0.08)] rounded-xl flex-1 min-w-[100px] max-w-[114px] h-[96px] flex flex-col items-center justify-center cursor-pointer transition-colors duration-200 max-sm:min-w-[calc(25%-0.75rem)] max-sm:h-[80px]">
+                    <img
+                      src={item.icon}
+                      alt={item.name}
+                      className={`object-contain mb-3 opacity-60 max-sm:mb-2 ${item.className || ""}`}
+                      style={{ width: b.stackIconSize, height: b.stackIconSize }}
+                    />
+                    <span className="text-sm text-text-secondary font-normal max-sm:text-xs">
+                      {item.name}
+                    </span>
+                  </div>
+                </Tooltip>
+              </motion.div>
             ))}
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       </div>
     </section>
   );

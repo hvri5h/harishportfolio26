@@ -1,8 +1,9 @@
 import me from "../assets/me.png";
 import { motion, useReducedMotion } from "framer-motion";
+import { getStaggerContainer, getStaggerItem } from "../lib/animations";
 
 const AboutMe = () => {
-  const shouldReduceMotion = useReducedMotion();
+  const shouldReduceMotion = useReducedMotion() ?? false;
 
   return (
     <section className="pt-20 pb-32 bg-bg relative z-30">
@@ -15,39 +16,49 @@ const AboutMe = () => {
         </div>
 
         {/* Heading */}
-        <h2 className="font-serif font-bold text-[56px] leading-[1.1] tracking-[-0.03em] text-text mb-12 text-center max-md:text-5xl max-sm:text-4xl">
-          Oh btw... I'm Harish
-        </h2>
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.3 }}
+          variants={getStaggerContainer()}
+        >
+          <motion.h2
+            variants={getStaggerItem(shouldReduceMotion)}
+            className="font-serif font-bold text-[56px] leading-[1.1] tracking-[-0.03em] text-text mb-12 text-center max-md:text-5xl max-sm:text-4xl"
+          >
+            Oh btw... I'm Harish
+          </motion.h2>
 
-        {/* Bio */}
-        <div className="space-y-6 font-medium">
-          {/* <p className="text-lg text-text-secondary leading-relaxed">
-            I like to make things — apps, websites, brands, animations. I focus
-            on consumer products because I spend a lot of time thinking about
-            people.
-          </p> */}
+          {/* Bio */}
+          <div className="space-y-6 font-medium">
+            {/* <p className="text-lg text-text-secondary leading-relaxed">
+              I like to make things — apps, websites, brands, animations. I focus
+              on consumer products because I spend a lot of time thinking about
+              people.
+            </p> */}
 
-          <p className="text-lg text-text-secondary leading-relaxed">
-            I'm a Design Engineer based in Australia, originally from New
-            Zealand. I spent over a decade as a software engineer shipping
-            products across the full stack. Along the way I kept getting pulled
-            toward design: how things look, how they feel, why certain
-            interfaces just work. So I made the jump.
-          </p>
+            <motion.p variants={getStaggerItem(shouldReduceMotion)} className="text-lg text-text-secondary leading-relaxed">
+              I'm a Design Engineer based in Australia, originally from New
+              Zealand. I spent over a decade as a software engineer shipping
+              products across the full stack. Along the way I kept getting pulled
+              toward design: how things look, how they feel, why certain
+              interfaces just work. So I made the jump.
+            </motion.p>
 
-          <p className="text-lg text-text-secondary leading-relaxed">
-            Now I do both. I design and build end-to-end, using AI tools to move
-            fast without cutting corners. I've been reading and writing code
-            long enough to understand what's happening under the hood, which
-            means the AI helps me move quicker, not think less.
-          </p>
+            <motion.p variants={getStaggerItem(shouldReduceMotion)} className="text-lg text-text-secondary leading-relaxed">
+              Now I do both. I design and build end-to-end, using AI tools to move
+              fast without cutting corners. I've been reading and writing code
+              long enough to understand what's happening under the hood, which
+              means the AI helps me move quicker, not think less.
+            </motion.p>
 
-          <p className="text-lg text-text-secondary leading-relaxed">
-            I work best with startups and small teams who care about craft and
-            speed. If that sounds like you, I'd love to hear about what you're
-            building.
-          </p>
-        </div>
+            <motion.p variants={getStaggerItem(shouldReduceMotion)} className="text-lg text-text-secondary leading-relaxed">
+              I work best with startups and small teams who care about craft and
+              speed. If that sounds like you, I'd love to hear about what you're
+              building.
+            </motion.p>
+          </div>
+        </motion.div>
 
         {/* Animated signature */}
         <div className="mt-16 flex justify-center text-text">
