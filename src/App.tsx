@@ -588,7 +588,7 @@ function App() {
                 }}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.97 }}
-                className="inline-flex items-center px-6 py-3.5 bg-text text-bg font-semibold text-lg rounded-full shadow-sm"
+                className="inline-flex items-center px-6 py-3.5 bg-text text-bg font-semibold rounded-full shadow-sm"
                 data-cursor-dark
               >
                 Get in touch
