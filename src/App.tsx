@@ -521,7 +521,7 @@ function App() {
         {/* Hero Section */}
         <header
           ref={heroSectionRef}
-          className="relative flex items-start justify-center pt-[110px] md:pt-[140px] pb-4 max-sm:px-8"
+          className="relative flex items-start justify-center pt-[110px] md:pt-[160px] pb-4 max-sm:px-8"
         >
           <div className="max-w-[1200px] mx-auto px-8 w-full">
             <motion.div
@@ -555,7 +555,7 @@ function App() {
                 <TextShimmer
                   as="span"
                   duration={1}
-                  className="[--base-color:var(--color-text-secondary)] [--base-gradient-color:var(--color-text)]"
+                  className="[--base-color:var(--color-text-secondary)] [--base-gradient-color:#fff]"
                 >
                   AI-native
                 </TextShimmer>{" "}
