@@ -575,13 +575,12 @@ function App() {
                 animate={!isLoading ? { opacity: 1, y: 0 } : {}}
                 transition={{
                   duration: 0.8,
-                  delay: 0.35,
                   ease: [0.16, 1, 0.3, 1],
                 }}
-                whileHover={{ scale: 1.03 }}
+                whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.97 }}
                 className="inline-flex items-center px-6 py-3.5 bg-text text-bg font-semibold text-lg rounded-full shadow-sm"
-                data-cursor-native-pointer
+                data-cursor-dark
               >
                 Get in touch
               </motion.a>
@@ -784,7 +783,7 @@ function App() {
                   );
                   if (p) setSelectedProject(p);
                 }}
-                className="inline-flex items-center gap-2 rounded-[64px] bg-[rgba(0,0,0,0.75)] backdrop-blur-[10px] border border-[rgba(255,255,255,0.12)] px-5 py-3 text-[15px] font-medium text-white shadow-[rgba(0,0,0,0.18)_0px_0.711334px_0.711334px_-0.75px,rgba(0,0,0,0.17)_0px_1.93715px_1.93715px_-1.5px,rgba(0,0,0,0.16)_0px_4.25329px_4.25329px_-2.25px,rgba(0,0,0,0.13)_0px_9.44132px_9.44132px_-3px,rgba(0,0,0,0.06)_0px_24px_24px_-3.75px] transition-transform hover:scale-[1.03] active:scale-[0.97]"
+                className="inline-flex items-center gap-2 rounded-[64px] bg-[rgba(0,0,0,0.75)] backdrop-blur-[10px] border border-[rgba(255,255,255,0.12)] px-5 py-3 text-[15px] font-medium text-white shadow-[rgba(0,0,0,0.18)_0px_0.711334px_0.711334px_-0.75px,rgba(0,0,0,0.17)_0px_1.93715px_1.93715px_-1.5px,rgba(0,0,0,0.16)_0px_4.25329px_4.25329px_-2.25px,rgba(0,0,0,0.13)_0px_9.44132px_9.44132px_-3px,rgba(0,0,0,0.06)_0px_24px_24px_-3.75px] transition-transform hover:scale-[1.05] active:scale-[0.97]"
               >
                 <span className="tracking-[-0.01em]">View case study</span>
                 <PiEyeOnStroke className="w-5 h-5" />

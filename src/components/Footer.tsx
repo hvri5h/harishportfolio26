@@ -39,7 +39,7 @@ const Footer = () => {
     >
       <div className="flex flex-col max-w-[1200px] mx-auto px-8 max-sm:px-6 pt-56 pb-10 min-h-screen">
         {/* CTA section */}
-        <div className="flex-1 flex flex-col items-center justify-center text-center">
+        <div className="flex-1 flex flex-col items-center justify-end pb-16 text-center">
           <h2 className="font-display font-semibold text-[56px] leading-[1.1] tracking-[-0.03em] text-white mb-6 max-md:text-5xl max-sm:text-4xl">
             Let's connect
           </h2>
