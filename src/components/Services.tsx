@@ -96,7 +96,7 @@ const Services = () => {
             className="font-display font-black text-[56px] leading-[0.8] tracking-[-0.02em] text-text mb-6 max-md:text-5xl max-sm:text-4xl"
             style={{ fontSize: h.sectionHeadingSize, fontWeight: h.sectionHeadingWeight, color: c.headingColor, fontFamily: headingFont, lineHeight: h.headingLineHeight, letterSpacing: `${h.headingLetterSpacing}em` }}
           >
-            How I work
+            What I can do for you
           </motion.h2>
           <motion.p
             variants={getStaggerItem(shouldReduceMotion)}
