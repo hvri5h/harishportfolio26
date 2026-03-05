@@ -13,37 +13,37 @@ const services = [
   {
     title: "Zero to One",
     description:
-      "I design interfaces people actually enjoy using. Real product thinking with attention to craft, typography, and how things feel.",
+      "You have an idea but no product yet. I'll take it from concept to shipped including design, code, and everything in between.",
     icon: PiRocketShipStroke,
   },
   {
     title: "AI-Native",
     description:
-      "I design interfaces people actually enjoy using. Real product thinking with attention to craft, typography, and how things feel.",
+      "I use AI as a tool to amplify my manual craft, not replace it. I can upskill your team, solve AI challenges, and ship high-quality work without the 'slop'.",
     icon: PiSparkleAi01Stroke,
   },
   {
     title: "Craft obsessed",
     description:
-      "I design interfaces people actually enjoy using. Real product thinking with attention to craft, typography, and how things feel.",
+      "I design interfaces people actually enjoy using. I pay attention to details and how things feel so your product always feels considered and polished.",
     icon: PiGitPullRequestStroke,
   },
   {
     title: "Async & Autonomous",
     description:
-      "I design interfaces people actually enjoy using. Real product thinking with attention to craft, typography, and how things feel.",
+      "Point me at a problem and I'll figure it out. I take initiative, figure things out, and keep you updated without needing to be managed.",
     icon: PiLightningThunderElectricOnStroke,
   },
   {
     title: "Rapid Iteration",
     description:
-      "I design interfaces people actually enjoy using. Real product thinking with attention to craft, typography, and how things feel.",
+      "I learn problem spaces instantly and turn things around quickly. I turn things around quickly whether it's a retainer, a sprint, or a one-off project.",
     icon: PiRefreshStroke,
   },
   {
     title: "Direct Collaboration",
     description:
-      "I design interfaces people actually enjoy using. Real product thinking with attention to craft, typography, and how things feel.",
+      "You work directly with me to solve problems, ensuring clear communication and nothing getting lost in translation.",
     icon: PiChatChattingStroke,
   },
 ];
@@ -103,8 +103,7 @@ const Services = () => {
             className="font-display font-medium text-2xl leading-[1.35] text-text-secondary max-w-[538px]"
             style={{ fontSize: b.subtitleSize, color: c.secondaryColor, lineHeight: b.subtitleLineHeight, letterSpacing: `${b.bodyLetterSpacing}em` }}
           >
-            Whether you need a one-person product team or an extra pair of
-            hands, here's how I work.
+            I communicate efficiently, get sh*t done, and ship fast without compromising on quality.
           </motion.p>
         </motion.div>
 

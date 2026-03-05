@@ -43,9 +43,8 @@ const Footer = () => {
           <h2 className="font-display font-semibold text-[56px] leading-[1.1] tracking-[-0.03em] text-white mb-6 max-md:text-5xl max-sm:text-4xl">
             Let's connect
           </h2>
-          <p className="font-display font-medium text-2xl text-[rgba(255,255,255,0.5)] max-w-[600px] mb-16 leading-[1.55]">
-            Have a project in mind and need someone that does both design and
-            engineering? I'd love to hear from you :)
+          <p className="font-display font-medium text-2xl text-[rgba(255,255,255,0.5)] max-w-[400px] mb-16 leading-[1.55]">
+            Have a project in mind that could use my help? I'd love to hear from you :)
           </p>
 
           {/* Email pill + Social icons row */}
