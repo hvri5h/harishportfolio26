@@ -521,7 +521,7 @@ function App() {
         {/* Hero Section */}
         <header
           ref={heroSectionRef}
-          className="relative flex items-start justify-center pt-[110px] md:pt-[160px] pb-4 max-sm:px-8"
+          className="relative flex items-start justify-center pt-[110px] md:pt-[180px] pb-4 max-sm:px-8"
         >
           <div className="max-w-[1200px] mx-auto px-8 w-full">
             <motion.div
@@ -575,7 +575,7 @@ function App() {
               </motion.a>
               <motion.div
                 variants={getStaggerItem(shouldReduceMotion)}
-                className="w-full mt-10 md:mt-12"
+                className="w-full mt-10 md:mt-20"
               >
                 {/* <p className="text-sm font-medium text-text-secondary text-center mb-5">
                   12+ years of shipping digital products
@@ -587,7 +587,7 @@ function App() {
         </header>
 
         {/* Work Section */}
-        <section id="work" ref={workSectionRef} className="pt-2 pb-32 relative">
+        <section id="work" ref={workSectionRef} className="pt-10 pb-32 relative">
           <div className="max-w-[1200px] mx-auto px-3 md:px-8">
             <div className="grid grid-cols-2 gap-4 md:gap-6 lg:gap-8">
               {workItems.map((item, i) => {
