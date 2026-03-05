@@ -559,7 +559,7 @@ function App() {
                 >
                   AI-native
                 </TextShimmer>{" "}
-                <span data-cursor-figma>design</span>{" "}
+                <span data-cursor-figma>designer +</span>{" "}
                 <span data-cursor-code>engineer</span> for startups that value
                 craft and speed.
               </motion.p>
