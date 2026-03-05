@@ -39,6 +39,8 @@ type ActiveImage = {
   src: string;
   isVideo: boolean;
   bgColor: string;
+  width?: number;
+  height?: number;
 };
 
 type WorkRenderItem =
@@ -119,7 +121,7 @@ type StackProjectSectionProps = {
   project: Project;
   stackImages: string[];
   animateProps: Record<string, unknown>;
-  onImageClick: (imageId: string, src: string, isVideoSrc: boolean) => void;
+  onImageClick: (imageId: string, src: string, isVideoSrc: boolean, width?: number, height?: number) => void;
   onActiveChange: (projectId: string, isActive: boolean) => void;
 };
 
@@ -228,9 +230,12 @@ function StackProjectSection({
                 layout: { type: "spring", duration: 0.5, bounce: 0.1 },
                 scale: { duration: 0.4, ease: [0.16, 1, 0.3, 1] },
               }}
-              onClick={() =>
-                onImageClick(`${project.id}-${index}`, src, isVideo(src))
-              }
+              onClick={(e) => {
+                const video = e.currentTarget.querySelector("video");
+                const w = video?.videoWidth;
+                const h = video?.videoHeight;
+                onImageClick(`${project.id}-${index}`, src, isVideo(src), w, h);
+              }}
             >
               {isVideo(src) ? (
                 <video
@@ -624,12 +629,14 @@ function App() {
                       project={item.project}
                       stackImages={item.stackImages}
                       animateProps={animateProps}
-                      onImageClick={(imageId, src, isVideoSrc) => {
+                      onImageClick={(imageId, src, isVideoSrc, width, height) => {
                         setActiveImage({
                           id: imageId,
                           src,
                           isVideo: isVideoSrc,
                           bgColor: item.project.bgColor,
+                          width,
+                          height,
                         });
                       }}
                       onActiveChange={(id, isActive) => {
@@ -670,14 +677,19 @@ function App() {
                         ease: [0.16, 1, 0.3, 1],
                       },
                     }}
-                    onClick={() =>
+                    onClick={(e) => {
+                      const video = e.currentTarget.querySelector("video");
+                      const w = video?.videoWidth;
+                      const h = video?.videoHeight;
                       setActiveImage({
                         id: item.project.id,
                         src: item.src,
                         isVideo: isVideo(item.src),
                         bgColor: item.project.bgColor,
-                      })
-                    }
+                        width: w,
+                        height: h,
+                      });
+                    }}
                   >
                     {isVideo(item.src) ? (
                       <video
@@ -888,6 +900,8 @@ function App() {
               <video
                 src={activeImage.src}
                 className="block max-w-[96vw] max-h-[96vh] w-auto h-auto transform-gpu"
+                width={activeImage.width}
+                height={activeImage.height}
                 autoPlay
                 loop
                 muted
