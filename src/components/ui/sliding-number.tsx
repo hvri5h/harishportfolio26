@@ -8,7 +8,9 @@ import {
 } from 'framer-motion';
 import useMeasure from 'react-use-measure';
 
-const TRANSITION = {
+import type { Transition } from 'framer-motion';
+
+const TRANSITION: Transition = {
   type: 'spring',
   stiffness: 280,
   damping: 18,

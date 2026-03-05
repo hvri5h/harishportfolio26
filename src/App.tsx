@@ -14,7 +14,6 @@ import {
   PiEyeOnStroke,
 } from "./components/icons/pikaicons-react";
 import Spline from "@splinetool/react-spline";
-import { PiSparkleAi02Stroke } from "./components/icons/pikaicons-react";
 import { projects, type Project } from "./data/portfolio";
 import { Navigation } from "./components/Navigation";
 import LogoCloud from "./components/LogoCloud";
@@ -44,16 +43,16 @@ type ActiveImage = {
 
 type WorkRenderItem =
   | {
-      kind: "stack";
-      project: Project;
-      stackImages: string[];
-    }
+    kind: "stack";
+    project: Project;
+    stackImages: string[];
+  }
   | {
-      kind: "grid";
-      project: Project;
-      src: string;
-      span: 1 | 2;
-    };
+    kind: "grid";
+    project: Project;
+    src: string;
+    span: 1 | 2;
+  };
 
 function MelbourneClock() {
   const [now, setNow] = useState(new Date());
@@ -150,7 +149,7 @@ function StackProjectSection({
 
   const evaluateActivationRef = useRef<
     (latest: number, inView: boolean) => void
-  >(() => {});
+  >(() => { });
   evaluateActivationRef.current = (latest: number, inView: boolean) => {
     if (!inView) {
       if (isActiveRef.current) {
@@ -337,7 +336,7 @@ function App() {
     () =>
       visibleProjects.map((project) => {
         const folderImages = project.slug
-          ? getProjectFolderImages(project.slug)
+          ? getProjectFolderImages(project.slug, { excludeHidden: true })
           : [];
         const shouldStack =
           folderImages.length > 1 && project.modalVariant !== "imageOnly";
@@ -608,14 +607,14 @@ function App() {
                 const animateProps =
                   i === 0
                     ? {
-                        initial: { opacity: 0 },
-                        animate: !isLoading ? { opacity: 1 } : {},
-                        transition: {
-                          duration: 0.8,
-                          delay: 0.5,
-                          ease: [0.16, 1, 0.3, 1] as const,
-                        },
-                      }
+                      initial: { opacity: 0 },
+                      animate: !isLoading ? { opacity: 1 } : {},
+                      transition: {
+                        duration: 0.8,
+                        delay: 0.5,
+                        ease: [0.16, 1, 0.3, 1] as const,
+                      },
+                    }
                     : {};
 
                 if (item.kind === "stack") {
@@ -649,11 +648,10 @@ function App() {
                     layoutId={`project-image-${item.project.id}`}
                     key={`${item.project.id}-${i}`}
                     data-cursor-magnify="true"
-                    className={`relative rounded-[32px] md:rounded-[48px] overflow-hidden cursor-pointer ${
-                      item.span === 2
-                        ? "col-span-2"
-                        : "col-span-1 aspect-[3/4] md:aspect-[4/5]"
-                    }`}
+                    className={`relative rounded-[32px] md:rounded-[48px] overflow-hidden cursor-pointer ${item.span === 2
+                      ? "col-span-2"
+                      : "col-span-1 aspect-[3/4] md:aspect-[4/5]"
+                      }`}
                     style={{
                       backgroundColor: item.project.bgColor,
                       WebkitMaskImage: "-webkit-radial-gradient(white, black)",
@@ -735,10 +733,10 @@ function App() {
               shouldReduceMotion
                 ? { opacity: 0 }
                 : {
-                    opacity: 0,
-                    y: pillMotion.enterYOffset,
-                    scale: pillMotion.enterScale,
-                  }
+                  opacity: 0,
+                  y: pillMotion.enterYOffset,
+                  scale: pillMotion.enterScale,
+                }
             }
             animate={
               shouldReduceMotion
@@ -749,20 +747,20 @@ function App() {
               shouldReduceMotion
                 ? { opacity: 0 }
                 : {
-                    opacity: 0,
-                    y: pillMotion.exitYOffset,
-                    scale: pillMotion.exitScale,
-                  }
+                  opacity: 0,
+                  y: pillMotion.exitYOffset,
+                  scale: pillMotion.exitScale,
+                }
             }
             transition={
               shouldReduceMotion
                 ? { duration: pillMotion.reducedMotionFadeMs / 1000 }
                 : {
-                    type: "spring",
-                    stiffness: pillMotion.springStiffness,
-                    damping: pillMotion.springDamping,
-                    mass: pillMotion.springMass,
-                  }
+                  type: "spring",
+                  stiffness: pillMotion.springStiffness,
+                  damping: pillMotion.springDamping,
+                  mass: pillMotion.springMass,
+                }
             }
           >
             <div className="pointer-events-auto">
@@ -949,45 +947,43 @@ function App() {
               onClick={() => setSelectedProject(null)}
             >
               <div
-                className={`w-full relative z-10 min-h-full flex flex-col items-center ${
-                  selectedProject.modalVariant === "imageOnly"
-                    ? "justify-center py-12 md:py-24 px-4 md:px-8"
-                    : "justify-end md:justify-center px-0 pt-16 md:px-8 md:py-16"
-                }`}
+                className={`w-full relative z-10 min-h-full flex flex-col items-center ${selectedProject.modalVariant === "imageOnly"
+                  ? "justify-center py-12 md:py-24 px-4 md:px-8"
+                  : "justify-end md:justify-center px-0 pt-16 md:px-8 md:py-16"
+                  }`}
                 onClick={() => setSelectedProject(null)}
               >
                 {/* Modal Container */}
                 <motion.div
-                  className={`w-full pointer-events-auto relative overflow-hidden flex flex-col squircle transform-gpu ${
-                    selectedProject?.modalVariant === "imageOnly"
-                      ? "max-w-[1120px] bg-transparent justify-center items-center cursor-pointer"
-                      : "mt-auto md:m-auto rounded-t-[48px] md:rounded-[56px] max-w-[1120px] bg-white shadow-2xl"
-                  }`}
+                  className={`w-full pointer-events-auto relative overflow-hidden flex flex-col squircle transform-gpu ${selectedProject?.modalVariant === "imageOnly"
+                    ? "max-w-[1120px] bg-transparent justify-center items-center cursor-pointer"
+                    : "mt-auto md:m-auto rounded-t-[48px] md:rounded-[56px] max-w-[1120px] bg-white shadow-2xl"
+                    }`}
                   initial={
                     shouldReduceMotion
                       ? { opacity: 1 }
                       : {
-                          transform: "translate3d(0, 100vh, 0)",
-                          opacity: 1,
-                        }
+                        transform: "translate3d(0, 100vh, 0)",
+                        opacity: 1,
+                      }
                   }
                   animate={
                     shouldReduceMotion
                       ? { opacity: 1 }
                       : {
-                          transform: "translate3d(0, 0, 0)",
-                          opacity: 1,
-                          transition: modalEnterSpring,
-                        }
+                        transform: "translate3d(0, 0, 0)",
+                        opacity: 1,
+                        transition: modalEnterSpring,
+                      }
                   }
                   exit={
                     shouldReduceMotion
                       ? { opacity: 1 }
                       : {
-                          transform: "translate3d(0, 100vh, 0)",
-                          opacity: 1,
-                          transition: modalExitSpring,
-                        }
+                        transform: "translate3d(0, 100vh, 0)",
+                        opacity: 1,
+                        transition: modalExitSpring,
+                      }
                   }
                   onClick={(e) => {
                     // Only prevent propagation for the standard modal wrapper, or let the inner actual content stop propagation for imageOnly
@@ -1000,10 +996,10 @@ function App() {
                   style={
                     selectedProject?.modalVariant !== "imageOnly"
                       ? {
-                          willChange: "transform, opacity",
-                          WebkitMaskImage:
-                            "-webkit-radial-gradient(white, black)",
-                        }
+                        willChange: "transform, opacity",
+                        WebkitMaskImage:
+                          "-webkit-radial-gradient(white, black)",
+                      }
                       : { willChange: "transform, opacity" }
                   }
                 >
@@ -1024,17 +1020,16 @@ function App() {
                       <>
                         {/* Cover Image/Video */}
                         <div
-                          className={`relative flex items-center justify-center overflow-hidden w-full ${
-                            selectedProject.modalVariant === "imageOnly"
-                              ? "mx-auto rounded-[32px] md:rounded-[48px] squircle shadow-2xl cursor-default"
-                              : ""
-                          }`}
+                          className={`relative flex items-center justify-center overflow-hidden w-full ${selectedProject.modalVariant === "imageOnly"
+                            ? "mx-auto rounded-[32px] md:rounded-[48px] squircle shadow-2xl cursor-default"
+                            : ""
+                            }`}
                           style={
                             selectedProject.modalVariant === "imageOnly"
                               ? {
-                                  WebkitMaskImage:
-                                    "-webkit-radial-gradient(white, black)",
-                                }
+                                WebkitMaskImage:
+                                  "-webkit-radial-gradient(white, black)",
+                              }
                               : {}
                           }
                           onClick={(e) => {
@@ -1046,11 +1041,10 @@ function App() {
                           {isVideo(coverSrc) ? (
                             <video
                               src={coverSrc}
-                              className={`block transform-gpu ${
-                                selectedProject.modalVariant === "imageOnly"
-                                  ? "w-full h-auto object-contain"
-                                  : "w-full h-auto aspect-[21/9] object-cover scale-[1.01]"
-                              }`}
+                              className={`block transform-gpu ${selectedProject.modalVariant === "imageOnly"
+                                ? "w-full h-auto object-contain"
+                                : "w-full h-auto aspect-[21/9] object-cover scale-[1.01]"
+                                }`}
                               autoPlay
                               loop
                               muted
@@ -1060,11 +1054,10 @@ function App() {
                             <img
                               src={coverSrc}
                               alt={selectedProject.title}
-                              className={`block transform-gpu ${
-                                selectedProject.modalVariant === "imageOnly"
-                                  ? "w-full h-auto object-contain"
-                                  : "w-full h-auto aspect-[21/9] object-cover scale-[1.01]"
-                              }`}
+                              className={`block transform-gpu ${selectedProject.modalVariant === "imageOnly"
+                                ? "w-full h-auto object-contain"
+                                : "w-full h-auto aspect-[21/9] object-cover scale-[1.01]"
+                                }`}
                             />
                           )}
                           <button
@@ -1152,9 +1145,8 @@ function App() {
                                 ) : (
                                   <img
                                     src={img}
-                                    alt={`${selectedProject.title} ${
-                                      index + 1
-                                    }`}
+                                    alt={`${selectedProject.title} ${index + 1
+                                      }`}
                                     className="w-full h-auto object-contain block scale-[1.01] transform-gpu"
                                   />
                                 )}

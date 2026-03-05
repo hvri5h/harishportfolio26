@@ -6,10 +6,17 @@ const workImages = import.meta.glob<string>(
   { eager: true, import: "default" }
 );
 
-export function getProjectFolderImages(slug: string): string[] {
+export function getProjectFolderImages(slug: string, options?: { excludeHidden?: boolean }): string[] {
   const prefix = `/src/assets/work/${slug}/`;
   return Object.entries(workImages)
-    .filter(([path]) => path.startsWith(prefix))
+    .filter(([path]) => {
+      if (!path.startsWith(prefix)) return false;
+      if (options?.excludeHidden) {
+        const name = path.split("/").pop() || "";
+        if (name.startsWith("_")) return false;
+      }
+      return true;
+    })
     .sort(([a], [b]) => {
       const nameA = a.split("/").pop() || "";
       const nameB = b.split("/").pop() || "";
@@ -25,7 +32,7 @@ export function getProjectFolderImages(slug: string): string[] {
 }
 
 export function getProjectGridImage(slug: string): string | undefined {
-  const images = getProjectFolderImages(slug);
+  const images = getProjectFolderImages(slug, { excludeHidden: true });
   const nonBanner = images.find((url) => {
     const name = url.split("/").pop() || "";
     return !name.toLowerCase().includes("banner");
