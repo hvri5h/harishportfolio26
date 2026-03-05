@@ -1,7 +1,8 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { useState } from "react";
 import { getStaggerContainer, getStaggerItem } from "../lib/animations";
-
+import engineeringBg from "../assets/engineering-bento-bg.png";
+import designBg from "../assets/design-bento-bg.png";
 const designSkills = [
   "Visual Design",
   "Branding",
@@ -15,24 +16,27 @@ const engineeringSkills = [
   "Javascript",
   "Typescript",
   "Tailwind CSS",
-  "Framer Motion",
   "Node.js",
   "Next.js",
   "React.js",
 ];
 
-const stackItems = [
+type StackItem = {
+  name: string;
+  icon: string;
+  className?: string;
+  customSize?: { width: number | string; height: number | string };
+};
+
+const stackItems: StackItem[] = [
+  { name: "Claude Code", icon: "/icons/claude-logo.png" },
+  { name: "Cursor", icon: "/icons/cursor-logo.svg" },
+  { name: "Antigravity", icon: "/icons/antigravity-logo.png" },
   { name: "React", icon: "/icons/react-logo.svg" },
-  {
-    name: "Next.js",
-    icon: "/icons/nextjs-logotype-light-background.svg",
-    className: "scale-150",
-  },
-  { name: "TypeScript", icon: "/icons/typescript-logo.svg" },
-  { name: "Tailwind", icon: "/icons/tailwindcss-logo.svg" },
+  { name: "Next.js", icon: "/icons/nextjs-logo.svg" },
   { name: "Figma", icon: "/icons/figma-logo.svg" },
-  { name: "Supabase", icon: "/icons/supabase-logo.svg" },
-  { name: "Motion", icon: "/icons/motion.svg" },
+  { name: "Motion", icon: "/icons/motion.svg", customSize: { width: 54, height: 36 } },
+  { name: "Framer", icon: "/icons/framer-logo.svg" },
 ];
 
 interface TooltipProps {
@@ -147,8 +151,15 @@ const WhatIDo = () => {
             variants={getStaggerItem(shouldReduceMotion)}
             className="relative bg-[rgba(26,26,26,0.03)] rounded-[24px] overflow-hidden h-[400px] max-md:h-auto max-md:min-h-[320px]"
           >
+            <div className="absolute inset-0 pointer-events-none">
+              <img
+                src={designBg}
+                alt=""
+                className="absolute right-0 bottom-0 min-w-full min-h-full object-cover object-bottom"
+              />
+            </div>
             <div className="absolute inset-0 p-10 flex flex-col max-md:relative max-md:p-8">
-              <div className="flex flex-col gap-4 mb-auto">
+              <div className="flex flex-col gap-4 mb-auto relative z-10">
                 <h3
                   className="text-2xl font-semibold tracking-[-0.02em] text-text"
                   style={{ fontSize: h.cardHeadingSize, fontWeight: h.cardHeadingWeight, color: c.headingColor, fontFamily: headingFont, lineHeight: h.headingLineHeight, letterSpacing: `${h.headingLetterSpacing}em` }}
@@ -164,7 +175,7 @@ const WhatIDo = () => {
                   feel.
                 </p>
               </div>
-              <div className="flex flex-wrap gap-2.5 mt-8 max-w-[340px] max-md:max-w-full">
+              <div className="flex flex-wrap gap-2.5 mt-8 max-w-[340px] max-md:max-w-full relative z-10">
                 {designSkills.map((skill) => (
                   <SkillTag key={skill} label={skill} tagSize={b.tagSize} />
                 ))}
@@ -177,8 +188,15 @@ const WhatIDo = () => {
             variants={getStaggerItem(shouldReduceMotion)}
             className="relative bg-[rgba(26,26,26,0.03)] rounded-[24px] overflow-hidden h-[400px] max-md:h-auto max-md:min-h-[320px]"
           >
+            <div className="absolute inset-0 pointer-events-none">
+              <img
+                src={engineeringBg}
+                alt=""
+                className="absolute right-0 bottom-0 min-w-full min-h-full object-cover object-bottom"
+              />
+            </div>
             <div className="absolute inset-0 p-10 flex flex-col max-md:relative max-md:p-8">
-              <div className="flex flex-col gap-4 mb-auto">
+              <div className="flex flex-col gap-4 mb-auto relative z-10">
                 <h3
                   className="text-2xl font-semibold tracking-[-0.02em] text-text"
                   style={{ fontSize: h.cardHeadingSize, fontWeight: h.cardHeadingWeight, color: c.headingColor, fontFamily: headingFont, lineHeight: h.headingLineHeight, letterSpacing: `${h.headingLetterSpacing}em` }}
@@ -194,7 +212,7 @@ const WhatIDo = () => {
                   things look right, I make them work right.
                 </p>
               </div>
-              <div className="flex flex-wrap gap-2.5 mt-8 max-w-[340px] max-md:max-w-full">
+              <div className="flex flex-wrap gap-2.5 mt-8 max-w-[340px] max-md:max-w-full relative z-10">
                 {engineeringSkills.map((skill) => (
                   <SkillTag key={skill} label={skill} tagSize={b.tagSize} />
                 ))}
@@ -227,9 +245,12 @@ const WhatIDo = () => {
                       src={item.icon}
                       alt={item.name}
                       className={`object-contain mb-3 opacity-60 max-sm:mb-2 ${item.className || ""}`}
-                      style={{ width: b.stackIconSize, height: b.stackIconSize }}
+                      style={{
+                        width: item.customSize?.width ?? b.stackIconSize,
+                        height: item.customSize?.height ?? b.stackIconSize
+                      }}
                     />
-                    <span className="text-sm text-text-secondary font-normal max-sm:text-xs">
+                    <span className="text-[13px] text-text-secondary font-normal max-sm:text-xs">
                       {item.name}
                     </span>
                   </div>

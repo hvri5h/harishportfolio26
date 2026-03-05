@@ -524,7 +524,7 @@ function App() {
         {/* Hero Section */}
         <header
           ref={heroSectionRef}
-          className="relative flex items-start justify-center pt-[100px] md:pt-[120px] pb-12 max-sm:px-8"
+          className="relative flex items-start justify-center pt-[140px] md:pt-[180px] pb-12 max-sm:px-8"
         >
           <div className="max-w-[1200px] mx-auto px-8 w-full">
             <motion.div
@@ -537,7 +537,7 @@ function App() {
                 variants={getStaggerItem(shouldReduceMotion)}
                 className="mt-6 mb-10 h-[200px] w-[200px] max-md:h-[160px] max-md:w-[160px] overflow-visible"
               >
-                <div className="h-[300px] w-[280px] -translate-x-[40px] -translate-y-[55px] max-md:h-[220px] max-md:w-[220px] max-md:-translate-x-[30px] max-md:-translate-y-[30px]">
+                <div className="h-[360px] w-[340px] -translate-x-[85px] -translate-y-[95px] max-md:h-[260px] max-md:w-[250px] max-md:-translate-x-[55px] max-md:-translate-y-[55px] pointer-events-auto">
                   <Spline
                     scene="https://prod.spline.design/zy5bc6-NJcpDwB1Y/scene.splinecode"
                     onLoad={handleSplineLoad}
