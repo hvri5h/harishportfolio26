@@ -1,5 +1,4 @@
 import { motion, useReducedMotion } from "framer-motion";
-import { useState } from "react";
 import { getStaggerContainer, getStaggerItem } from "../lib/animations";
 import engineeringBg from "../assets/engineering-bento-bg.png";
 import designBg from "../assets/design-bento-bg.png";
@@ -40,35 +39,6 @@ const stackItems: StackItem[] = [
   { name: "Framer", icon: "/icons/framer-logo.svg" },
   { name: "Supabase", icon: "/icons/supabase-logo.svg" },
 ];
-
-interface TooltipProps {
-  name: string;
-  children: React.ReactNode;
-}
-
-const Tooltip = ({ name, children }: TooltipProps) => {
-  const [isVisible, setIsVisible] = useState(false);
-
-  return (
-    <div
-      className="relative"
-      onMouseEnter={() => setIsVisible(true)}
-      onMouseLeave={() => setIsVisible(false)}
-    >
-      {children}
-      {isVisible && (
-        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 z-50 pointer-events-none">
-          <div className="bg-[#1a1a1a] text-white px-3.5 py-2 rounded-xl shadow-xl whitespace-nowrap">
-            <div className="text-[13px] font-semibold">{name}</div>
-          </div>
-          <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-1">
-            <div className="w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[6px] border-t-[#1a1a1a]" />
-          </div>
-        </div>
-      )}
-    </div>
-  );
-};
 
 const SkillTag = ({ label, tagSize }: { label: string; tagSize?: number }) => (
   <span
@@ -242,22 +212,20 @@ const WhatIDo = () => {
           <motion.div variants={getStaggerContainer()} className="flex flex-wrap items-center gap-4 max-sm:gap-3">
             {stackItems.map((item) => (
               <motion.div key={item.name} variants={getStaggerItem(shouldReduceMotion)} className="flex-1">
-                <Tooltip name={item.name}>
-                  <div className="relative bg-[rgba(26,26,26,0.04)] hover:bg-[rgba(26,26,26,0.08)] rounded-xl w-full min-w-[86px] max-w-[114px] h-[96px] flex flex-col items-center justify-center cursor-pointer transition-colors duration-200 max-sm:min-w-[calc(25%-0.75rem)] max-sm:h-[80px]">
-                    <img
-                      src={item.icon}
-                      alt={item.name}
-                      className={`object-contain mb-3 opacity-60 max-sm:mb-2 ${item.className || ""}`}
-                      style={{
-                        width: item.customSize?.width ?? b.stackIconSize,
-                        height: item.customSize?.height ?? b.stackIconSize
-                      }}
-                    />
-                    <span className="text-[13px] text-text-secondary font-normal max-sm:text-xs">
-                      {item.name}
-                    </span>
-                  </div>
-                </Tooltip>
+                <div className="relative bg-[rgba(26,26,26,0.04)] hover:bg-[rgba(26,26,26,0.08)] rounded-xl w-full min-w-[86px] max-w-[114px] h-[96px] flex flex-col items-center justify-center cursor-pointer transition-colors duration-200 max-sm:min-w-[calc(25%-0.75rem)] max-sm:h-[80px]">
+                  <img
+                    src={item.icon}
+                    alt={item.name}
+                    className={`object-contain mb-3 opacity-60 max-sm:mb-2 ${item.className || ""}`}
+                    style={{
+                      width: item.customSize?.width ?? b.stackIconSize,
+                      height: item.customSize?.height ?? b.stackIconSize
+                    }}
+                  />
+                  <span className="text-[13px] text-text-secondary font-normal max-sm:text-xs">
+                    {item.name}
+                  </span>
+                </div>
               </motion.div>
             ))}
           </motion.div>
