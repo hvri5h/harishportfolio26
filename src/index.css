@@ -38,6 +38,7 @@
 @tailwind utilities;
 
 @media (pointer: fine) {
+
   *,
   *::before,
   *::after {
@@ -53,12 +54,19 @@
 }
 
 @keyframes terminalBlink {
+
   0%,
-  100% {
+  49.9% {
     opacity: 1;
   }
-  50% {
+
+  50%,
+  99.9% {
     opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
   }
 }
 
@@ -153,6 +161,7 @@
   0% {
     transform: translateX(0);
   }
+
   100% {
     transform: translateX(var(--scroll-width));
   }

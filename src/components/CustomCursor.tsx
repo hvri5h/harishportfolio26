@@ -155,16 +155,23 @@ export function CustomCursor() {
   if (codeMode) {
     return (
       <motion.div
-        className="fixed top-0 left-0 pointer-events-none z-[9999]"
+        key="code"
+        className="fixed top-0 left-0 pointer-events-none z-[9999] flex items-center gap-1.5"
         style={{
           x: mouseX,
           y: mouseY,
           translateX: "-50%",
           translateY: "-50%",
-          opacity: visible ? 1 : 0,
+          opacity: visible ? 1 : 0
         }}
       >
-        <div className="w-[10px] h-[26px] bg-green-500 animate-[terminalBlink_1s_step-end_infinite]" />
+        <span className="text-[#0EE725] font-mono text-[28px] font-black leading-none mt-[2px]">
+          &gt;
+        </span>
+        <div
+          style={{ animation: "terminalBlink 1s infinite" }}
+          className="w-[12px] h-[24px] bg-[#0EE725]"
+        />
       </motion.div>
     );
   }
@@ -172,6 +179,7 @@ export function CustomCursor() {
   if (figmaMode) {
     return (
       <motion.div
+        key="figma"
         className="fixed top-0 left-0 pointer-events-none z-[9999]"
         style={{
           x: mouseX,
@@ -188,6 +196,7 @@ export function CustomCursor() {
 
   return (
     <motion.div
+      key="default"
       className="fixed top-0 left-0 pointer-events-none z-[9999] flex items-center justify-center rounded-full"
       style={{
         x: mouseX,

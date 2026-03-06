@@ -189,6 +189,7 @@ const WhatIDo = () => {
           <motion.div
             variants={getStaggerItem(shouldReduceMotion)}
             className="relative bg-[rgba(26,26,26,0.03)] rounded-[24px] overflow-hidden h-[400px] max-md:h-auto max-md:min-h-[320px]"
+            data-cursor-code
           >
             <div className="absolute inset-0 pointer-events-none">
               <img
