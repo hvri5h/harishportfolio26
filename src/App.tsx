@@ -335,6 +335,8 @@ function App() {
   });
   const workSectionRef = useRef<HTMLElement>(null);
   const isWorkSectionInView = useInView(workSectionRef, { amount: 0.01 });
+  const showLiquidBlur =
+    !isLoading && isWorkSectionInView && !!activeStackedProjectId;
   const showBottomLiquidBlur =
     !isLoading && !isHeroSectionInView && !isFooterSectionInView;
   const visibleProjects = useMemo(
@@ -718,7 +720,7 @@ function App() {
 
       {/* Global Context-Aware Pill */}
       <AnimatePresence>
-        {isWorkSectionInView && activeStackedProjectId && (
+        {showLiquidBlur && (
           <motion.div
             key="global-case-study-pill"
             className="fixed left-0 right-0 z-[100] flex justify-center pointer-events-none"
@@ -776,7 +778,9 @@ function App() {
         )}
       </AnimatePresence>
 
-      {/* Bottom liquid blur overlay (post-hero only) */}
+
+
+      {/* Bottom liquid blur overlay */}
       <AnimatePresence>
         {showBottomLiquidBlur && (
           <motion.div
@@ -810,6 +814,17 @@ function App() {
                 backdropFilter: `blur(${blurVisual.blurPx}px)`,
                 WebkitBackdropFilter: `blur(${blurVisual.blurPx}px)`,
                 background: `linear-gradient(to top, rgba(255,255,255,${blurVisual.alphaBottom}), rgba(255,255,255,${blurVisual.alphaMiddle}), rgba(255,255,255,${blurVisual.alphaUpper}), transparent)`,
+                maskImage: `linear-gradient(to top, black 0%, rgba(0,0,0,${blurVisual.maskMiddleAlpha}) ${blurVisual.maskMiddleStop}%, transparent 100%)`,
+                WebkitMaskImage: `linear-gradient(to top, black 0%, rgba(0,0,0,${blurVisual.maskMiddleAlpha}) ${blurVisual.maskMiddleStop}%, transparent 100%)`,
+              }}
+            />
+
+            {/* Black gradient overlay active when case study pill appears */}
+            <div
+              className={`absolute inset-0 transition-opacity duration-300 ease-out ${showLiquidBlur ? "opacity-100" : "opacity-0"
+                }`}
+              style={{
+                background: `linear-gradient(to top, rgba(0,0,0,0.5), transparent)`,
                 maskImage: `linear-gradient(to top, black 0%, rgba(0,0,0,${blurVisual.maskMiddleAlpha}) ${blurVisual.maskMiddleStop}%, transparent 100%)`,
                 WebkitMaskImage: `linear-gradient(to top, black 0%, rgba(0,0,0,${blurVisual.maskMiddleAlpha}) ${blurVisual.maskMiddleStop}%, transparent 100%)`,
               }}
