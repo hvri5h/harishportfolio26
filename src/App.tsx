@@ -32,7 +32,6 @@ import {
 import StackingCards, {
   StackingCardItem,
 } from "./components/fancy/blocks/stacking-cards";
-import { TextShimmer } from "./components/motion-primitives/text-shimmer";
 import { getStaggerContainer, getStaggerItem } from "./lib/animations";
 
 type ActiveImage = {
@@ -122,13 +121,6 @@ type StackProjectSectionProps = {
   project: Project;
   stackImages: string[];
   animateProps: Record<string, unknown>;
-  onImageClick: (
-    imageId: string,
-    src: string,
-    isVideoSrc: boolean,
-    width?: number,
-    height?: number,
-  ) => void;
   onActiveChange: (projectId: string, isActive: boolean) => void;
 };
 
@@ -136,7 +128,6 @@ function StackProjectSection({
   project,
   stackImages,
   animateProps,
-  onImageClick,
   onActiveChange,
 }: StackProjectSectionProps) {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -209,11 +200,11 @@ function StackProjectSection({
       {...animateProps}
       ref={sectionRef}
       key={`${project.id}-stack`}
-      className="col-span-2 relative"
+      className="col-span-1 md:col-span-2 relative"
     >
       <StackingCards
         totalCards={stackImages.length}
-        className="w-full"
+        className="w-full flex flex-col gap-6 md:block"
         scaleMultiplier={0.035}
       >
         {stackImages.map((src, index) => {
@@ -221,41 +212,19 @@ function StackProjectSection({
             <StackingCardItem
               key={`${project.id}-${index}`}
               index={index}
-              className="h-screen"
+              className="h-auto md:h-screen"
             >
               <motion.div
-                layoutId={`project-image-${project.id}-${index}`}
-                data-cursor-magnify="true"
-                className="relative w-full rounded-[32px] md:rounded-[48px] overflow-hidden cursor-pointer"
+                className="relative w-full rounded-[32px] md:rounded-[48px] overflow-hidden"
                 style={{
                   aspectRatio: "1920 / 1280",
                   backgroundColor: project.bgColor,
-                  WebkitMaskImage: "-webkit-radial-gradient(white, black)",
-                  willChange: "transform",
-                }}
-                whileHover={{ scale: 1.01 }}
-                whileTap={{ scale: 0.98 }}
-                transition={{
-                  layout: { type: "spring", duration: 0.5, bounce: 0.1 },
-                  scale: { duration: 0.4, ease: [0.16, 1, 0.3, 1] },
-                }}
-                onClick={(e) => {
-                  const video = e.currentTarget.querySelector("video");
-                  const w = video?.videoWidth;
-                  const h = video?.videoHeight;
-                  onImageClick(
-                    `${project.id}-${index}`,
-                    src,
-                    isVideo(src),
-                    w,
-                    h,
-                  );
                 }}
               >
                 {isVideo(src) ? (
                   <video
                     src={src}
-                    className="w-full h-full object-cover block transform-gpu"
+                    className="w-full h-full object-cover block"
                     autoPlay
                     loop
                     muted
@@ -265,7 +234,7 @@ function StackProjectSection({
                   <img
                     src={src}
                     alt={`${project.title} ${index + 1}`}
-                    className="w-full h-full object-cover block transform-gpu"
+                    className="w-full h-full object-cover block"
                     loading="lazy"
                   />
                 )}
@@ -509,7 +478,7 @@ function App() {
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
                 </div>
               </div>
-              <span className="text-text-secondary tracking-[-0.01em] text-sm">Available for work <span className="hidden md:block">Mar 2026</span></span>
+              <span className="text-text-secondary tracking-[-0.01em] text-sm">Available for work <span className="hidden md:inline-block">Mar 2026</span></span>
             </div>
             <div className="hidden md:flex items-center gap-2">
               <button
@@ -594,7 +563,7 @@ function App() {
               </motion.a>
               <motion.div
                 variants={getStaggerItem(shouldReduceMotion)}
-                className="w-full mt-10 md:mt-20"
+                className="w-full mt-10 mb-12 md:mt-20 md:mb-0"
               >
                 {/* <p className="text-sm font-medium text-text-secondary text-center mb-5">
                   12+ years of shipping digital products
@@ -612,7 +581,7 @@ function App() {
           className="pt-2 md:pt-10 pb-32 relative"
         >
           <div className="max-w-[1200px] mx-auto px-3 md:px-8">
-            <div className="grid grid-cols-2 gap-2 md:gap-4 lg:gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
               {workItems.map((item, i) => {
                 const animateProps =
                   i === 0
@@ -634,22 +603,6 @@ function App() {
                       project={item.project}
                       stackImages={item.stackImages}
                       animateProps={animateProps}
-                      onImageClick={(
-                        imageId,
-                        src,
-                        isVideoSrc,
-                        width,
-                        height,
-                      ) => {
-                        setActiveImage({
-                          id: imageId,
-                          src,
-                          isVideo: isVideoSrc,
-                          bgColor: item.project.bgColor,
-                          width,
-                          height,
-                        });
-                      }}
                       onActiveChange={(id, isActive) => {
                         setActiveStackedProjectId((prev) => {
                           if (isActive) return id;
@@ -663,43 +616,13 @@ function App() {
                 return (
                   <motion.div
                     {...animateProps}
-                    layoutId={`project-image-${item.project.id}`}
                     key={`${item.project.id}-${i}`}
-                    data-cursor-magnify="true"
-                    className={`relative rounded-[32px] md:rounded-[48px] overflow-hidden cursor-pointer ${item.span === 2
-                      ? "col-span-2"
+                    className={`relative rounded-[32px] md:rounded-[48px] overflow-hidden ${item.span === 2
+                      ? "col-span-1 md:col-span-2"
                       : "col-span-1 aspect-[3/4] md:aspect-[4/5]"
                       }`}
                     style={{
                       backgroundColor: item.project.bgColor,
-                      WebkitMaskImage: "-webkit-radial-gradient(white, black)",
-                      willChange: "transform",
-                    }}
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    transition={{
-                      layout: {
-                        type: "spring",
-                        duration: 0.5,
-                        bounce: 0.1,
-                      },
-                      scale: {
-                        duration: 0.4,
-                        ease: [0.16, 1, 0.3, 1],
-                      },
-                    }}
-                    onClick={(e) => {
-                      const video = e.currentTarget.querySelector("video");
-                      const w = video?.videoWidth;
-                      const h = video?.videoHeight;
-                      setActiveImage({
-                        id: item.project.id,
-                        src: item.src,
-                        isVideo: isVideo(item.src),
-                        bgColor: item.project.bgColor,
-                        width: w,
-                        height: h,
-                      });
                     }}
                   >
                     {isVideo(item.src) ? (
@@ -707,8 +630,8 @@ function App() {
                         src={item.src}
                         className={
                           item.span === 2
-                            ? "w-full h-auto block transform-gpu"
-                            : "absolute inset-0 w-full h-full object-cover block transform-gpu"
+                            ? "w-full h-auto block"
+                            : "absolute inset-0 w-full h-full object-cover block"
                         }
                         autoPlay
                         loop
@@ -721,8 +644,8 @@ function App() {
                         alt={`${item.project.title} screen`}
                         className={
                           item.span === 2
-                            ? "w-full h-auto block transform-gpu"
-                            : "absolute inset-0 w-full h-full object-cover block transform-gpu"
+                            ? "w-full h-auto block"
+                            : "absolute inset-0 w-full h-full object-cover block"
                         }
                         loading="lazy"
                       />
