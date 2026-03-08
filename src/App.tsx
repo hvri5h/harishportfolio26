@@ -122,7 +122,13 @@ type StackProjectSectionProps = {
   project: Project;
   stackImages: string[];
   animateProps: Record<string, unknown>;
-  onImageClick: (imageId: string, src: string, isVideoSrc: boolean, width?: number, height?: number) => void;
+  onImageClick: (
+    imageId: string,
+    src: string,
+    isVideoSrc: boolean,
+    width?: number,
+    height?: number,
+  ) => void;
   onActiveChange: (projectId: string, isActive: boolean) => void;
 };
 
@@ -237,7 +243,13 @@ function StackProjectSection({
                   const video = e.currentTarget.querySelector("video");
                   const w = video?.videoWidth;
                   const h = video?.videoHeight;
-                  onImageClick(`${project.id}-${index}`, src, isVideo(src), w, h);
+                  onImageClick(
+                    `${project.id}-${index}`,
+                    src,
+                    isVideo(src),
+                    w,
+                    h,
+                  );
                 }}
               >
                 {isVideo(src) ? (
@@ -320,6 +332,11 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [progress, setProgress] = useState(0);
   const [activeSection, setActiveSection] = useState("work");
+  const [hasFineCursor, setHasFineCursor] = useState(false);
+
+  useEffect(() => {
+    setHasFineCursor(window.matchMedia("(pointer: fine)").matches);
+  }, []);
 
   // Track the currently active stacked project ID for the page-level CTA
   const [activeStackedProjectId, setActiveStackedProjectId] = useState<
@@ -442,7 +459,7 @@ function App() {
 
   return (
     <div className="min-h-screen">
-      <CustomCursor />
+      {hasFineCursor && <CustomCursor />}
 
       {/* Navigation — hidden while loading */}
       {!isLoading && (
@@ -523,7 +540,7 @@ function App() {
         {/* Hero Section */}
         <header
           ref={heroSectionRef}
-          className="relative flex items-start justify-center pt-[110px] md:pt-[180px] pb-4 max-sm:px-8"
+          className="relative flex items-start justify-center pt-[100px] md:pt-[180px] pb-4 max-sm:px-8"
         >
           <div className="max-w-[1200px] mx-auto px-8 w-full">
             <motion.div
@@ -534,9 +551,9 @@ function App() {
             >
               <motion.div
                 variants={getStaggerItem(shouldReduceMotion)}
-                className="mt-6 mb-6 h-[200px] w-[200px] max-md:h-[160px] max-md:w-[160px] overflow-visible"
+                className="md:mt-6 md:mb-6 h-[200px] w-[200px] overflow-visible"
               >
-                <div className="h-[360px] w-[340px] -translate-x-[85px] -translate-y-[95px] max-md:h-[260px] max-md:w-[250px] max-md:-translate-x-[55px] max-md:-translate-y-[55px] pointer-events-auto">
+                <div className="h-[360px] w-[340px] -translate-x-[80px] md:-translate-x-[85px] -translate-y-[95px] pointer-events-auto max-md:pointer-events-none max-md:scale-[0.7] max-md:origin-center">
                   <Spline
                     scene="https://prod.spline.design/zy5bc6-NJcpDwB1Y/scene.splinecode"
                     onLoad={handleSplineLoad}
@@ -545,14 +562,14 @@ function App() {
               </motion.div>
               <motion.h1
                 variants={getStaggerItem(shouldReduceMotion)}
-                className="font-display font-black text-[5rem] tracking-[-0.03em] leading-none text-text mb-4 max-md:text-[clamp(2.5rem,8vw,4rem)] max-sm:text-[1.75rem] z-10"
+                className="font-display font-black text-[5rem] tracking-[-0.03em] leading-none text-text mb-3 md:mb-4 max-md:text-[clamp(2.75rem,10vw,4rem)] z-10"
                 data-cursor-label="hah-REESH"
               >
                 Harish
               </motion.h1>
               <motion.p
                 variants={getStaggerItem(shouldReduceMotion)}
-                className="font-display font-medium text-2xl text-text-secondary leading-[1.4] max-w-[400px] mb-6"
+                className="font-display font-medium text-2xl max-md:text-xl text-text-secondary leading-[1.4] max-w-[400px] mb-5 md:mb-6"
               >
                 <TextShimmer
                   as="span"
@@ -589,9 +606,13 @@ function App() {
         </header>
 
         {/* Work Section */}
-        <section id="work" ref={workSectionRef} className="pt-10 pb-32 relative">
+        <section
+          id="work"
+          ref={workSectionRef}
+          className="pt-10 pb-32 relative"
+        >
           <div className="max-w-[1200px] mx-auto px-3 md:px-8">
-            <div className="grid grid-cols-2 gap-4 md:gap-6 lg:gap-8">
+            <div className="grid grid-cols-2 gap-2 md:gap-4 lg:gap-6">
               {workItems.map((item, i) => {
                 const animateProps =
                   i === 0
@@ -613,7 +634,13 @@ function App() {
                       project={item.project}
                       stackImages={item.stackImages}
                       animateProps={animateProps}
-                      onImageClick={(imageId, src, isVideoSrc, width, height) => {
+                      onImageClick={(
+                        imageId,
+                        src,
+                        isVideoSrc,
+                        width,
+                        height,
+                      ) => {
                         setActiveImage({
                           id: imageId,
                           src,
@@ -640,8 +667,8 @@ function App() {
                     key={`${item.project.id}-${i}`}
                     data-cursor-magnify="true"
                     className={`relative rounded-[32px] md:rounded-[48px] overflow-hidden cursor-pointer ${item.span === 2
-                      ? "col-span-2"
-                      : "col-span-1 aspect-[3/4] md:aspect-[4/5]"
+                        ? "col-span-2"
+                        : "col-span-1 aspect-[3/4] md:aspect-[4/5]"
                       }`}
                     style={{
                       backgroundColor: item.project.bgColor,
@@ -777,8 +804,6 @@ function App() {
           </motion.div>
         )}
       </AnimatePresence>
-
-
 
       {/* Bottom liquid blur overlay */}
       <AnimatePresence>
@@ -959,16 +984,16 @@ function App() {
             >
               <div
                 className={`w-full relative z-10 min-h-full flex flex-col items-center ${selectedProject.modalVariant === "imageOnly"
-                  ? "justify-center py-12 md:py-24 px-4 md:px-8"
-                  : "justify-end md:justify-center px-0 pt-16 md:px-8 md:py-16"
+                    ? "justify-center py-12 md:py-24 px-4 md:px-8"
+                    : "justify-end md:justify-center px-0 pt-16 md:px-8 md:py-16"
                   }`}
                 onClick={() => setSelectedProject(null)}
               >
                 {/* Modal Container */}
                 <motion.div
                   className={`w-full pointer-events-auto relative overflow-hidden flex flex-col squircle transform-gpu ${selectedProject?.modalVariant === "imageOnly"
-                    ? "max-w-[1120px] bg-transparent justify-center items-center cursor-pointer"
-                    : "mt-auto md:m-auto rounded-t-[48px] md:rounded-[56px] max-w-[1120px] bg-white shadow-2xl"
+                      ? "max-w-[1120px] bg-transparent justify-center items-center cursor-pointer"
+                      : "mt-auto md:m-auto rounded-t-[48px] md:rounded-[56px] max-w-[1120px] bg-white shadow-2xl"
                     }`}
                   initial={
                     shouldReduceMotion
@@ -1032,8 +1057,8 @@ function App() {
                         {/* Cover Image/Video */}
                         <div
                           className={`relative flex items-center justify-center overflow-hidden w-full ${selectedProject.modalVariant === "imageOnly"
-                            ? "mx-auto rounded-[32px] md:rounded-[48px] squircle shadow-2xl cursor-default"
-                            : ""
+                              ? "mx-auto rounded-[32px] md:rounded-[48px] squircle shadow-2xl cursor-default"
+                              : ""
                             }`}
                           style={
                             selectedProject.modalVariant === "imageOnly"
@@ -1053,8 +1078,8 @@ function App() {
                             <video
                               src={coverSrc}
                               className={`block transform-gpu ${selectedProject.modalVariant === "imageOnly"
-                                ? "w-full h-auto object-contain"
-                                : "w-full h-auto aspect-[21/9] object-cover scale-[1.01]"
+                                  ? "w-full h-auto object-contain"
+                                  : "w-full h-auto aspect-[21/9] object-cover scale-[1.01]"
                                 }`}
                               autoPlay
                               loop
@@ -1066,8 +1091,8 @@ function App() {
                               src={coverSrc}
                               alt={selectedProject.title}
                               className={`block transform-gpu ${selectedProject.modalVariant === "imageOnly"
-                                ? "w-full h-auto object-contain"
-                                : "w-full h-auto aspect-[21/9] object-cover scale-[1.01]"
+                                  ? "w-full h-auto object-contain"
+                                  : "w-full h-auto aspect-[21/9] object-cover scale-[1.01]"
                                 }`}
                             />
                           )}

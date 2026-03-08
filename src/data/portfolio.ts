@@ -115,62 +115,6 @@ export const projects: Project[] = [
     }
   ),
   createProject(
-    "mob-2",
-    watercoola,
-    "watercoola", // Optional fallback
-    true,
-    "image",
-    "Watercoola",
-    "Connecting remote teams asynchronously through immersive virtual environments.",
-    ["product design", "branding"],
-    {
-      client: "Watercoola Inc.",
-      team: "Myself, 2 Frontend Engineers",
-      year: "2024",
-      timeline: "6 Weeks",
-      bgColor: "#0EA5E9",
-      modalVariant: "imageOnly",
-    }
-  ),
-  createProject(
-    "mob-3",
-    audiobook,
-    "audiobook",
-    true,
-    "image",
-    "Audiobook app concept",
-    "Listen to your favorite books on the go with this modern, accessible player.",
-    ["product design"],
-    {
-      client: "Personal Project",
-      team: "Myself",
-      year: "2025",
-      timeline: "2 Weeks",
-      bgColor: "#8B5CF6",
-      modalVariant: "imageOnly",
-    }
-  ),
-  createProject(
-    "mob-4",
-    lj,
-    "", // Need a generic slug or empty string here
-    true,
-    "image",
-    "LJ Hooker",
-    "A mobile app that keeps property buyers in the loop with instant notifications on price changes, new listings, and auction updates.",
-    ["product design"],
-    {
-      subtitle: "Real-time property updates for home buyers",
-      client: "LJ Hooker",
-      team: "3 Engineers, 1 Designer, PM",
-      year: "2023",
-      role: "Product Designer",
-      timeline: "4 Months",
-      bgColor: "#1A1A2E",
-      isHidden: true,
-    }
-  ),
-  createProject(
     "desk-1",
     sbnbBanner,
     "superbnb",
@@ -284,6 +228,62 @@ export const projects: Project[] = [
       year: "2023",
       timeline: "6 Months",
       bgColor: "#4F46E5",
+      isHidden: true,
+    }
+  ),
+  createProject(
+    "mob-2",
+    watercoola,
+    "watercoola", // Optional fallback
+    true,
+    "image",
+    "Watercoola",
+    "Connecting remote teams asynchronously through immersive virtual environments.",
+    ["product design", "branding"],
+    {
+      client: "Watercoola Inc.",
+      team: "Myself, 2 Frontend Engineers",
+      year: "2024",
+      timeline: "6 Weeks",
+      bgColor: "#0EA5E9",
+      modalVariant: "imageOnly",
+    }
+  ),
+  createProject(
+    "mob-3",
+    audiobook,
+    "audiobook",
+    true,
+    "image",
+    "Audiobook app concept",
+    "Listen to your favorite books on the go with this modern, accessible player.",
+    ["product design"],
+    {
+      client: "Personal Project",
+      team: "Myself",
+      year: "2025",
+      timeline: "2 Weeks",
+      bgColor: "#8B5CF6",
+      modalVariant: "imageOnly",
+    }
+  ),
+  createProject(
+    "mob-4",
+    lj,
+    "", // Need a generic slug or empty string here
+    true,
+    "image",
+    "LJ Hooker",
+    "A mobile app that keeps property buyers in the loop with instant notifications on price changes, new listings, and auction updates.",
+    ["product design"],
+    {
+      subtitle: "Real-time property updates for home buyers",
+      client: "LJ Hooker",
+      team: "3 Engineers, 1 Designer, PM",
+      year: "2023",
+      role: "Product Designer",
+      timeline: "4 Months",
+      bgColor: "#1A1A2E",
       isHidden: true,
     }
   ),
