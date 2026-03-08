@@ -500,18 +500,18 @@ function App() {
         </AnimatePresence>
 
         {/* Header Content - Top Frame */}
-        <div className="absolute top-8 left-0 right-0 z-[10] max-w-[1200px] mx-auto px-8 hidden md:flex justify-between items-center h-[54px] text-sm font-medium text-text-secondary pointer-events-none">
+        <div className="absolute top-4 md:top-8 left-0 right-0 z-[40] max-w-[1200px] mx-auto px-4 md:px-8 flex justify-between items-center h-14 md:h-[54px] text-xs md:text-sm font-medium text-text-secondary pointer-events-none">
           <div className="pointer-events-auto flex flex-col items-start gap-1">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5 md:gap-2 px-1 py-1 md:p-0 transition-all">
               <div className="flex items-center justify-center w-[14px]">
                 <div className="relative flex h-2 w-2">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
                 </div>
               </div>
-              <span>Available for work Mar 2026</span>
+              <span className="text-text-secondary tracking-[-0.01em] text-sm">Available for work <span className="hidden md:block">Mar 2026</span></span>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="hidden md:flex items-center gap-2">
               <button
                 onClick={handleCopyEmail}
                 className="flex items-center justify-center w-[14px] text-text-secondary hover:text-text transition-colors focus:outline-none"
@@ -531,7 +531,7 @@ function App() {
               </a>
             </div>
           </div>
-          <div className="pointer-events-auto flex flex-col items-end gap-0.5">
+          <div className="pointer-events-auto hidden md:flex flex-col items-end gap-0.5">
             <span>Melbourne, Australia</span>
             <MelbourneClock />
           </div>
@@ -540,11 +540,11 @@ function App() {
         {/* Hero Section */}
         <header
           ref={heroSectionRef}
-          className="relative flex items-start justify-center pt-[100px] md:pt-[180px] pb-4 max-sm:px-8"
+          className="relative flex items-start justify-center pt-[80px] md:pt-[180px] pb-2 md:pb-4 max-sm:px-8"
         >
-          <div className="max-w-[1200px] mx-auto px-8 w-full">
+          <div className="max-w-none md:max-w-[1200px] mx-auto px-0 md:px-8 w-full">
             <motion.div
-              className="max-w-[900px] mx-auto flex flex-col items-center text-center"
+              className="max-w-none md:max-w-[900px] mx-auto flex flex-col items-center text-center"
               initial="hidden"
               animate={!isLoading ? "visible" : "hidden"}
               variants={getStaggerContainer()}
@@ -569,17 +569,17 @@ function App() {
               </motion.h1>
               <motion.p
                 variants={getStaggerItem(shouldReduceMotion)}
-                className="font-display font-medium text-2xl max-md:text-xl text-text-secondary leading-[1.4] max-w-[400px] mb-5 md:mb-6"
+                className="font-display font-medium text-2xl max-md:text-xl text-text-secondary leading-[1.4] max-w-none md:max-w-[400px] mb-5 md:mb-6"
               >
-                <TextShimmer
+                {/* <TextShimmer
                   as="span"
                   duration={1}
                   className="[--base-color:var(--color-text-secondary)] [--base-gradient-color:#fff]"
                 >
                   AI-native
-                </TextShimmer>{" "}
-                <span data-cursor-figma>designer +</span>{" "}
-                <span data-cursor-code>engineer</span> for startups that value
+                </TextShimmer>{" "} */}
+                <span data-cursor-figma>Design +</span>{" "}
+                <span data-cursor-code>Engineering</span> partner for startups that value
                 craft and speed.
               </motion.p>
               <motion.a
@@ -609,7 +609,7 @@ function App() {
         <section
           id="work"
           ref={workSectionRef}
-          className="pt-10 pb-32 relative"
+          className="pt-2 md:pt-10 pb-32 relative"
         >
           <div className="max-w-[1200px] mx-auto px-3 md:px-8">
             <div className="grid grid-cols-2 gap-2 md:gap-4 lg:gap-6">
@@ -667,8 +667,8 @@ function App() {
                     key={`${item.project.id}-${i}`}
                     data-cursor-magnify="true"
                     className={`relative rounded-[32px] md:rounded-[48px] overflow-hidden cursor-pointer ${item.span === 2
-                        ? "col-span-2"
-                        : "col-span-1 aspect-[3/4] md:aspect-[4/5]"
+                      ? "col-span-2"
+                      : "col-span-1 aspect-[3/4] md:aspect-[4/5]"
                       }`}
                     style={{
                       backgroundColor: item.project.bgColor,
@@ -984,16 +984,16 @@ function App() {
             >
               <div
                 className={`w-full relative z-10 min-h-full flex flex-col items-center ${selectedProject.modalVariant === "imageOnly"
-                    ? "justify-center py-12 md:py-24 px-4 md:px-8"
-                    : "justify-end md:justify-center px-0 pt-16 md:px-8 md:py-16"
+                  ? "justify-center py-12 md:py-24 px-4 md:px-8"
+                  : "justify-end md:justify-center px-0 pt-16 md:px-8 md:py-16"
                   }`}
                 onClick={() => setSelectedProject(null)}
               >
                 {/* Modal Container */}
                 <motion.div
                   className={`w-full pointer-events-auto relative overflow-hidden flex flex-col squircle transform-gpu ${selectedProject?.modalVariant === "imageOnly"
-                      ? "max-w-[1120px] bg-transparent justify-center items-center cursor-pointer"
-                      : "mt-auto md:m-auto rounded-t-[48px] md:rounded-[56px] max-w-[1120px] bg-white shadow-2xl"
+                    ? "max-w-[1120px] bg-transparent justify-center items-center cursor-pointer"
+                    : "mt-auto md:m-auto rounded-t-[48px] md:rounded-[56px] max-w-[1120px] bg-white shadow-2xl"
                     }`}
                   initial={
                     shouldReduceMotion
@@ -1057,8 +1057,8 @@ function App() {
                         {/* Cover Image/Video */}
                         <div
                           className={`relative flex items-center justify-center overflow-hidden w-full ${selectedProject.modalVariant === "imageOnly"
-                              ? "mx-auto rounded-[32px] md:rounded-[48px] squircle shadow-2xl cursor-default"
-                              : ""
+                            ? "mx-auto rounded-[32px] md:rounded-[48px] squircle shadow-2xl cursor-default"
+                            : ""
                             }`}
                           style={
                             selectedProject.modalVariant === "imageOnly"
@@ -1078,8 +1078,8 @@ function App() {
                             <video
                               src={coverSrc}
                               className={`block transform-gpu ${selectedProject.modalVariant === "imageOnly"
-                                  ? "w-full h-auto object-contain"
-                                  : "w-full h-auto aspect-[21/9] object-cover scale-[1.01]"
+                                ? "w-full h-auto object-contain"
+                                : "w-full h-auto aspect-[21/9] object-cover scale-[1.01]"
                                 }`}
                               autoPlay
                               loop
@@ -1091,8 +1091,8 @@ function App() {
                               src={coverSrc}
                               alt={selectedProject.title}
                               className={`block transform-gpu ${selectedProject.modalVariant === "imageOnly"
-                                  ? "w-full h-auto object-contain"
-                                  : "w-full h-auto aspect-[21/9] object-cover scale-[1.01]"
+                                ? "w-full h-auto object-contain"
+                                : "w-full h-auto aspect-[21/9] object-cover scale-[1.01]"
                                 }`}
                             />
                           )}

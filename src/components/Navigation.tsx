@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { PiBurgerMenuThreeStroke } from "./icons/pikaicons-react";
+import { X } from "lucide-react";
 
 interface NavigationProps {
   activeSection: string;
@@ -93,50 +95,25 @@ export function Navigation({
       </motion.nav>
 
       {/* Mobile hamburger nav */}
-      <nav className="fixed top-4 left-0 right-0 z-[100] flex md:hidden px-6 pointer-events-none">
+      <nav className="fixed top-4 md:top-8 left-0 right-0 z-[100] flex justify-end md:hidden px-4 pointer-events-none">
         <motion.div
-          className="pointer-events-auto w-full bg-[#f0f0f0]/50 backdrop-blur-[20px] backdrop-saturate-[180%] border border-white/50 shadow-[0_2px_6px_rgba(0,0,0,0.06),0_0_0_1px_rgba(0,0,0,0.06)] overflow-hidden"
+          className="pointer-events-auto bg-[#f0f0f0]/50 backdrop-blur-[20px] backdrop-saturate-[180%] border border-white/50 shadow-[0_2px_6px_rgba(0,0,0,0.06),0_0_0_1px_rgba(0,0,0,0.06)] overflow-hidden"
           layout
           transition={{ type: "spring", stiffness: 400, damping: 35 }}
           style={{ borderRadius: 24 }}
         >
           {/* Top bar */}
-          <div className="flex items-center justify-between px-5 py-2.5">
-            <span className="font-display font-bold text-lg text-text leading-none">
-              h.
-            </span>
+          <div className="flex items-center justify-end p-2">
             <button
               onClick={() => setMobileOpen((v) => !v)}
-              className="relative w-8 h-8 flex items-center justify-center bg-transparent cursor-pointer"
+              className="relative w-10 h-10 flex items-center justify-center bg-transparent cursor-pointer text-text"
               aria-label={mobileOpen ? "Close menu" : "Open menu"}
             >
-              <motion.span
-                className="absolute w-[18px] h-[2px] bg-text rounded-full"
-                animate={
-                  mobileOpen
-                    ? { rotate: 45, y: 0 }
-                    : { rotate: 0, y: -4 }
-                }
-                transition={{ duration: 0.25 }}
-              />
-              <motion.span
-                className="absolute w-[18px] h-[2px] bg-text rounded-full"
-                animate={
-                  mobileOpen
-                    ? { opacity: 0, scaleX: 0 }
-                    : { opacity: 1, scaleX: 1 }
-                }
-                transition={{ duration: 0.15 }}
-              />
-              <motion.span
-                className="absolute w-[18px] h-[2px] bg-text rounded-full"
-                animate={
-                  mobileOpen
-                    ? { rotate: -45, y: 0 }
-                    : { rotate: 0, y: 4 }
-                }
-                transition={{ duration: 0.25 }}
-              />
+              {mobileOpen ? (
+                <X className="w-5 h-5" />
+              ) : (
+                <PiBurgerMenuThreeStroke className="w-6 h-6" />
+              )}
             </button>
           </div>
 
@@ -160,8 +137,8 @@ export function Navigation({
                       transition={{ delay: i * 0.05, duration: 0.2 }}
                       onClick={() => handleClick(item.id)}
                       className={`w-full text-left px-4 py-2.5 rounded-xl text-[0.9375rem] font-medium transition-colors bg-transparent cursor-pointer ${activeSection === item.id
-                          ? "text-black bg-white/60"
-                          : "text-text-secondary"
+                        ? "text-black bg-white/60"
+                        : "text-text-secondary"
                         }`}
                     >
                       {item.label}
