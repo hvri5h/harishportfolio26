@@ -81,11 +81,11 @@ const Services = () => {
   const bodyFont = fontFamilyMap.Saans;
 
   return (
-    <section className="py-32 bg-bg relative z-30" style={{ fontFamily: bodyFont }}>
+    <section className="py-12 md:py-32 bg-bg relative z-30" style={{ fontFamily: bodyFont }}>
       <div className="max-w-[1200px] mx-auto px-8 max-sm:px-6">
         {/* Header */}
         <motion.div
-          className="flex flex-col items-center text-center mb-20"
+          className="flex flex-col items-center text-center mb-10 md:mb-20"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.5 }}
@@ -94,14 +94,14 @@ const Services = () => {
           <motion.h2
             variants={getStaggerItem(shouldReduceMotion)}
             className="font-display font-black text-[56px] leading-[0.8] tracking-[-0.02em] text-text mb-6 max-md:text-5xl max-sm:text-4xl"
-            style={{ fontSize: h.sectionHeadingSize, fontWeight: h.sectionHeadingWeight, color: c.headingColor, fontFamily: headingFont, lineHeight: h.headingLineHeight, letterSpacing: `${h.headingLetterSpacing}em` }}
+            style={{ fontWeight: h.sectionHeadingWeight, color: c.headingColor, fontFamily: headingFont, lineHeight: h.headingLineHeight, letterSpacing: `${h.headingLetterSpacing}em` }}
           >
             What I can do for you
           </motion.h2>
           <motion.p
             variants={getStaggerItem(shouldReduceMotion)}
-            className="font-display font-medium text-2xl leading-[1.35] text-text-secondary max-w-[538px]"
-            style={{ fontSize: b.subtitleSize, color: c.secondaryColor, lineHeight: b.subtitleLineHeight, letterSpacing: `${b.bodyLetterSpacing}em` }}
+            className="font-display font-medium text-2xl max-md:text-xl leading-[1.35] text-text-secondary max-w-[538px]"
+            style={{ color: c.secondaryColor, lineHeight: b.subtitleLineHeight, letterSpacing: `${b.bodyLetterSpacing}em` }}
           >
             I communicate efficiently, get sh*t done, and ship fast without compromising on quality.
           </motion.p>
@@ -119,21 +119,20 @@ const Services = () => {
             <motion.div
               key={service.title}
               variants={getStaggerItem(shouldReduceMotion)}
-              className="bg-[rgba(26,26,26,0.03)] rounded-[24px] p-10 flex flex-col gap-6 max-sm:p-7"
+              className="bg-[rgba(26,26,26,0.03)] rounded-[24px] p-10 flex flex-col gap-6 max-sm:p-7 max-sm:gap-4"
             >
               <service.icon
-                className="text-text/70"
-                style={{ width: b.iconSize, height: b.iconSize }}
+                className="text-text/70 w-9 h-9"
               />
               <h3
-                className="text-2xl font-semibold tracking-[-0.02em] text-text"
-                style={{ fontSize: h.cardHeadingSize, fontWeight: h.cardHeadingWeight, color: c.headingColor, fontFamily: headingFont, lineHeight: h.headingLineHeight, letterSpacing: `${h.headingLetterSpacing}em` }}
+                className="text-[22px] max-sm:text-xl font-semibold tracking-[-0.02em] text-text"
+                style={{ fontWeight: h.cardHeadingWeight, color: c.headingColor, fontFamily: headingFont, lineHeight: h.headingLineHeight, letterSpacing: `${h.headingLetterSpacing}em` }}
               >
                 {service.title}
               </h3>
               <p
-                className="text-base text-text-secondary leading-relaxed"
-                style={{ fontSize: b.bodySize, fontWeight: b.bodyWeight, color: c.secondaryColor, lineHeight: b.bodyLineHeight, letterSpacing: `${b.bodyLetterSpacing}em` }}
+                className="text-[17px] max-sm:text-base text-text-secondary leading-relaxed"
+                style={{ fontWeight: b.bodyWeight, color: c.secondaryColor, lineHeight: b.bodyLineHeight, letterSpacing: `${b.bodyLetterSpacing}em` }}
               >
                 {service.description}
               </p>

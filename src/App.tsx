@@ -578,7 +578,7 @@ function App() {
         <section
           id="work"
           ref={workSectionRef}
-          className="pt-2 md:pt-10 pb-32 relative"
+          className="pt-2 md:pt-10 pb-12 md:pb-32 relative"
         >
           <div className="max-w-[1200px] mx-auto px-3 md:px-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
@@ -782,11 +782,11 @@ function App() {
       </AnimatePresence>
 
       {/* Curved edge — overlaps the footer top */}
-      <div className="relative z-10 -mb-[200px] pointer-events-none">
+      <div className="relative z-10 -mb-[80px] md:-mb-[200px] pointer-events-none">
         <svg
           viewBox="0 0 1440 200"
           preserveAspectRatio="none"
-          className="w-full h-[200px] block"
+          className="w-full h-[80px] md:h-[200px] block"
         >
           <path
             d="M0,0 L0,200 C360,40 1080,40 1440,200 L1440,0 Z"

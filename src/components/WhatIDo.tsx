@@ -15,10 +15,10 @@ const engineeringSkills = [
   "HTML/CSS",
   "Javascript",
   "Typescript",
-  "Tailwind CSS",
-  "Framer Motion",
-  "Web Apps",
-  "Mobile Apps",
+  "Animation",
+  "Micointeractions",
+  "API integration",
+  "Database design"
 ];
 
 type StackItem = {
@@ -83,11 +83,11 @@ const WhatIDo = () => {
   const bodyFont = fontFamilyMap.Saans;
 
   return (
-    <section id="about" className="py-24 bg-bg relative z-30" style={{ fontFamily: bodyFont }}>
+    <section id="about" className="py-12 md:py-24 bg-bg relative z-30" style={{ fontFamily: bodyFont }}>
       <div className="max-w-[1200px] mx-auto px-8 max-sm:px-6">
         {/* Header */}
         <motion.div
-          className="flex flex-col items-center text-center mb-20"
+          className="flex flex-col items-center text-center mb-10 md:mb-20"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.5 }}
@@ -96,14 +96,14 @@ const WhatIDo = () => {
           <motion.h2
             variants={getStaggerItem(shouldReduceMotion)}
             className="font-display font-black text-[56px] leading-[0.8] tracking-[-0.02em] text-text mb-6 max-md:text-5xl max-sm:text-4xl"
-            style={{ fontSize: h.sectionHeadingSize, fontWeight: h.sectionHeadingWeight, color: c.headingColor, fontFamily: headingFont, lineHeight: h.headingLineHeight, letterSpacing: `${h.headingLetterSpacing}em` }}
+            style={{ fontWeight: h.sectionHeadingWeight, color: c.headingColor, fontFamily: headingFont, lineHeight: h.headingLineHeight, letterSpacing: `${h.headingLetterSpacing}em` }}
           >
             What I do
           </motion.h2>
           <motion.p
             variants={getStaggerItem(shouldReduceMotion)}
-            className="font-display font-medium text-2xl leading-[1.35] text-text-secondary max-w-[588px]"
-            style={{ fontSize: b.subtitleSize, color: c.secondaryColor, lineHeight: b.subtitleLineHeight, letterSpacing: `${b.bodyLetterSpacing}em` }}
+            className="font-display font-medium text-2xl max-md:text-xl leading-[1.35] text-text-secondary max-w-[588px]"
+            style={{ color: c.secondaryColor, lineHeight: b.subtitleLineHeight, letterSpacing: `${b.bodyLetterSpacing}em` }}
           >
             I work across design, code, and product, owning everything from
             concept to implementation.
@@ -122,6 +122,7 @@ const WhatIDo = () => {
           <motion.div
             variants={getStaggerItem(shouldReduceMotion)}
             className="relative bg-[rgba(26,26,26,0.03)] rounded-[24px] overflow-hidden h-[400px] max-md:h-auto max-md:min-h-[320px]"
+            data-cursor-figma
           >
             <div className="absolute inset-0 pointer-events-none">
               <img
@@ -133,14 +134,14 @@ const WhatIDo = () => {
             <div className="absolute inset-0 p-10 flex flex-col max-md:relative max-md:p-8">
               <div className="flex flex-col gap-4 mb-auto relative z-10">
                 <h3
-                  className="text-2xl font-semibold tracking-[-0.02em] text-text"
-                  style={{ fontSize: h.cardHeadingSize, fontWeight: h.cardHeadingWeight, color: c.headingColor, fontFamily: headingFont, lineHeight: h.headingLineHeight, letterSpacing: `${h.headingLetterSpacing}em` }}
+                  className="text-2xl max-sm:text-xl font-semibold tracking-[-0.02em] text-text"
+                  style={{ fontWeight: h.cardHeadingWeight, color: c.headingColor, fontFamily: headingFont, lineHeight: h.headingLineHeight, letterSpacing: `${h.headingLetterSpacing}em` }}
                 >
                   Design
                 </h3>
                 <p
-                  className="text-base text-text-secondary leading-relaxed max-w-[90%]"
-                  style={{ fontSize: b.bodySize, fontWeight: b.bodyWeight, color: c.secondaryColor, lineHeight: b.bodyLineHeight, letterSpacing: `${b.bodyLetterSpacing}em` }}
+                  className="text-[17px] max-sm:text-base text-text-secondary leading-relaxed max-w-[90%]"
+                  style={{ fontWeight: b.bodyWeight, color: c.secondaryColor, lineHeight: b.bodyLineHeight, letterSpacing: `${b.bodyLetterSpacing}em` }}
                 >
                   I design interfaces people actually enjoy using. Real product
                   thinking with attention to craft, typography, and how things
@@ -171,14 +172,14 @@ const WhatIDo = () => {
             <div className="absolute inset-0 p-10 flex flex-col max-md:relative max-md:p-8">
               <div className="flex flex-col gap-4 mb-auto relative z-10">
                 <h3
-                  className="text-2xl font-semibold tracking-[-0.02em] text-text"
-                  style={{ fontSize: h.cardHeadingSize, fontWeight: h.cardHeadingWeight, color: c.headingColor, fontFamily: headingFont, lineHeight: h.headingLineHeight, letterSpacing: `${h.headingLetterSpacing}em` }}
+                  className="text-2xl max-sm:text-xl font-semibold tracking-[-0.02em] text-text"
+                  style={{ fontWeight: h.cardHeadingWeight, color: c.headingColor, fontFamily: headingFont, lineHeight: h.headingLineHeight, letterSpacing: `${h.headingLetterSpacing}em` }}
                 >
                   Engineering
                 </h3>
                 <p
-                  className="text-base text-text-secondary leading-relaxed max-w-[90%]"
-                  style={{ fontSize: b.bodySize, fontWeight: b.bodyWeight, color: c.secondaryColor, lineHeight: b.bodyLineHeight, letterSpacing: `${b.bodyLetterSpacing}em` }}
+                  className="text-[17px] max-sm:text-base text-text-secondary leading-relaxed max-w-[90%]"
+                  style={{ fontWeight: b.bodyWeight, color: c.secondaryColor, lineHeight: b.bodyLineHeight, letterSpacing: `${b.bodyLetterSpacing}em` }}
                 >
                   Over a decade of writing code. I build what I design with no
                   handoff needed. From frontend to backend, I ship
@@ -196,7 +197,7 @@ const WhatIDo = () => {
 
         {/* Stack */}
         <motion.div
-          className="bg-[rgba(26,26,26,0.03)] rounded-[24px] p-10 max-md:p-8 max-sm:p-5"
+          className="bg-[rgba(26,26,26,0.03)] rounded-[24px] p-10 max-md:p-8"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.2 }}
@@ -204,15 +205,15 @@ const WhatIDo = () => {
         >
           <motion.h3
             variants={getStaggerItem(shouldReduceMotion)}
-            className="text-2xl font-semibold tracking-[-0.02em] text-text mb-10 max-sm:mb-6"
-            style={{ fontSize: h.cardHeadingSize, fontWeight: h.cardHeadingWeight, color: c.headingColor, fontFamily: headingFont, lineHeight: h.headingLineHeight, letterSpacing: `${h.headingLetterSpacing}em` }}
+            className="text-2xl max-sm:text-xl font-semibold tracking-[-0.02em] text-text mb-10 max-sm:mb-6"
+            style={{ fontWeight: h.cardHeadingWeight, color: c.headingColor, fontFamily: headingFont, lineHeight: h.headingLineHeight, letterSpacing: `${h.headingLetterSpacing}em` }}
           >
             Stack
           </motion.h3>
-          <motion.div variants={getStaggerContainer()} className="flex flex-wrap items-center gap-4 max-sm:gap-3">
+          <motion.div variants={getStaggerContainer()} className="flex flex-wrap items-center gap-4 max-sm:grid max-sm:grid-cols-4 max-sm:gap-2">
             {stackItems.map((item) => (
-              <motion.div key={item.name} variants={getStaggerItem(shouldReduceMotion)} className="flex-1">
-                <div className="relative bg-[rgba(26,26,26,0.04)] hover:bg-[rgba(26,26,26,0.08)] rounded-xl w-full min-w-[86px] max-w-[114px] h-[96px] flex flex-col items-center justify-center cursor-pointer transition-colors duration-200 max-sm:min-w-[calc(25%-0.75rem)] max-sm:h-[80px]">
+              <motion.div key={item.name} variants={getStaggerItem(shouldReduceMotion)}>
+                <div className="relative bg-[rgba(26,26,26,0.04)] hover:bg-[rgba(26,26,26,0.08)] rounded-xl w-full min-w-[86px] max-w-[114px] h-[96px] flex flex-col items-center justify-center cursor-pointer transition-colors duration-200 max-sm:max-w-none max-sm:h-[96px] max-sm:bg-transparent max-sm:hover:bg-[rgba(26,26,26,0.04)]">
                   <img
                     src={item.icon}
                     alt={item.name}

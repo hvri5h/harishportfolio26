@@ -37,13 +37,13 @@ const Footer = () => {
       className="bg-[#141414] text-white sticky bottom-0 z-0"
       data-cursor-dark
     >
-      <div className="flex flex-col max-w-[1200px] mx-auto px-8 max-sm:px-6 pt-56 pb-10 min-h-screen">
+      <div className="flex flex-col max-w-[1200px] mx-auto px-8 max-sm:px-6 pt-32 md:pt-56 pb-10 min-h-screen">
         {/* CTA section */}
         <div className="flex-1 flex flex-col items-center justify-end pb-16 text-center">
           <h2 className="font-display font-semibold text-[56px] leading-[1.1] tracking-[-0.03em] text-white mb-6 max-md:text-5xl max-sm:text-4xl">
             Let's connect
           </h2>
-          <p className="font-display font-medium text-2xl text-[rgba(255,255,255,0.5)] max-w-[400px] mb-16 leading-[1.55]">
+          <p className="font-display font-medium text-2xl max-md:text-xl text-[rgba(255,255,255,0.5)] max-w-[400px] mb-16 leading-[1.55]">
             Have a project in mind that could use my help? I'd love to hear from you :)
           </p>
 
@@ -105,7 +105,7 @@ const Footer = () => {
           <img
             src={footerBranding}
             alt=""
-            className="w-full"
+            className="w-full max-sm:w-[140%] max-sm:mx-auto max-sm:relative max-sm:left-1/2 max-sm:-translate-x-1/2"
             draggable={false}
           />
           <div
@@ -115,10 +115,12 @@ const Footer = () => {
         </div>
 
         {/* Bottom bar */}
-        <div className="flex justify-between items-end text-sm text-[rgba(255,255,255,0.3)]">
+        <div className="flex justify-between items-end text-sm text-[rgba(255,255,255,0.3)] max-sm:flex-col max-sm:items-center max-sm:gap-0 max-sm:text-center max-sm:leading-relaxed">
           <span>
-            &copy; 2026 Harish Tirunahari &middot; Vibe coded with Claude Code &
-            Antigravity
+            &copy; 2026 Harish Tirunahari
+            <span className="max-sm:hidden"> &middot; </span>
+            <br className="sm:hidden" />
+            Vibe coded with Claude Code & Antigravity
           </span>
           <span>
             Have a nice{" "}
