@@ -8,17 +8,17 @@ const designSkills = [
   "Interaction Design",
   "Branding",
   "Prototyping",
-  "User Research"
+  "Motion Design"
 ];
 
 const engineeringSkills = [
   "HTML/CSS",
   "Javascript",
-  "Typescript",
   "Animation",
   "Micointeractions",
-  "API integration",
-  "Database design"
+  "Web/mobile apps",
+  "No-code websites",
+  "CMS integration"
 ];
 
 type StackItem = {
@@ -210,10 +210,10 @@ const WhatIDo = () => {
           >
             Stack
           </motion.h3>
-          <motion.div variants={getStaggerContainer()} className="flex flex-wrap items-center gap-4 max-sm:grid max-sm:grid-cols-3 max-sm:gap-2">
+          <motion.div variants={getStaggerContainer()} className="grid grid-cols-9 gap-3 max-sm:grid-cols-3 max-sm:gap-2">
             {stackItems.map((item) => (
               <motion.div key={item.name} variants={getStaggerItem(shouldReduceMotion)}>
-                <div className="relative bg-[rgba(26,26,26,0.04)] hover:bg-[rgba(26,26,26,0.08)] rounded-xl w-full min-w-[86px] max-w-[114px] h-[96px] flex flex-col items-center justify-center cursor-pointer transition-colors duration-200 max-sm:max-w-none max-sm:h-[96px] max-sm:bg-transparent max-sm:hover:bg-[rgba(26,26,26,0.04)]">
+                <div className="relative bg-[rgba(26,26,26,0.04)] hover:bg-[rgba(26,26,26,0.08)] rounded-xl w-full h-[96px] flex flex-col items-center justify-center cursor-pointer transition-colors duration-200 max-sm:bg-transparent max-sm:hover:bg-[rgba(26,26,26,0.04)]">
                   <img
                     src={item.icon}
                     alt={item.name}

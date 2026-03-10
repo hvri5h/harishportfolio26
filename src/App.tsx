@@ -27,7 +27,6 @@ import { BasicNumberTicker } from "./components/ui/basic-number-ticker";
 import {
   isVideo,
   getProjectFolderImages,
-  getProjectGridImage,
 } from "./lib/projectImages";
 import StackingCards, {
   StackingCardItem,
@@ -114,6 +113,106 @@ function MelbourneClock() {
         <span>{period}</span>
       </span>
     </span>
+  );
+}
+
+function StackingMedia({
+  src,
+  project,
+  index,
+}: {
+  src: string;
+  project: Project;
+  index: number;
+}) {
+  const [isLoaded, setIsLoaded] = useState(false);
+  const _isVideo = isVideo(src);
+
+  return (
+    <motion.div
+      className={`relative w-full rounded-[32px] md:rounded-[48px] overflow-hidden max-md:aspect-[3/4] md:aspect-[1920/1280] ${!isLoaded ? "animate-pulse" : ""
+        }`}
+      style={{
+        backgroundColor: isLoaded ? project.bgColor : "#F2F2F2",
+      }}
+    >
+      {_isVideo ? (
+        <video
+          src={src}
+          className={`w-full h-full object-cover block max-md:absolute max-md:inset-0 transition-opacity duration-700 ease-in-out ${isLoaded ? "opacity-100" : "opacity-0"
+            }`}
+          autoPlay
+          loop
+          muted
+          playsInline
+          onLoadedData={() => setIsLoaded(true)}
+        />
+      ) : (
+        <img
+          src={src}
+          alt={`${project.title} ${index + 1}`}
+          className={`w-full h-full object-cover block max-md:absolute max-md:inset-0 transition-opacity duration-700 ease-in-out ${isLoaded ? "opacity-100" : "opacity-0"
+            }`}
+          loading="lazy"
+          onLoad={() => setIsLoaded(true)}
+        />
+      )}
+    </motion.div>
+  );
+}
+
+function GridMedia({
+  item,
+  animateProps,
+  index,
+}: {
+  item: WorkRenderItem & { kind: "grid" };
+  animateProps: Record<string, unknown>;
+  index: number;
+}) {
+  const [isLoaded, setIsLoaded] = useState(false);
+  const _isVideo = isVideo(item.src);
+
+  return (
+    <motion.div
+      {...animateProps}
+      key={`${item.project.id}-${index}`}
+      className={`relative rounded-[32px] md:rounded-[48px] overflow-hidden ${item.span === 2
+        ? "col-span-1 md:col-span-2 max-md:aspect-[3/4]"
+        : "col-span-1 aspect-[3/4] md:aspect-[4/5]"
+        } ${!isLoaded ? "animate-pulse" : ""}`}
+      style={{
+        backgroundColor: isLoaded ? item.project.bgColor : "#F2F2F2",
+      }}
+    >
+      {_isVideo ? (
+        <video
+          src={item.src}
+          className={`${item.span === 2
+            ? "w-full block max-md:absolute max-md:inset-0 max-md:h-full max-md:object-cover md:h-auto"
+            : "absolute inset-0 w-full h-full object-cover block"
+            } transition-opacity duration-700 ease-in-out ${isLoaded ? "opacity-100" : "opacity-0"
+            }`}
+          autoPlay
+          loop
+          muted
+          playsInline
+          onLoadedData={() => setIsLoaded(true)}
+        />
+      ) : (
+        <img
+          src={item.src}
+          alt={`${item.project.title} screen`}
+          className={`${item.span === 2
+            ? "w-full block max-md:absolute max-md:inset-0 max-md:h-full max-md:object-cover md:h-auto"
+            : "absolute inset-0 w-full h-full object-cover block"
+            } transition-opacity duration-700 ease-in-out ${isLoaded ? "opacity-100" : "opacity-0"
+            }`}
+          loading="lazy"
+          onLoad={() => setIsLoaded(true)}
+        />
+      )}
+    </motion.div>
   );
 }
 
@@ -214,31 +313,7 @@ function StackProjectSection({
               index={index}
               className="h-auto md:h-screen"
             >
-              <motion.div
-                className="relative w-full rounded-[32px] md:rounded-[48px] overflow-hidden"
-                style={{
-                  aspectRatio: "1920 / 1280",
-                  backgroundColor: project.bgColor,
-                }}
-              >
-                {isVideo(src) ? (
-                  <video
-                    src={src}
-                    className="w-full h-full object-cover block"
-                    autoPlay
-                    loop
-                    muted
-                    playsInline
-                  />
-                ) : (
-                  <img
-                    src={src}
-                    alt={`${project.title} ${index + 1}`}
-                    className="w-full h-full object-cover block"
-                    loading="lazy"
-                  />
-                )}
-              </motion.div>
+              <StackingMedia src={src} project={project} index={index} />
             </StackingCardItem>
           );
         })}
@@ -302,9 +377,18 @@ function App() {
   const [progress, setProgress] = useState(0);
   const [activeSection, setActiveSection] = useState("work");
   const [hasFineCursor, setHasFineCursor] = useState(false);
+  const [isMobileViewport, setIsMobileViewport] = useState(false);
 
   useEffect(() => {
     setHasFineCursor(window.matchMedia("(pointer: fine)").matches);
+  }, []);
+
+  useEffect(() => {
+    const mql = window.matchMedia("(max-width: 767px)");
+    setIsMobileViewport(mql.matches);
+    const handler = (e: MediaQueryListEvent) => setIsMobileViewport(e.matches);
+    mql.addEventListener("change", handler);
+    return () => mql.removeEventListener("change", handler);
   }, []);
 
   // Track the currently active stacked project ID for the page-level CTA
@@ -332,12 +416,35 @@ function App() {
   const workItems = useMemo<WorkRenderItem[]>(
     () =>
       visibleProjects.map((project) => {
-        const folderImagesAll = project.slug
+        let folderImagesAll = project.slug
           ? getProjectFolderImages(project.slug)
           : [];
-        const folderImagesVisible = project.slug
+        let folderImagesVisible = project.slug
           ? getProjectFolderImages(project.slug, { excludeHidden: true })
           : [];
+
+        const hasMobFiles = folderImagesAll.some((img) =>
+          img.split("/").pop()?.startsWith("mob_"),
+        );
+
+        if (hasMobFiles) {
+          if (isMobileViewport) {
+            folderImagesAll = folderImagesAll.filter((img) =>
+              img.split("/").pop()?.startsWith("mob_"),
+            );
+            folderImagesVisible = folderImagesVisible.filter((img) =>
+              img.split("/").pop()?.startsWith("mob_"),
+            );
+          } else {
+            folderImagesAll = folderImagesAll.filter(
+              (img) => !img.split("/").pop()?.startsWith("mob_"),
+            );
+            folderImagesVisible = folderImagesVisible.filter(
+              (img) => !img.split("/").pop()?.startsWith("mob_"),
+            );
+          }
+        }
+
         const shouldStack =
           folderImagesAll.length > 1 && project.modalVariant !== "imageOnly";
 
@@ -349,10 +456,14 @@ function App() {
           };
         }
 
+        const nonBanner = folderImagesVisible.find((url) => {
+          const name = url.split("/").pop() || "";
+          return !name.toLowerCase().includes("banner");
+        });
+        const derivedGridImage = nonBanner ?? folderImagesVisible[0];
+
         const src =
-          project.gridImage ??
-          (project.slug ? getProjectGridImage(project.slug) : undefined) ??
-          project.image;
+          project.gridImage ?? derivedGridImage ?? project.image;
 
         return {
           kind: "grid",
@@ -361,7 +472,7 @@ function App() {
           span: project.gridSpan ?? (project.isMobile ? 1 : 2),
         };
       }),
-    [visibleProjects],
+    [visibleProjects, isMobileViewport],
   );
 
   useEffect(() => {
@@ -520,7 +631,7 @@ function App() {
             >
               <motion.div
                 variants={getStaggerItem(shouldReduceMotion)}
-                className="md:mt-6 md:mb-6 h-[200px] w-[200px] overflow-visible"
+                className="md:mt-6 md:mb-6 h-[200px] w-[200px] overflow-visible max-md:-mb-4"
               >
                 <div className="h-[360px] w-[340px] -translate-x-[80px] md:-translate-x-[85px] -translate-y-[95px] pointer-events-auto max-md:pointer-events-none max-md:scale-[0.7] max-md:origin-center">
                   <Spline
@@ -556,7 +667,7 @@ function App() {
                 variants={getStaggerItem(shouldReduceMotion)}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.97 }}
-                className="inline-flex items-center px-6 py-3.5 max-md:px-5 max-md:py-3 max-md:text-[15px] bg-text text-bg font-semibold rounded-full shadow-sm"
+                className="inline-flex items-center px-6 py-3.5 max-md:px-[22px] max-md:py-[14px] max-md:text-[15.5px] bg-text text-bg font-semibold rounded-full shadow-sm"
                 data-cursor-dark
               >
                 Get in touch
@@ -580,7 +691,7 @@ function App() {
           ref={workSectionRef}
           className="pt-2 md:pt-10 pb-12 md:pb-32 relative"
         >
-          <div className="max-w-[1200px] mx-auto px-3 md:px-8">
+          <div className="max-w-[1200px] mx-auto px-6 md:px-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
               {workItems.map((item, i) => {
                 const animateProps =
@@ -614,43 +725,12 @@ function App() {
                 }
 
                 return (
-                  <motion.div
-                    {...animateProps}
+                  <GridMedia
                     key={`${item.project.id}-${i}`}
-                    className={`relative rounded-[32px] md:rounded-[48px] overflow-hidden ${item.span === 2
-                      ? "col-span-1 md:col-span-2"
-                      : "col-span-1 aspect-[3/4] md:aspect-[4/5]"
-                      }`}
-                    style={{
-                      backgroundColor: item.project.bgColor,
-                    }}
-                  >
-                    {isVideo(item.src) ? (
-                      <video
-                        src={item.src}
-                        className={
-                          item.span === 2
-                            ? "w-full h-auto block"
-                            : "absolute inset-0 w-full h-full object-cover block"
-                        }
-                        autoPlay
-                        loop
-                        muted
-                        playsInline
-                      />
-                    ) : (
-                      <img
-                        src={item.src}
-                        alt={`${item.project.title} screen`}
-                        className={
-                          item.span === 2
-                            ? "w-full h-auto block"
-                            : "absolute inset-0 w-full h-full object-cover block"
-                        }
-                        loading="lazy"
-                      />
-                    )}
-                  </motion.div>
+                    item={item}
+                    animateProps={animateProps}
+                    index={i}
+                  />
                 );
               })}
             </div>
@@ -796,8 +876,17 @@ function App() {
       </div>
 
       {/* Footer — revealed from behind as you scroll */}
-      <section ref={footerSectionRef}>
-        <Footer />
+      <section
+        ref={footerSectionRef}
+        className="relative w-full"
+        style={{ clipPath: "polygon(0% 0, 100% 0%, 100% 100%, 0 100%)" }}
+      >
+        <div className="fixed bottom-0 left-0 w-full z-0">
+          <Footer />
+        </div>
+        <div aria-hidden="true" className="opacity-0 pointer-events-none w-full">
+          <Footer />
+        </div>
       </section>
 
       {/* Image Lightbox — backdrop */}
