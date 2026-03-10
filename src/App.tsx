@@ -531,7 +531,7 @@ function App() {
               </motion.div>
               <motion.h1
                 variants={getStaggerItem(shouldReduceMotion)}
-                className="font-display font-black text-[5rem] tracking-[-0.03em] leading-none text-text mb-3 md:mb-4 max-md:text-[clamp(2.75rem,10vw,4rem)] z-10"
+                className="font-display font-black text-[5rem] tracking-[-0.03em] leading-none text-text mb-3 md:mb-4 max-md:text-[clamp(2.75rem,10.5vw,4.25rem)] z-10"
                 data-cursor-label="hah-REESH"
               >
                 Harish
@@ -556,7 +556,7 @@ function App() {
                 variants={getStaggerItem(shouldReduceMotion)}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.97 }}
-                className="inline-flex items-center px-6 py-3.5 bg-text text-bg font-semibold rounded-full shadow-sm"
+                className="inline-flex items-center px-6 py-3.5 max-md:px-5 max-md:py-3 max-md:text-[15px] bg-text text-bg font-semibold rounded-full shadow-sm"
                 data-cursor-dark
               >
                 Get in touch

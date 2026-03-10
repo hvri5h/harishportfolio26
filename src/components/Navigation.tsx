@@ -1,7 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { PiBurgerMenuThreeStroke } from "./icons/pikaicons-react";
-import { X } from "lucide-react";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 
 interface NavigationProps {
   activeSection: string;
@@ -14,12 +12,54 @@ const navItems = [
   { id: "contact", label: "Contact" },
 ];
 
+function MenuIcon({ open }: { open: boolean }) {
+  return (
+    <svg width="20" height="20" viewBox="0 0 20 20" className="text-text">
+      <motion.line
+        x1="3" x2="17"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        animate={open ? { y1: 10, y2: 10, rotate: 45 } : { y1: 7, y2: 7, rotate: 0 }}
+        transition={{ type: "spring", stiffness: 500, damping: 30 }}
+        style={{ originX: "50%", originY: "50%" }}
+      />
+      <motion.line
+        x1="3" x2="17"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        animate={open ? { y1: 10, y2: 10, rotate: -45 } : { y1: 13, y2: 13, rotate: 0 }}
+        transition={{ type: "spring", stiffness: 500, damping: 30 }}
+        style={{ originX: "50%", originY: "50%" }}
+      />
+    </svg>
+  );
+}
+
 export function Navigation({
   activeSection,
   onSectionChange,
 }: NavigationProps) {
   const observerRef = useRef<IntersectionObserver | null>(null);
+  const mobileMenuRef = useRef<HTMLDivElement>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const shouldReduceMotion = useReducedMotion() ?? false;
+
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const handleTouch = (e: TouchEvent | MouseEvent) => {
+      if (mobileMenuRef.current && !mobileMenuRef.current.contains(e.target as Node)) {
+        setMobileOpen(false);
+      }
+    };
+    document.addEventListener("touchstart", handleTouch);
+    document.addEventListener("mousedown", handleTouch);
+    return () => {
+      document.removeEventListener("touchstart", handleTouch);
+      document.removeEventListener("mousedown", handleTouch);
+    };
+  }, [mobileOpen]);
 
   useEffect(() => {
     const options = {
@@ -61,6 +101,9 @@ export function Navigation({
     setMobileOpen(false);
   };
 
+  const springConfig = { type: "spring" as const, stiffness: 400, damping: 30 };
+  const exitConfig = { duration: 0.2, ease: [0.25, 0.46, 0.45, 0.94] as const };
+
   return (
     <>
       {/* Desktop pill nav */}
@@ -95,25 +138,24 @@ export function Navigation({
       </motion.nav>
 
       {/* Mobile hamburger nav */}
-      <nav className="fixed top-4 md:top-8 left-0 right-0 z-[100] flex justify-end md:hidden px-4 pointer-events-none">
+      <nav className="fixed top-4 md:top-8 left-0 right-0 z-[100] flex md:hidden px-4 pointer-events-none justify-end">
         <motion.div
+          ref={mobileMenuRef}
           className="pointer-events-auto bg-[#f0f0f0]/50 backdrop-blur-[20px] backdrop-saturate-[180%] border border-white/50 shadow-[0_2px_6px_rgba(0,0,0,0.06),0_0_0_1px_rgba(0,0,0,0.06)] overflow-hidden"
-          layout
-          transition={{ type: "spring", stiffness: 400, damping: 35 }}
-          style={{ borderRadius: 24 }}
+          animate={{
+            width: mobileOpen ? "100%" : 56,
+            borderRadius: mobileOpen ? 20 : 20,
+          }}
+          transition={shouldReduceMotion ? { duration: 0 } : mobileOpen ? springConfig : exitConfig}
         >
           {/* Top bar */}
           <div className="flex items-center justify-end p-2">
             <button
               onClick={() => setMobileOpen((v) => !v)}
-              className="relative w-10 h-10 flex items-center justify-center bg-transparent cursor-pointer text-text"
+              className="relative w-10 h-10 flex items-center justify-center bg-transparent cursor-pointer"
               aria-label={mobileOpen ? "Close menu" : "Open menu"}
             >
-              {mobileOpen ? (
-                <X className="w-5 h-5" />
-              ) : (
-                <PiBurgerMenuThreeStroke className="w-6 h-6" />
-              )}
+              <MenuIcon open={mobileOpen} />
             </button>
           </div>
 
@@ -121,23 +163,28 @@ export function Navigation({
           <AnimatePresence>
             {mobileOpen && (
               <motion.div
-                initial={{ height: 0, opacity: 0 }}
-                animate={{ height: "auto", opacity: 1 }}
-                exit={{ height: 0, opacity: 0 }}
-                transition={{ type: "spring", stiffness: 400, damping: 35 }}
+                initial={shouldReduceMotion ? false : { height: 0, opacity: 0 }}
+                animate={{ height: "auto", opacity: 1, transition: shouldReduceMotion ? { duration: 0 } : springConfig }}
+                exit={{ height: 0, opacity: 0, transition: shouldReduceMotion ? { duration: 0 } : exitConfig }}
                 className="overflow-hidden"
               >
                 <div className="flex flex-col gap-1 px-3 pb-3.5">
                   {navItems.map((item, i) => (
                     <motion.button
                       key={item.id}
-                      initial={{ opacity: 0, y: -8 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -8 }}
-                      transition={{ delay: i * 0.05, duration: 0.2 }}
+                      initial={shouldReduceMotion ? false : { opacity: 0, x: 12 }}
+                      animate={{
+                        opacity: 1, x: 0, transition: shouldReduceMotion ? { duration: 0 } : {
+                          delay: i * 0.04,
+                          type: "spring",
+                          stiffness: 500,
+                          damping: 30,
+                        }
+                      }}
+                      exit={{ opacity: 0, x: 8, transition: { duration: 0.12 } }}
                       onClick={() => handleClick(item.id)}
                       className={`w-full text-left px-4 py-2.5 rounded-xl text-[0.9375rem] font-medium transition-colors bg-transparent cursor-pointer ${activeSection === item.id
-                        ? "text-black bg-white/60"
+                        ? "text-black bg-white/80"
                         : "text-text-secondary"
                         }`}
                     >
