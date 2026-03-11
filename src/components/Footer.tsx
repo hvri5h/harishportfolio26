@@ -3,7 +3,6 @@ import footerBranding from "../assets/footer.svg";
 import {
   PiLinkedinStroke,
   PiXComStroke,
-  PiYoutubeStroke,
   PiCopyDefaultStroke,
   PiCopyCopiedStroke,
   PiCalendarDefaultStroke,
