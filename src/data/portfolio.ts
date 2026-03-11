@@ -100,7 +100,7 @@ export const projects: Project[] = [
     true,
     "image",
     "Woofly",
-    "A mobile app that helps dog owners find and book trusted walkers nearby. The big design challenge was trust. Leaving your dog with a stranger is stressful, so the whole experience is built around verification, reviews, transparent pricing, and detailed walker profiles that give you enough confidence to actually book. I did the user research, branding, and zero to one product design.",
+    "A mobile app that helps dog owners find and book trusted walkers nearby. Leaving your dog with a stranger is stressful, so the whole experience is built around verification, reviews, transparent pricing, and detailed walker profiles that give you enough confidence to actually book. I did the user research, branding, and zero to one product design.",
     ["product design", "branding", "user research"],
     {
       subtitle: "Find trusted dog walkers nearby",

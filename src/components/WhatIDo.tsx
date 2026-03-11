@@ -143,9 +143,9 @@ const WhatIDo = () => {
                   className="text-[17px] max-sm:text-base text-text-secondary leading-relaxed max-w-[90%]"
                   style={{ fontWeight: b.bodyWeight, color: c.secondaryColor, lineHeight: b.bodyLineHeight, letterSpacing: `${b.bodyLetterSpacing}em` }}
                 >
-                  I design interfaces people actually enjoy using. Real product
-                  thinking with attention to craft, typography, and how things
-                  feel.
+                  I design interfaces people actually enjoy using. I employ product
+                  thinking with attention to craft, design details, user experience, and how things
+                  work.
                 </p>
               </div>
               <div className="flex flex-wrap gap-2.5 mt-8 max-w-[340px] max-md:max-w-full relative z-10">
@@ -181,9 +181,9 @@ const WhatIDo = () => {
                   className="text-[17px] max-sm:text-base text-text-secondary leading-relaxed max-w-[90%]"
                   style={{ fontWeight: b.bodyWeight, color: c.secondaryColor, lineHeight: b.bodyLineHeight, letterSpacing: `${b.bodyLetterSpacing}em` }}
                 >
-                  Over a decade of writing code. I build what I design with no
-                  handoff needed. From frontend to backend, I ship
-                  production-ready products.
+                  Over a decade of writing code. I build what I design
+                  with no handoff needed. Most at home on
+                  the frontend, but full-stack when the project calls for it.
                 </p>
               </div>
               <div className="flex flex-wrap gap-2.5 mt-8 max-w-[340px] max-md:max-w-full relative z-10">

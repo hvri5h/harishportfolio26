@@ -38,7 +38,7 @@ const AboutMe = () => {
             </p> */}
 
             <motion.p variants={getStaggerItem(shouldReduceMotion)} className="text-lg text-text-secondary leading-relaxed">
-              I'm a Design Engineer based in Australia, originally from New
+              I'm a Designer & Engineer based in Australia, originally from New
               Zealand. I spent over a decade as a software engineer shipping
               products across the full stack. Along the way I kept getting pulled
               toward design: how things look, how they feel, why certain

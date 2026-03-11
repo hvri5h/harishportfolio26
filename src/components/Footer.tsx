@@ -47,7 +47,7 @@ const Footer = () => {
           </p>
 
           {/* Email pill + Social icons row */}
-          <div className="flex items-center gap-3 max-sm:flex-col">
+          <div className="flex items-center gap-3 max-sm:flex-col max-sm:gap-4">
             {/* Email pill with copy */}
             <button
               onClick={() => {

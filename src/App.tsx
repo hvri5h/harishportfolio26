@@ -117,7 +117,10 @@ function MelbourneClock() {
   );
 }
 
-const hoverSpring = { type: "spring" as const, stiffness: 300, damping: 20 };
+const cardTransition = {
+  layout: { type: "spring" as const, duration: 0.5, bounce: 0.1 },
+  scale: { duration: 0.4, ease: [0.16, 1, 0.3, 1] },
+};
 
 function StackingMedia({
   src,
@@ -145,9 +148,9 @@ function StackingMedia({
       }}
       onClick={onImageClick ? () => onImageClick(imageId, src, _isVideo) : undefined}
       data-cursor-magnify={onImageClick ? true : undefined}
-      whileHover={onImageClick ? { scale: 1.02 } : undefined}
-      whileTap={onImageClick ? { scale: 0.97 } : undefined}
-      transition={hoverSpring}
+      whileHover={onImageClick ? { scale: 1.01 } : undefined}
+      whileTap={onImageClick ? { scale: 0.98 } : undefined}
+      transition={cardTransition}
     >
       {_isVideo ? (
         <video
@@ -206,8 +209,8 @@ function GridMedia({
       onClick={onImageClick ? () => onImageClick(imageId, item.src, _isVideo) : undefined}
       data-cursor-magnify={onImageClick ? true : undefined}
       whileHover={onImageClick ? { scale: 1.02 } : undefined}
-      whileTap={onImageClick ? { scale: 0.97 } : undefined}
-      transition={hoverSpring}
+      whileTap={onImageClick ? { scale: 0.98 } : undefined}
+      transition={cardTransition}
     >
       {_isVideo ? (
         <video
@@ -925,78 +928,79 @@ function App() {
         </div>
       </section>
 
-      {/* Image Lightbox */}
+      {/* Image Lightbox — backdrop */}
       <AnimatePresence>
         {activeImage && (
-          <>
-            {/* Backdrop — paired with expanded image, same easing */}
-            <motion.div
-              key="lightbox-backdrop"
-              className="fixed inset-0 bg-black/80 backdrop-blur-md z-[999]"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={
-                shouldReduceMotion
-                  ? { duration: 0.1 }
-                  : { duration: 0.35, ease: [0.23, 1, 0.32, 1] }
-              }
-              onClick={() => setActiveImage(null)}
-            />
+          <motion.div
+            key="lightbox-backdrop"
+            className="fixed inset-0 bg-black/80 backdrop-blur-md z-[999]"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{
+              duration: shouldReduceMotion ? 0.1 : 0.3,
+              ease: "easeOut",
+            }}
+            onClick={() => setActiveImage(null)}
+            style={{ willChange: "opacity" }}
+          />
+        )}
+      </AnimatePresence>
 
-            {/* Expanded image — shared layout animation from source */}
-            <motion.div
-              key="lightbox-expanded"
-              layoutId={
-                shouldReduceMotion ? undefined : `project-image-${activeImage.id}`
-              }
-              initial={shouldReduceMotion ? { opacity: 0 } : undefined}
-              animate={shouldReduceMotion ? { opacity: 1 } : undefined}
-              exit={shouldReduceMotion ? { opacity: 0 } : undefined}
-              className="fixed inset-0 z-[1000] m-auto w-fit h-fit pointer-events-auto overflow-hidden rounded-[32px] md:rounded-[48px]"
-              style={{
-                willChange: "transform",
-                backgroundColor: activeImage.bgColor,
+      {/* Image Lightbox — expanded image */}
+      <AnimatePresence>
+        {activeImage && (
+          <motion.div
+            key="lightbox-expanded"
+            layoutId={
+              shouldReduceMotion ? undefined : `project-image-${activeImage.id}`
+            }
+            initial={shouldReduceMotion ? { opacity: 0 } : undefined}
+            animate={shouldReduceMotion ? { opacity: 1 } : undefined}
+            exit={shouldReduceMotion ? { opacity: 0 } : undefined}
+            className="fixed inset-0 z-[1000] m-auto w-fit h-fit pointer-events-auto overflow-hidden rounded-[32px] md:rounded-[48px]"
+            style={{
+              willChange: "transform",
+              backgroundColor: activeImage.bgColor,
+            }}
+            transition={
+              shouldReduceMotion
+                ? { duration: 0.15 }
+                : { type: "spring", duration: 0.5, bounce: 0.1 }
+            }
+          >
+            {activeImage.isVideo ? (
+              <video
+                src={activeImage.src}
+                className="block max-w-[96vw] max-h-[96vh] w-auto h-auto transform-gpu"
+                width={activeImage.width}
+                height={activeImage.height}
+                autoPlay
+                loop
+                muted
+                playsInline
+              />
+            ) : (
+              <img
+                src={activeImage.src}
+                alt=""
+                className="block max-w-[96vw] max-h-[96vh] w-auto h-auto transform-gpu"
+              />
+            )}
+            <motion.button
+              initial={{ opacity: 0 }}
+              animate={{
+                opacity: 1,
+                transition: { delay: 0.15, duration: 0.15 },
               }}
-              transition={
-                shouldReduceMotion
-                  ? { duration: 0.15 }
-                  : { duration: 0.35, ease: [0.23, 1, 0.32, 1] }
-              }
+              exit={{ opacity: 0, transition: { duration: 0.1 } }}
+              className="absolute top-4 right-4 md:top-6 md:right-6 w-11 h-11 flex items-center justify-center rounded-full bg-white/80 text-black backdrop-blur-md transition-all duration-150 ease-out active:scale-95 sm:hover:scale-105 hover:bg-white z-50 shadow-lg border border-black/5"
+              onClick={() => setActiveImage(null)}
+              aria-label="Close lightbox"
             >
-              {activeImage.isVideo ? (
-                <video
-                  src={activeImage.src}
-                  className="block max-w-[96vw] max-h-[96vh] w-auto h-auto transform-gpu"
-                  width={activeImage.width}
-                  height={activeImage.height}
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                />
-              ) : (
-                <img
-                  src={activeImage.src}
-                  alt=""
-                  className="block max-w-[96vw] max-h-[96vh] w-auto h-auto transform-gpu"
-                />
-              )}
-              <motion.button
-                initial={{ opacity: 0 }}
-                animate={{
-                  opacity: 1,
-                  transition: { delay: 0.2, duration: 0.15, ease: [0.23, 1, 0.32, 1] },
-                }}
-                exit={{ opacity: 0, transition: { duration: 0.1 } }}
-                className="absolute top-4 right-4 md:top-6 md:right-6 w-11 h-11 flex items-center justify-center rounded-full bg-white/80 text-black backdrop-blur-md transition-all duration-150 ease-out active:scale-95 sm:hover:scale-105 hover:bg-white z-50 shadow-lg border border-black/5"
-                onClick={() => setActiveImage(null)}
-                aria-label="Close lightbox"
-              >
-                <XIcon size={20} />
-              </motion.button>
-            </motion.div>
-          </>
+              <XIcon size={20} />
+            </motion.button>
+          </motion.div>
         )}
       </AnimatePresence>
 
