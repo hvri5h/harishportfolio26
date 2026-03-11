@@ -9,7 +9,7 @@ import {
   PiCalendarDefaultStroke,
 } from "./icons/pikaicons-react";
 
-const EMAIL = "hello@hari.sh";
+const EMAIL = "htiruna@gmail.com";
 
 const socials = [
   {
@@ -22,11 +22,11 @@ const socials = [
     href: "https://x.com/hvri5h",
     icon: PiXComStroke,
   },
-  {
-    label: "YouTube",
-    href: "https://youtube.com/@hvri5h",
-    icon: PiYoutubeStroke,
-  },
+  // {
+  //   label: "YouTube",
+  //   href: "https://youtube.com/@hvri5h",
+  //   icon: PiYoutubeStroke,
+  // },
 ];
 
 const Footer = () => {
@@ -73,7 +73,7 @@ const Footer = () => {
 
             {/* Book a call */}
             <a
-              href="https://cal.com/htiruna"
+              href="https://cal.com/htiruna/discovery"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2.5 h-[56px] px-6 rounded-full border border-[rgba(255,255,255,0.2)] font-display font-medium text-lg text-[rgba(255,255,255,0.7)] hover:text-white hover:border-[rgba(255,255,255,0.5)] transition-colors"

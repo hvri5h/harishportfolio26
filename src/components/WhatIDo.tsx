@@ -8,17 +8,17 @@ const designSkills = [
   "Interaction Design",
   "Branding",
   "Prototyping",
-  "Motion Design"
+  "User Research"
 ];
 
 const engineeringSkills = [
   "HTML/CSS",
   "Javascript",
   "Animation",
-  "Micointeractions",
-  "Web/mobile apps",
-  "No-code websites",
-  "CMS integration"
+  "Micro-interactions",
+  "Web apps",
+  "Mobile apps",
+  "CMS & APIs",
 ];
 
 type StackItem = {

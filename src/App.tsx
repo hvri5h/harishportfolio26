@@ -7,11 +7,12 @@ import {
   useMotionValueEvent,
   useInView,
 } from "framer-motion";
-import { X as XIcon, ArrowUpRight } from "lucide-react";
+import { X as XIcon } from "lucide-react";
 import {
   PiCopyDefaultStroke,
   PiCopyCopiedStroke,
   PiEyeOnStroke,
+  PiArrowRightUpStroke,
 } from "./components/icons/pikaicons-react";
 import Spline from "@splinetool/react-spline";
 import { projects, type Project } from "./data/portfolio";
@@ -127,13 +128,13 @@ function StackingMedia({
 }) {
   const [isLoaded, setIsLoaded] = useState(false);
   const _isVideo = isVideo(src);
+  const isSquare = src.split("/").pop()?.includes("sq_");
 
   return (
     <motion.div
-      className={`relative w-full rounded-[32px] md:rounded-[48px] overflow-hidden max-md:aspect-[3/4] md:aspect-[1920/1280] ${!isLoaded ? "animate-pulse" : ""
-        }`}
+      className={`relative w-full rounded-[32px] md:rounded-[48px] overflow-hidden ${isSquare ? "max-md:aspect-square" : "max-md:aspect-[3/4]"} md:aspect-[1920/1280] ${!isLoaded ? "skeleton-shimmer" : ""}`}
       style={{
-        backgroundColor: isLoaded ? project.bgColor : "#F2F2F2",
+        backgroundColor: "#F2F2F2",
       }}
     >
       {_isVideo ? (
@@ -172,17 +173,18 @@ function GridMedia({
 }) {
   const [isLoaded, setIsLoaded] = useState(false);
   const _isVideo = isVideo(item.src);
+  const isSquare = item.src.split("/").pop()?.includes("sq_");
 
   return (
     <motion.div
       {...animateProps}
       key={`${item.project.id}-${index}`}
       className={`relative rounded-[32px] md:rounded-[48px] overflow-hidden ${item.span === 2
-        ? "col-span-1 md:col-span-2 max-md:aspect-[3/4]"
-        : "col-span-1 aspect-[3/4] md:aspect-[4/5]"
-        } ${!isLoaded ? "animate-pulse" : ""}`}
+        ? `col-span-1 md:col-span-2 ${isSquare ? "max-md:aspect-square" : "max-md:aspect-[3/4]"}`
+        : `col-span-1 ${isSquare ? "aspect-square" : "aspect-[3/4]"} md:aspect-[4/5]`
+        } ${!isLoaded ? "skeleton-shimmer" : ""}`}
       style={{
-        backgroundColor: isLoaded ? item.project.bgColor : "#F2F2F2",
+        backgroundColor: "#F2F2F2",
       }}
     >
       {_isVideo ? (
@@ -424,23 +426,23 @@ function App() {
           : [];
 
         const hasMobFiles = folderImagesAll.some((img) =>
-          img.split("/").pop()?.startsWith("mob_"),
+          img.split("/").pop()?.includes("mob_"),
         );
 
         if (hasMobFiles) {
           if (isMobileViewport) {
             folderImagesAll = folderImagesAll.filter((img) =>
-              img.split("/").pop()?.startsWith("mob_"),
+              img.split("/").pop()?.includes("mob_"),
             );
             folderImagesVisible = folderImagesVisible.filter((img) =>
-              img.split("/").pop()?.startsWith("mob_"),
+              img.split("/").pop()?.includes("mob_"),
             );
           } else {
             folderImagesAll = folderImagesAll.filter(
-              (img) => !img.split("/").pop()?.startsWith("mob_"),
+              (img) => !img.split("/").pop()?.includes("mob_"),
             );
             folderImagesVisible = folderImagesVisible.filter(
-              (img) => !img.split("/").pop()?.startsWith("mob_"),
+              (img) => !img.split("/").pop()?.includes("mob_"),
             );
           }
         }
@@ -604,10 +606,10 @@ function App() {
                 )}
               </button>
               <a
-                href="mailto:hello@hari.sh"
+                href="mailto:htiruna@gmail.com"
                 className="hover:text-text transition-colors"
               >
-                hello@hari.sh
+                htiruna@gmail.com
               </a>
             </div>
           </div>
@@ -663,7 +665,7 @@ function App() {
                 craft and speed.
               </motion.p>
               <motion.a
-                href="mailto:hello@hari.sh"
+                href="mailto:htiruna@gmail.com"
                 variants={getStaggerItem(shouldReduceMotion)}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.97 }}
@@ -995,17 +997,21 @@ function App() {
               onClick={() => setSelectedProject(null)}
             >
               <div
-                className={`w-full relative z-10 min-h-full flex flex-col items-center ${selectedProject.modalVariant === "imageOnly"
-                  ? "justify-center py-12 md:py-24 px-4 md:px-8"
-                  : "justify-end md:justify-center px-0 pt-16 md:px-8 md:py-16"
+                className={`w-full relative z-10 flex flex-col items-center ${selectedProject.modalVariant === "imageOnly"
+                  ? "min-h-full justify-center py-12 md:py-24 px-4 md:px-8"
+                  : "md:min-h-full justify-end md:justify-center px-0 md:px-8 md:py-16"
                   }`}
                 onClick={() => setSelectedProject(null)}
               >
+                {/* Spacer to push modal to bottom on mobile */}
+                {selectedProject.modalVariant !== "imageOnly" && (
+                  <div className="flex-grow md:hidden min-h-[64px]" />
+                )}
                 {/* Modal Container */}
                 <motion.div
                   className={`w-full pointer-events-auto relative overflow-hidden flex flex-col squircle transform-gpu ${selectedProject?.modalVariant === "imageOnly"
                     ? "max-w-[1120px] bg-transparent justify-center items-center cursor-pointer"
-                    : "mt-auto md:m-auto rounded-t-[48px] md:rounded-[56px] max-w-[1120px] bg-white shadow-2xl"
+                    : "md:m-auto rounded-t-[48px] md:rounded-[56px] max-w-[1120px] bg-white shadow-2xl"
                     }`}
                   initial={
                     shouldReduceMotion
@@ -1053,7 +1059,7 @@ function App() {
                 >
                   {(() => {
                     const allImages = selectedProject.slug
-                      ? getProjectFolderImages(selectedProject.slug)
+                      ? getProjectFolderImages(selectedProject.slug, { device: isMobileViewport ? "mobile" : "desktop" })
                       : [];
                     const coverSrc =
                       allImages[0] ||
@@ -1091,7 +1097,7 @@ function App() {
                               src={coverSrc}
                               className={`block transform-gpu ${selectedProject.modalVariant === "imageOnly"
                                 ? "w-full h-auto object-contain"
-                                : "w-full h-auto aspect-[21/9] object-cover scale-[1.01]"
+                                : "w-full h-auto aspect-[16/9] md:aspect-[21/9] object-cover scale-[1.01]"
                                 }`}
                               autoPlay
                               loop
@@ -1104,12 +1110,12 @@ function App() {
                               alt={selectedProject.title}
                               className={`block transform-gpu ${selectedProject.modalVariant === "imageOnly"
                                 ? "w-full h-auto object-contain"
-                                : "w-full h-auto aspect-[21/9] object-cover scale-[1.01]"
+                                : "w-full h-auto aspect-[16/9] md:aspect-[21/9] object-cover scale-[1.01]"
                                 }`}
                             />
                           )}
                           <button
-                            className="absolute top-4 right-4 md:top-6 md:right-6 w-11 h-11 flex items-center justify-center rounded-full bg-white/80 text-black backdrop-blur-md transition-all duration-150 ease-out active:scale-95 sm:hover:scale-105 hover:bg-white z-50 shadow-lg border border-black/5"
+                            className={`absolute top-4 right-4 md:top-6 md:right-6 w-11 h-11 flex items-center justify-center rounded-full bg-white/80 text-black backdrop-blur-md transition-all duration-150 ease-out active:scale-95 sm:hover:scale-105 hover:bg-white z-50 shadow-lg border border-black/5 ${selectedProject.modalVariant !== "imageOnly" ? "max-md:hidden" : ""}`}
                             onClick={() => setSelectedProject(null)}
                             aria-label="Close modal"
                           >
@@ -1119,15 +1125,16 @@ function App() {
 
                         {/* Detail Content Block */}
                         {selectedProject.modalVariant !== "imageOnly" && (
-                          <div className="w-full flex flex-col md:flex-row gap-10 md:gap-16 p-8 md:p-12 lg:p-16">
-                            <div className="w-full md:w-[200px] lg:w-[250px] flex-shrink-0 flex flex-col gap-8 md:gap-10">
+                          <div className="w-full flex flex-col md:flex-row gap-6 md:gap-16 px-8 pt-10 pb-12 md:p-12 lg:p-16">
+                            {/* Desktop: sidebar with meta + live link */}
+                            <div className="hidden md:flex w-[200px] lg:w-[250px] flex-shrink-0 flex-col gap-10">
                               <div className="flex flex-col gap-6">
                                 {selectedProject.client && (
                                   <div className="flex flex-col gap-1.5">
-                                    <span className="text-[13px] font-bold text-text-secondary">
+                                    <span className="text-[14px] font-semibold text-text-secondary">
                                       Client
                                     </span>
-                                    <span className="text-[15px] text-text">
+                                    <span className="text-base text-text">
                                       {selectedProject.client}
                                     </span>
                                   </div>
@@ -1135,10 +1142,10 @@ function App() {
                                 {selectedProject.services &&
                                   selectedProject.services.length > 0 && (
                                     <div className="flex flex-col gap-1.5">
-                                      <span className="text-[13px] font-bold text-text-secondary">
+                                      <span className="text-[14px] font-semibold text-text-secondary">
                                         Services
                                       </span>
-                                      <span className="text-[15px] text-text capitalize">
+                                      <span className="text-base text-text capitalize">
                                         {selectedProject.services.join(", ")}
                                       </span>
                                     </div>
@@ -1149,12 +1156,13 @@ function App() {
                                   href={selectedProject.liveLink}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className="inline-flex items-center justify-between gap-3 px-5 py-2.5 bg-white border border-black/10 text-black font-medium text-[14px] rounded-full transition-all duration-300 hover:scale-[1.02] hover:bg-black/5 shadow-sm self-start"
+                                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-white border border-black/10 text-black font-medium text-[14px] rounded-full transition-all duration-300 hover:scale-[1.02] hover:bg-black/5 shadow-sm self-start"
                                 >
-                                  Live link <ArrowUpRight size={16} />
+                                  Live link <PiArrowRightUpStroke className="w-4 h-4" />
                                 </a>
                               )}
                             </div>
+                            {/* Main content column */}
                             <div className="flex-grow flex flex-col items-start min-w-0">
                               <h2 className="font-display font-bold text-3xl md:text-4xl lg:text-[2.5rem] tracking-[-0.03em] text-text mb-1 md:mb-2 leading-tight">
                                 {selectedProject.title}
@@ -1162,16 +1170,53 @@ function App() {
                               <h3 className="text-xl md:text-2xl tracking-[-0.03em] text-text-secondary mb-8 md:mb-10 leading-snug">
                                 {selectedProject.subtitle}
                               </h3>
-                              <div className="text-[15px] md:text-base text-text leading-relaxed whitespace-pre-line max-w-[650px]">
+                              {/* Mobile: meta in 2-col grid under title/subtitle */}
+                              {(selectedProject.client || (selectedProject.services && selectedProject.services.length > 0)) && (
+                                <div className="md:hidden grid grid-cols-2 gap-x-6 gap-y-4 w-full mb-8">
+                                  {selectedProject.client && (
+                                    <div className="flex flex-col gap-1">
+                                      <span className="text-base font-semibold text-text-secondary">
+                                        Client
+                                      </span>
+                                      <span className="text-base text-text">
+                                        {selectedProject.client}
+                                      </span>
+                                    </div>
+                                  )}
+                                  {selectedProject.services &&
+                                    selectedProject.services.length > 0 && (
+                                      <div className="flex flex-col gap-1">
+                                        <span className="text-base font-semibold text-text-secondary">
+                                          Services
+                                        </span>
+                                        <span className="text-base text-text capitalize">
+                                          {selectedProject.services.join(", ")}
+                                        </span>
+                                      </div>
+                                    )}
+                                </div>
+                              )}
+                              <div className="text-base text-text leading-relaxed whitespace-pre-line max-w-[650px]">
                                 {selectedProject.description}
                               </div>
+                              {/* Mobile: live link */}
+                              {selectedProject.liveLink && (
+                                <a
+                                  href={selectedProject.liveLink}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="md:hidden mt-8 self-start inline-flex items-center gap-2 px-5 py-2.5 bg-white border border-black/10 text-black font-medium text-[14px] rounded-full transition-all duration-300 active:scale-[0.98] active:bg-black/5 shadow-sm"
+                                >
+                                  Live link <PiArrowRightUpStroke className="w-4 h-4" />
+                                </a>
+                              )}
                             </div>
                           </div>
                         )}
 
                         {/* Content Images */}
                         {contentSrcs.length > 0 && (
-                          <div className="w-full flex flex-col gap-6 md:gap-10 px-6 md:px-12 lg:px-16 pb-12 md:pb-16 lg:pb-20">
+                          <div className="w-full flex flex-col gap-6 md:gap-10 px-6 md:px-12 lg:px-16 pb-24 md:pb-16 lg:pb-20">
                             {contentSrcs.map((img, index) => (
                               <div
                                 key={index}
@@ -1207,6 +1252,16 @@ function App() {
                   })()}
                 </motion.div>
               </div>
+              {/* Floating close button — mobile only, Apple-style */}
+              {selectedProject.modalVariant !== "imageOnly" && (
+                <button
+                  className="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-[1001] w-[52px] h-[52px] flex items-center justify-center rounded-full bg-[rgba(0,0,0,0.75)] backdrop-blur-[10px] border border-[rgba(255,255,255,0.12)] text-white shadow-[rgba(0,0,0,0.18)_0px_0.711334px_0.711334px_-0.75px,rgba(0,0,0,0.17)_0px_1.93715px_1.93715px_-1.5px,rgba(0,0,0,0.16)_0px_4.25329px_4.25329px_-2.25px,rgba(0,0,0,0.13)_0px_9.44132px_9.44132px_-3px,rgba(0,0,0,0.06)_0px_24px_24px_-3.75px] active:scale-90 transition-transform duration-150"
+                  onClick={() => setSelectedProject(null)}
+                  aria-label="Close modal"
+                >
+                  <XIcon size={22} strokeWidth={2.5} />
+                </button>
+              )}
             </div>
           </motion.div>
         )}

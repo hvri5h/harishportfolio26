@@ -6,7 +6,7 @@ import tpb from "../assets/work/tpb-3.webp";
 import nearmap from "../assets/work/nearmap.webp";
 import qantasBanner from "../assets/work/qantas/_banner.webp";
 import wooflySplash from "../assets/work/woofly-2.webp";
-import wooflyCover from "../assets/work/woofly/2.webp";
+import wooflyCover from "../assets/work/woofly/_banner.webp";
 import reachout from "../assets/work/reachout.webp";
 import canon from "../assets/work/canon-2.webp";
 
@@ -100,8 +100,8 @@ export const projects: Project[] = [
     true,
     "image",
     "Woofly",
-    "A mobile app that helps dog owners find, vet, and book reliable walkers in their area, solving the trust problem that keeps people from handing over the leash.",
-    ["product design", "branding"],
+    "A mobile app that helps dog owners find and book trusted walkers nearby. The big design challenge was trust. Leaving your dog with a stranger is stressful, so the whole experience is built around verification, reviews, transparent pricing, and detailed walker profiles that give you enough confidence to actually book. I did the user research, branding, and zero to one product design.",
+    ["product design", "branding", "user research"],
     {
       subtitle: "Find trusted dog walkers nearby",
       client: "Personal Project",
@@ -121,11 +121,11 @@ export const projects: Project[] = [
     false,
     "image",
     "Superbnb",
-    "A tool for digital nomads to find the best Airbnbs by price and location, with AI-powered filters and deal alerts you won't find on Airbnb itself.",
-    ["website design", "product design"],
+    "Superbnb helps digital nomads save money on accommodation by tracking Airbnb prices and sending deal alerts when rates drop. It also offers advanced filtering and search options tailored to long-stay travellers that you won't find on Airbnb itself. I designed the product from zero to one, including the branding, marketing site, and the full web app experience.",
+    ["website design", "product design", "branding"],
     {
       subtitle: "Smarter Airbnb search for digital nomads",
-      client: "Solo founder",
+      client: "Superbnb",
       team: "Myself, Frontend Engineer",
       year: "2024",
       role: "Lead Designer",
@@ -160,7 +160,7 @@ export const projects: Project[] = [
     false,
     "image",
     "Nearmap",
-    "A brand refresh for Australia's leading aerial imagery company — new marketing website and a scalable design system to support future work.",
+    "A brand refresh for Australia's leading aerial imagery company. I was part of an engineering team that built their new marketing website on Next.js with a custom headless CMS and worked closely with the design team to build out a flexible design system.",
     ["frontend engineering"],
     {
       subtitle: "Turn location data into insightful answers",
@@ -180,7 +180,7 @@ export const projects: Project[] = [
     false,
     "image",
     "Qantas Shopping",
-    "I was part of a team that built this greenfield end-to-end rewards platform from scratch, featuring complex integrations with numerous third-party services including external vendors and credit card companies.",
+    "A rewards platform that lets Qantas Frequent Flyers earn points through an online shopping mall with 450+ partner brands and a card-linked offers program for in-store purchases. I was part of the team that built this from scratch on Next.js and AWS microservices, integrating with external vendors and credit card providers. We also shipped a Chrome extension to help users earn points while browsing.",
     ["fullstack engineering"],
     {
       subtitle: "Loyalty program shopping portal",

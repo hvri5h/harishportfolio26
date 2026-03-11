@@ -6,14 +6,22 @@ const workImages = import.meta.glob<string>(
   { eager: true, import: "default" }
 );
 
-export function getProjectFolderImages(slug: string, options?: { excludeHidden?: boolean }): string[] {
+export function getProjectFolderImages(slug: string, options?: { excludeHidden?: boolean; device?: "desktop" | "mobile" }): string[] {
   const prefix = `/src/assets/work/${slug}/`;
   return Object.entries(workImages)
     .filter(([path]) => {
       if (!path.startsWith(prefix)) return false;
+      const name = (path.split("/").pop() || "").toLowerCase();
       if (options?.excludeHidden) {
-        const name = path.split("/").pop() || "";
         if (name.startsWith("_")) return false;
+      }
+      // Device-aware filtering: skip "des"/"mob" files based on viewport
+      // Banner files are never filtered by device
+      if (options?.device && !name.includes("banner")) {
+        const hasDes = name.includes("des");
+        const hasMob = name.includes("mob");
+        if (options.device === "mobile" && hasDes) return false;
+        if (options.device === "desktop" && hasMob) return false;
       }
       return true;
     })
@@ -26,7 +34,9 @@ export function getProjectFolderImages(slug: string, options?: { excludeHidden?:
       if (aIsBanner && !bIsBanner) return -1;
       if (!aIsBanner && bIsBanner) return 1;
 
-      return nameA.localeCompare(nameB, undefined, { numeric: true });
+      const sortA = nameA.replace(/^_+/, "");
+      const sortB = nameB.replace(/^_+/, "");
+      return sortA.localeCompare(sortB, undefined, { numeric: true });
     })
     .map(([, url]) => url);
 }
