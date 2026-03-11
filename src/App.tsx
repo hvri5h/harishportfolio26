@@ -713,7 +713,7 @@ function App() {
                 variants={getStaggerItem(shouldReduceMotion)}
                 className="w-full mt-10 mb-12 md:mt-20 md:mb-0"
               >
-                {/* <p className="text-sm font-medium text-text-secondary text-center mb-5">
+                {/* <p className="text-[13px] md:text-base font-medium text-black/50 text-center mb-5">
                   12+ years of shipping digital products
                 </p> */}
                 <LogoCloud />
