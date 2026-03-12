@@ -1,12 +1,12 @@
 // import lj from "../assets/work/lj-2.webp";
-// import watercoola from "../assets/work/watercoola-2.webp";
-// import audiobook from "../assets/work/audiobook-2.webp";
+import watercoola from "../assets/work/watercoola/1.webp";
+import audiobook from "../assets/work/audiobook/1.webp";
 import sbnbBanner from "../assets/work/superbnb/_banner.webp";
 // import tpb from "../assets/work/tpb-3.webp";
-// import nearmap from "../assets/work/nearmap.webp";
+import nearmap from "../assets/work/nearmap/_banner.webp";
 import qantasBanner from "../assets/work/qantas/_banner.webp";
-// import wooflySplash from "../assets/work/woofly-2.webp";
-// import wooflyCover from "../assets/work/woofly/_banner.webp";
+import wooflySplash from "../assets/work/woofly/mob_3.webp";
+import wooflyCover from "../assets/work/woofly/_banner.webp";
 // import reachout from "../assets/work/reachout.webp";
 // import canon from "../assets/work/canon-2.webp";
 
@@ -93,27 +93,27 @@ const createProject = (
 
 // Reorder projects by moving entries in this array
 export const projects: Project[] = [
-  // createProject(
-  //   "mob-1",
-  //   wooflySplash,
-  //   "woofly",
-  //   true,
-  //   "image",
-  //   "Woofly",
-  //   "A mobile app that helps dog owners find and book trusted walkers nearby. Leaving your dog with a stranger is stressful, so the whole experience is built around verification, reviews, transparent pricing, and detailed walker profiles that give you enough confidence to actually book. I did the user research, branding, and zero to one product design.",
-  //   ["product design", "branding", "user research"],
-  //   {
-  //     subtitle: "Find trusted dog walkers nearby",
-  //     client: "Personal Project",
-  //     team: "Myself",
-  //     year: "2023",
-  //     role: "Product Designer",
-  //     timeline: "8 Weeks",
-  //     bgColor: "#FF6B00",
-  //     gridSpan: 2,
-  //     gridImage: wooflyCover,
-  //   }
-  // ),
+  createProject(
+    "mob-1",
+    wooflySplash,
+    "woofly",
+    true,
+    "image",
+    "Woofly",
+    "A mobile app that helps dog owners find and book trusted walkers nearby. Leaving your dog with a stranger is stressful, so the whole experience is built around verification, reviews, transparent pricing, and detailed walker profiles that give you enough confidence to actually book. I did the user research, branding, and zero to one product design.",
+    ["product design", "branding", "user research"],
+    {
+      subtitle: "Find trusted dog walkers nearby",
+      client: "Personal Project",
+      team: "Myself",
+      year: "2023",
+      role: "Product Designer",
+      timeline: "8 Weeks",
+      bgColor: "#FF6B00",
+      gridSpan: 2,
+      gridImage: wooflyCover,
+    }
+  ),
   createProject(
     "desk-1",
     sbnbBanner,
@@ -153,26 +153,26 @@ export const projects: Project[] = [
   //     isHidden: true,
   //   },
   // ),
-  // createProject(
-  //   "desk-3",
-  //   nearmap,
-  //   "nearmap",
-  //   false,
-  //   "image",
-  //   "Nearmap",
-  //   "A brand refresh for Australia's leading aerial imagery company. I was part of an engineering team that built their new marketing website on Next.js with a custom headless CMS and worked closely with the design team to build out a flexible design system.",
-  //   ["frontend engineering"],
-  //   {
-  //     subtitle: "Turn location data into insightful answers",
-  //     client: "Nearmap",
-  //     team: "3 Engineers, 2 Designers, PM",
-  //     year: "2024",
-  //     role: "Frontend Engineer",
-  //     timeline: "5 Months",
-  //     bgColor: "#0284C7",
-  //     liveLink: "https://www.nearmap.com.au",
-  //   }
-  // ),
+  createProject(
+    "desk-3",
+    nearmap,
+    "nearmap",
+    false,
+    "image",
+    "Nearmap",
+    "A brand refresh for Australia's leading aerial imagery company. I was part of an engineering team that built their new marketing website on Next.js with a custom headless CMS and worked closely with the design team to build out a flexible design system.",
+    ["frontend engineering"],
+    {
+      subtitle: "Turn location data into insightful answers",
+      client: "Nearmap",
+      team: "3 Engineers, 2 Designers, PM",
+      year: "2024",
+      role: "Frontend Engineer",
+      timeline: "5 Months",
+      bgColor: "#0284C7",
+      liveLink: "https://www.nearmap.com.au",
+    }
+  ),
   createProject(
     "desk-4",
     qantasBanner,
@@ -231,42 +231,42 @@ export const projects: Project[] = [
   //     isHidden: true,
   //   }
   // ),
-  // createProject(
-  //   "mob-2",
-  //   watercoola,
-  //   "watercoola", // Optional fallback
-  //   true,
-  //   "image",
-  //   "Watercoola",
-  //   "Connecting remote teams asynchronously through immersive virtual environments.",
-  //   ["product design", "branding"],
-  //   {
-  //     client: "Watercoola Inc.",
-  //     team: "Myself, 2 Frontend Engineers",
-  //     year: "2024",
-  //     timeline: "6 Weeks",
-  //     bgColor: "#0EA5E9",
-  //     modalVariant: "imageOnly",
-  //   }
-  // ),
-  // createProject(
-  //   "mob-3",
-  //   audiobook,
-  //   "audiobook",
-  //   true,
-  //   "image",
-  //   "Audiobook app concept",
-  //   "Listen to your favorite books on the go with this modern, accessible player.",
-  //   ["product design"],
-  //   {
-  //     client: "Personal Project",
-  //     team: "Myself",
-  //     year: "2025",
-  //     timeline: "2 Weeks",
-  //     bgColor: "#8B5CF6",
-  //     modalVariant: "imageOnly",
-  //   }
-  // ),
+  createProject(
+    "mob-2",
+    watercoola,
+    "watercoola", // Optional fallback
+    true,
+    "image",
+    "Watercoola",
+    "Connecting remote teams asynchronously through immersive virtual environments.",
+    ["product design", "branding"],
+    {
+      client: "Watercoola Inc.",
+      team: "Myself, 2 Frontend Engineers",
+      year: "2024",
+      timeline: "6 Weeks",
+      bgColor: "#0EA5E9",
+      modalVariant: "imageOnly",
+    }
+  ),
+  createProject(
+    "mob-3",
+    audiobook,
+    "audiobook",
+    true,
+    "image",
+    "Audiobook app concept",
+    "Listen to your favorite books on the go with this modern, accessible player.",
+    ["product design"],
+    {
+      client: "Personal Project",
+      team: "Myself",
+      year: "2025",
+      timeline: "2 Weeks",
+      bgColor: "#8B5CF6",
+      modalVariant: "imageOnly",
+    }
+  ),
   // createProject(
   //   "mob-4",
   //   lj,
