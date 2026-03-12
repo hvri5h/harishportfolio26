@@ -31,31 +31,21 @@ const AboutMe = () => {
 
           {/* Bio */}
           <div className="space-y-6 font-medium">
-            {/* <p className="text-lg text-text-secondary leading-relaxed">
-              I like to make things — apps, websites, brands, animations. I focus
-              on consumer products because I spend a lot of time thinking about
-              people.
-            </p> */}
 
             <motion.p variants={getStaggerItem(shouldReduceMotion)} className="text-lg text-text-secondary leading-relaxed">
-              I'm a Designer & Engineer based in Australia, originally from New
-              Zealand. I spent over a decade as a software engineer shipping
-              products across the full stack. Along the way I kept getting pulled
-              toward design: how things look, how they feel, why certain
-              interfaces just work. So I made the jump.
+              I'm a Designer & Engineer based in Australia, originally from New Zealand. I've spent 10+ years as a Software Engineer shipping products across the full stack for startups, scale-ups and large enterprises.
             </motion.p>
 
             <motion.p variants={getStaggerItem(shouldReduceMotion)} className="text-lg text-text-secondary leading-relaxed">
-              Now I do both. I design and build end-to-end, using AI tools to move
-              fast without cutting corners. I've been reading and writing code
-              long enough to understand what's happening under the hood, which
-              means the AI helps me move quicker, not think less.
+              Along the way I kept getting pulled toward design: how things look, how they feel, why certain interfaces just work. So I made the jump. Now I do both, designing and building end-to-end, using AI tools to support my craft and enhance my workflow without cutting corners.
             </motion.p>
 
             <motion.p variants={getStaggerItem(shouldReduceMotion)} className="text-lg text-text-secondary leading-relaxed">
-              I work best with startups and small teams who care about craft and
-              speed. If that sounds like you, I'd love to hear about what you're
-              building.
+              What drives me is creating things that genuinely solve problems for real people. I'm endlessly curious about how humans think, what they notice, and what they feel. I think the best digital products are built by people who care about that stuff deeply.
+            </motion.p>
+
+            <motion.p variants={getStaggerItem(shouldReduceMotion)} className="text-lg text-text-secondary leading-relaxed">
+              Outside of work, I'm a coffee obsessive (Melbourne, obviously), a big Liverpool fan, and happiest when I'm out in nature. I'm a lifelong learner who loves reading about psychology, engaging in creative hobbies like music, writing, and acting, and going down whatever rabbit hole catches my attention next.
             </motion.p>
           </div>
         </motion.div>

@@ -4,7 +4,7 @@ import engineeringBg from "../assets/engineering-bento-bg.png";
 import designBg from "../assets/design-bento-bg.png";
 const designSkills = [
   "Product Design",
-  "Visual Design",
+  "Web Design",
   "Interaction Design",
   "Branding",
   "Prototyping",
