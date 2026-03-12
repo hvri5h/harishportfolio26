@@ -1,10 +1,11 @@
 import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import footerBranding from "../assets/footer.svg";
 import {
   PiLinkedinStroke,
   PiXComStroke,
   PiCopyDefaultStroke,
-  PiCopyCopiedStroke,
+  PiCheckTickSingleStroke,
   PiCalendarDefaultStroke,
 } from "./icons/pikaicons-react";
 
@@ -50,23 +51,50 @@ const Footer = () => {
           <div className="flex items-center gap-3 max-sm:flex-col max-sm:gap-4">
             {/* Email pill with copy */}
             <button
-              onClick={() => {
-                navigator.clipboard.writeText(EMAIL);
+              type="button"
+              onClick={async () => {
+                try {
+                  if (navigator?.clipboard?.writeText) {
+                    await navigator.clipboard.writeText(EMAIL);
+                  }
+                } catch (err) {
+                  console.error("Failed to copy:", err);
+                }
                 setIsCopied(true);
                 setTimeout(() => setIsCopied(false), 2000);
               }}
-              className="flex items-center bg-white rounded-full pl-6 pr-2 py-2 gap-1"
+              className="flex items-center bg-white rounded-full pl-6 pr-2 py-2 gap-1 relative z-10"
               data-cursor-label="Copy email"
             >
               <span className="font-display font-semibold text-xl text-[#141414] tracking-[-0.02em]">
                 {EMAIL}
               </span>
-              <div className="w-10 h-10 rounded-full flex items-center justify-center text-[#141414]/50">
-                {isCopied ? (
-                  <PiCopyCopiedStroke className="w-5 h-5" />
-                ) : (
-                  <PiCopyDefaultStroke className="w-5 h-5" />
-                )}
+              <div className="w-10 h-10 rounded-full flex items-center justify-center text-[#141414]/50 relative">
+                <AnimatePresence initial={false}>
+                  {isCopied ? (
+                    <motion.div
+                      key="check"
+                      className="absolute inset-0 flex items-center justify-center"
+                      initial={{ opacity: 0, scale: 0.5, rotate: -45 }}
+                      animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                      exit={{ opacity: 0, scale: 0.5, rotate: 45 }}
+                      transition={{ type: "spring", bounce: 0, duration: 0.3 }}
+                    >
+                      <PiCheckTickSingleStroke className="w-5 h-5" />
+                    </motion.div>
+                  ) : (
+                    <motion.div
+                      key="copy"
+                      className="absolute inset-0 flex items-center justify-center"
+                      initial={{ opacity: 0, scale: 0.5, rotate: -45 }}
+                      animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                      exit={{ opacity: 0, scale: 0.5, rotate: 45 }}
+                      transition={{ type: "spring", bounce: 0, duration: 0.3 }}
+                    >
+                      <PiCopyDefaultStroke className="w-5 h-5" />
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             </button>
 

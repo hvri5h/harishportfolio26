@@ -914,18 +914,26 @@ function App() {
         </svg>
       </div>
 
-      {/* Footer — revealed from behind as you scroll */}
+      {/* Footer — revealed from behind as you scroll (desktop only) */}
       <section
         ref={footerSectionRef}
         className="relative w-full"
-        style={{ clipPath: "polygon(0% 0, 100% 0%, 100% 100%, 0 100%)" }}
+        style={isMobileViewport ? undefined : { clipPath: "polygon(0% 0, 100% 0%, 100% 100%, 0 100%)" }}
       >
-        <div className="fixed bottom-0 left-0 w-full z-0">
-          <Footer />
-        </div>
-        <div aria-hidden="true" className="opacity-0 pointer-events-none w-full">
-          <Footer />
-        </div>
+        {isMobileViewport ? (
+          <div className="w-full">
+            <Footer />
+          </div>
+        ) : (
+          <>
+            <div className="fixed bottom-0 left-0 w-full z-0">
+              <Footer />
+            </div>
+            <div aria-hidden="true" className="opacity-0 pointer-events-none w-full">
+              <Footer />
+            </div>
+          </>
+        )}
       </section>
 
       {/* Image Lightbox — backdrop */}
