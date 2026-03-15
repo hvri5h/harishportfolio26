@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import footerBranding from "../assets/footer.svg";
+import { siteConfig } from "../lib/siteMode";
 import {
   PiLinkedinStroke,
   PiXComStroke,
@@ -33,18 +34,15 @@ const Footer = () => {
   const [isCopied, setIsCopied] = useState(false);
 
   return (
-    <footer
-      className="bg-[#141414] text-white"
-      data-cursor-dark
-    >
+    <footer className="bg-[#141414] text-white" data-cursor-dark>
       <div className="flex flex-col max-w-[1200px] mx-auto px-8 max-sm:px-6 pt-32 md:pt-56 pb-10">
         {/* CTA section */}
         <div className="flex flex-col items-center pb-16 text-center">
           <h2 className="font-display font-semibold text-[56px] leading-[1.1] tracking-[-0.03em] text-white mb-6 max-md:text-5xl max-sm:text-4xl">
-            Let's connect
+            {siteConfig.footer.heading}
           </h2>
-          <p className="font-display font-medium text-2xl max-md:text-xl text-[rgba(255,255,255,0.5)] max-w-[400px] mb-16 leading-[1.55]">
-            Have a project in mind that could use my help? I'd love to hear from you :)
+          <p className="font-display font-medium text-2xl max-md:text-xl text-[rgba(255,255,255,0.5)] max-w-[550px] mb-16 leading-[1.55]">
+            {siteConfig.footer.subheading}
           </p>
 
           {/* Email pill + Social icons row */}
@@ -99,15 +97,17 @@ const Footer = () => {
             </button>
 
             {/* Book a call */}
-            <a
-              href="https://cal.com/htiruna/discovery"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2.5 h-[56px] px-6 rounded-full border border-[rgba(255,255,255,0.2)] font-display font-medium text-lg text-[rgba(255,255,255,0.7)] hover:text-white hover:border-[rgba(255,255,255,0.5)] transition-colors"
-            >
-              <PiCalendarDefaultStroke className="w-5 h-5" />
-              Book a call
-            </a>
+            {siteConfig.footer.showBookCall && (
+              <a
+                href="https://cal.com/htiruna/discovery"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2.5 h-[56px] px-6 rounded-full border border-[rgba(255,255,255,0.2)] font-display font-medium text-lg text-[rgba(255,255,255,0.7)] hover:text-white hover:border-[rgba(255,255,255,0.5)] transition-colors"
+              >
+                <PiCalendarDefaultStroke className="w-5 h-5" />
+                Book a call
+              </a>
+            )}
 
             {/* Social icons */}
             <div className="flex items-center gap-3">

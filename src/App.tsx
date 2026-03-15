@@ -13,6 +13,7 @@ import {
   PiCopyCopiedStroke,
   PiEyeOnStroke,
   PiArrowRightUpStroke,
+  PiMapPinStroke,
 } from "./components/icons/pikaicons-react";
 import Spline from "@splinetool/react-spline";
 import { projects, type Project } from "./data/portfolio";
@@ -33,6 +34,7 @@ import StackingCards, {
   StackingCardItem,
 } from "./components/fancy/blocks/stacking-cards";
 import { getStaggerContainer, getStaggerItem } from "./lib/animations";
+import { siteConfig } from "./lib/siteMode";
 
 type ActiveImage = {
   id: string;
@@ -412,6 +414,22 @@ function App() {
     setHasFineCursor(window.matchMedia("(pointer: fine)").matches);
   }, []);
 
+  // Update meta tags based on site mode
+  useEffect(() => {
+    document.title = siteConfig.meta.title;
+    const setMeta = (selector: string, attr: string, value: string) => {
+      const el = document.querySelector(selector);
+      if (el) el.setAttribute(attr, value);
+    };
+    setMeta('meta[name="description"]', "content", siteConfig.meta.description);
+    setMeta('meta[property="og:title"]', "content", siteConfig.meta.title);
+    setMeta('meta[property="og:description"]', "content", siteConfig.meta.ogDescription);
+    setMeta('meta[property="og:url"]', "content", siteConfig.meta.ogUrl);
+    setMeta('meta[name="twitter:title"]', "content", siteConfig.meta.title);
+    setMeta('meta[name="twitter:description"]', "content", siteConfig.meta.ogDescription);
+    setMeta('meta[name="twitter:url"]', "content", siteConfig.meta.ogUrl);
+  }, []);
+
   useEffect(() => {
     const mql = window.matchMedia("(max-width: 767px)");
     setIsMobileViewport(mql.matches);
@@ -617,7 +635,8 @@ function App() {
         </AnimatePresence>
 
         {/* Header Content - Top Frame */}
-        <div className="absolute top-4 md:top-8 left-0 right-0 z-[40] max-w-[1200px] mx-auto px-4 md:px-8 flex justify-between items-center h-14 md:h-[54px] text-xs md:text-sm font-medium text-text-secondary pointer-events-none">
+        <div className="absolute top-4 md:top-8 left-0 right-0 z-[40] max-w-[1200px] mx-auto px-6 md:px-8 flex justify-between items-center h-14 md:h-[54px] text-xs md:text-sm font-medium text-text-secondary pointer-events-none">
+          {siteConfig.showAvailableBadge && (
           <div className="pointer-events-auto flex flex-col items-start gap-1">
             <div className="flex items-center gap-1.5 md:gap-2 px-1 py-1 md:p-0 transition-all">
               <div className="flex items-center justify-center w-[14px]">
@@ -648,8 +667,17 @@ function App() {
               </a>
             </div>
           </div>
-          <div className="pointer-events-auto hidden md:flex flex-col items-end gap-0.5">
+          )}
+          {!siteConfig.showAvailableBadge && (
+          <div className="pointer-events-auto hidden md:flex items-center gap-1.5">
+            <PiMapPinStroke className="w-4 h-4" />
             <span>Melbourne, Australia</span>
+          </div>
+          )}
+          <div className="pointer-events-auto hidden md:flex flex-col items-end gap-0.5">
+            {siteConfig.showAvailableBadge && (
+              <span>Melbourne, Australia</span>
+            )}
             <MelbourneClock />
           </div>
         </div>
@@ -688,16 +716,15 @@ function App() {
                 variants={getStaggerItem(shouldReduceMotion)}
                 className="font-display font-medium text-2xl max-md:text-xl text-text-secondary leading-[1.4] max-w-none md:max-w-[400px] mb-5 md:mb-6"
               >
-                {/* <TextShimmer
-                  as="span"
-                  duration={1}
-                  className="[--base-color:var(--color-text-secondary)] [--base-gradient-color:#fff]"
-                >
-                  AI-native
-                </TextShimmer>{" "} */}
-                <span data-cursor-figma>Design +</span>{" "}
-                <span data-cursor-code>Engineering</span> partner for startups that value
-                craft and speed.
+                {siteConfig.hero.useCustomCursors ? (
+                  <>
+                    <span data-cursor-figma>Design +</span>{" "}
+                    <span data-cursor-code>Engineering</span> partner for startups that value
+                    craft and speed.
+                  </>
+                ) : (
+                  siteConfig.hero.subtitle
+                )}
               </motion.p>
               <motion.a
                 href="mailto:htiruna@gmail.com"
@@ -777,7 +804,7 @@ function App() {
         </section>
 
         <WhatIDo />
-        <Services />
+        {siteConfig.showServices && <Services />}
         {/* <Testimonials /> */}
         <AboutMe />
 
