@@ -49,7 +49,7 @@ const configs: Record<SiteMode, SiteConfig> = {
     footer: {
       heading: "Let's connect",
       subheading:
-        "Have a project in mind that could use my help? I'd love to hear from you :)",
+        "Have a project in mind that you think could use my help? I'd love to hear from you :)",
       showBookCall: true,
     },
     meta: {
