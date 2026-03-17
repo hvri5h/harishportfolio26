@@ -43,7 +43,7 @@ const configs: Record<SiteMode, SiteConfig> = {
     showServices: true,
     hero: {
       subtitle:
-        "Design + Engineering partner for startups that value craft and speed.",
+        "Design + Engineering partner for early-stage startups that value craft and speed.",
       useCustomCursors: true,
     },
     footer: {
@@ -57,7 +57,7 @@ const configs: Record<SiteMode, SiteConfig> = {
       description: "Designer + Engineer",
       ogUrl: "https://hari.sh/",
       ogDescription:
-        "Independent Designer & Engineer based in Australia working across design, code, and product.",
+        "Designer & Engineer based in Australia working across design, code, and product.",
     },
   },
   professional: {
