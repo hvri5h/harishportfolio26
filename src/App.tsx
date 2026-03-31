@@ -637,42 +637,42 @@ function App() {
         {/* Header Content - Top Frame */}
         <div className="absolute top-4 md:top-8 left-0 right-0 z-[40] max-w-[1200px] mx-auto px-6 md:px-8 flex justify-between items-center h-14 md:h-[54px] text-xs md:text-sm font-medium text-text-secondary pointer-events-none">
           {siteConfig.showAvailableBadge && (
-          <div className="pointer-events-auto flex flex-col items-start gap-1">
-            <div className="flex items-center gap-1.5 md:gap-2 px-1 py-1 md:p-0 transition-all">
-              <div className="flex items-center justify-center w-[14px]">
-                <div className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+            <div className="pointer-events-auto flex flex-col items-start gap-1">
+              <div className="flex items-center gap-1.5 md:gap-2 px-1 py-1 md:p-0 transition-all">
+                <div className="flex items-center justify-center w-[14px]">
+                  <div className="relative flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                  </div>
                 </div>
+                <span className="text-text-secondary tracking-[-0.01em] text-sm">Available for work <span className="hidden md:inline-block">Apr 2026</span></span>
               </div>
-              <span className="text-text-secondary tracking-[-0.01em] text-sm">Available for work <span className="hidden md:inline-block">Mar 2026</span></span>
+              <div className="hidden md:flex items-center gap-2">
+                <button
+                  onClick={handleCopyEmail}
+                  className="flex items-center justify-center w-[14px] text-text-secondary hover:text-text transition-colors focus:outline-none"
+                  title="Copy email address"
+                >
+                  {isCopied ? (
+                    <PiCopyCopiedStroke className="w-4 h-4" />
+                  ) : (
+                    <PiCopyDefaultStroke className="w-4 h-4" />
+                  )}
+                </button>
+                <a
+                  href="mailto:htiruna@gmail.com"
+                  className="hover:text-text transition-colors"
+                >
+                  htiruna@gmail.com
+                </a>
+              </div>
             </div>
-            <div className="hidden md:flex items-center gap-2">
-              <button
-                onClick={handleCopyEmail}
-                className="flex items-center justify-center w-[14px] text-text-secondary hover:text-text transition-colors focus:outline-none"
-                title="Copy email address"
-              >
-                {isCopied ? (
-                  <PiCopyCopiedStroke className="w-4 h-4" />
-                ) : (
-                  <PiCopyDefaultStroke className="w-4 h-4" />
-                )}
-              </button>
-              <a
-                href="mailto:htiruna@gmail.com"
-                className="hover:text-text transition-colors"
-              >
-                htiruna@gmail.com
-              </a>
-            </div>
-          </div>
           )}
           {!siteConfig.showAvailableBadge && (
-          <div className="pointer-events-auto hidden md:flex items-center gap-1.5">
-            <PiMapPinStroke className="w-4 h-4" />
-            <span>Melbourne, Australia</span>
-          </div>
+            <div className="pointer-events-auto hidden md:flex items-center gap-1.5">
+              <PiMapPinStroke className="w-4 h-4" />
+              <span>Melbourne, Australia</span>
+            </div>
           )}
           <div className="pointer-events-auto hidden md:flex flex-col items-end gap-0.5">
             {siteConfig.showAvailableBadge && (
