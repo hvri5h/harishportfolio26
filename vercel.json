@@ -1,0 +1,12 @@
+{
+  "redirects": [
+    { "source": "/linkedin", "destination": "/?ref=linkedin", "statusCode": 307 },
+    { "source": "/twitter", "destination": "/?ref=twitter", "statusCode": 307 },
+    { "source": "/github", "destination": "/?ref=github", "statusCode": 307 },
+    { "source": "/resume", "destination": "/?ref=resume", "statusCode": 307 }
+  ],
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/api/$1" },
+    { "source": "/((?!api/).*)", "destination": "/index.html" }
+  ]
+}

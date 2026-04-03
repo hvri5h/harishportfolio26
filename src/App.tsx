@@ -353,7 +353,7 @@ function StackProjectSection({
   );
 }
 
-function App() {
+function Portfolio() {
   const shouldReduceMotion = useReducedMotion() ?? false;
   const blurTrigger = {
     heroInViewAmount: 0.2,
@@ -1342,4 +1342,5 @@ function App() {
   );
 }
 
-export default App;
+export { Portfolio };
+export default Portfolio;
