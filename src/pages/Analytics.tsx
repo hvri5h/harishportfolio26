@@ -69,10 +69,11 @@ function Dashboard({ token }: { token: string }) {
 
   return (
     <div
+      data-standard-cursor
       style={{
         minHeight: "100vh",
-        background: "#0a0a0a",
-        color: "#fff",
+        background: "#fafafa",
+        color: "#111",
         fontFamily:
           '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
         padding: "24px",
@@ -172,7 +173,7 @@ export default function Analytics() {
       <div
         style={{
           minHeight: "100vh",
-          background: "#0a0a0a",
+          background: "#fafafa",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",

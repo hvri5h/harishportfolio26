@@ -8,17 +8,18 @@ export function StatsCard({ label, value, live }: StatsCardProps) {
   return (
     <div
       style={{
-        background: "#141414",
-        border: "1px solid #1e1e1e",
+        background: "#fff",
+        border: "1px solid #e5e7eb",
         borderRadius: 12,
         padding: "20px 24px",
         flex: "1 1 0",
         minWidth: 140,
+        boxShadow: "0 1px 2px rgba(0,0,0,0.04)",
       }}
     >
       <div
         style={{
-          color: "#888",
+          color: "#6b7280",
           fontSize: 13,
           marginBottom: 8,
           display: "flex",
@@ -40,7 +41,7 @@ export function StatsCard({ label, value, live }: StatsCardProps) {
         )}
         {label}
       </div>
-      <div style={{ color: "#fff", fontSize: 28, fontWeight: 600 }}>
+      <div style={{ color: "#111", fontSize: 28, fontWeight: 600 }}>
         {value}
       </div>
     </div>

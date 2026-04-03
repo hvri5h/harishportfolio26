@@ -17,12 +17,12 @@ export function TimeSeriesChart({ data }: TimeSeriesChartProps) {
     return (
       <div
         style={{
-          background: "#141414",
-          border: "1px solid #1e1e1e",
+          background: "#fff",
+          border: "1px solid #e5e7eb",
           borderRadius: 12,
           padding: 40,
           textAlign: "center",
-          color: "#888",
+          color: "#9ca3af",
         }}
       >
         No data for this period
@@ -35,28 +35,29 @@ export function TimeSeriesChart({ data }: TimeSeriesChartProps) {
   return (
     <div
       style={{
-        background: "#141414",
-        border: "1px solid #1e1e1e",
+        background: "#fff",
+        border: "1px solid #e5e7eb",
         borderRadius: 12,
         padding: "20px 20px 12px",
+        boxShadow: "0 1px 2px rgba(0,0,0,0.04)",
       }}
     >
       <ResponsiveContainer width="100%" height={300}>
         <AreaChart data={data}>
           <defs>
             <linearGradient id="gradPageviews" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#3b82f6" stopOpacity={0.3} />
+              <stop offset="0%" stopColor="#3b82f6" stopOpacity={0.15} />
               <stop offset="100%" stopColor="#3b82f6" stopOpacity={0} />
             </linearGradient>
             <linearGradient id="gradVisitors" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#8b5cf6" stopOpacity={0.3} />
+              <stop offset="0%" stopColor="#8b5cf6" stopOpacity={0.15} />
               <stop offset="100%" stopColor="#8b5cf6" stopOpacity={0} />
             </linearGradient>
           </defs>
           <XAxis
             dataKey="date"
-            stroke="#333"
-            tick={{ fill: "#888", fontSize: 12 }}
+            stroke="#e5e7eb"
+            tick={{ fill: "#6b7280", fontSize: 12 }}
             tickFormatter={(v: string) => {
               try {
                 return isHourly
@@ -67,14 +68,15 @@ export function TimeSeriesChart({ data }: TimeSeriesChartProps) {
               }
             }}
           />
-          <YAxis stroke="#333" tick={{ fill: "#888", fontSize: 12 }} />
+          <YAxis stroke="#e5e7eb" tick={{ fill: "#6b7280", fontSize: 12 }} />
           <Tooltip
             contentStyle={{
-              background: "#1a1a1a",
-              border: "1px solid #333",
+              background: "#fff",
+              border: "1px solid #e5e7eb",
               borderRadius: 8,
-              color: "#fff",
+              color: "#111",
               fontSize: 13,
+              boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
             }}
             labelFormatter={(v) => {
               try {

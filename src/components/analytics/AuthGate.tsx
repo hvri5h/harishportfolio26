@@ -59,9 +59,10 @@ export function AuthGate({
 
   return (
     <div
+      data-standard-cursor
       style={{
         minHeight: "100vh",
-        background: "#0a0a0a",
+        background: "#fafafa",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -72,19 +73,20 @@ export function AuthGate({
       <form
         onSubmit={handleSubmit}
         style={{
-          background: "#141414",
-          border: "1px solid #1e1e1e",
+          background: "#fff",
+          border: "1px solid #e5e7eb",
           borderRadius: 12,
           padding: 32,
           width: 360,
           display: "flex",
           flexDirection: "column",
           gap: 16,
+          boxShadow: "0 1px 3px rgba(0,0,0,0.08)",
         }}
       >
         <h1
           style={{
-            color: "#fff",
+            color: "#111",
             fontSize: 20,
             fontWeight: 600,
             margin: 0,
@@ -95,7 +97,7 @@ export function AuthGate({
         </h1>
         <p
           style={{
-            color: "#888",
+            color: "#6b7280",
             fontSize: 14,
             margin: 0,
             textAlign: "center",
@@ -110,10 +112,10 @@ export function AuthGate({
           placeholder="Password"
           autoFocus
           style={{
-            background: "#0a0a0a",
-            border: "1px solid #1e1e1e",
+            background: "#f9fafb",
+            border: "1px solid #d1d5db",
             borderRadius: 8,
-            color: "#fff",
+            color: "#111",
             padding: "10px 14px",
             fontSize: 14,
             outline: "none",

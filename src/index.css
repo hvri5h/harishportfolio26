@@ -51,6 +51,13 @@
   [data-cursor-native-pointer] *::after {
     cursor: pointer !important;
   }
+
+  [data-standard-cursor],
+  [data-standard-cursor] *,
+  [data-standard-cursor] *::before,
+  [data-standard-cursor] *::after {
+    cursor: auto !important;
+  }
 }
 
 @keyframes terminalBlink {

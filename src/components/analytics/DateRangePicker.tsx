@@ -35,8 +35,8 @@ export function DateRangePicker({ selected, onChange }: DateRangePickerProps) {
               onChange({ start, end, label: r.label });
             }}
             style={{
-              background: isActive ? "#3b82f6" : "#1e1e1e",
-              color: isActive ? "#fff" : "#888",
+              background: isActive ? "#3b82f6" : "#f3f4f6",
+              color: isActive ? "#fff" : "#6b7280",
               border: "none",
               borderRadius: 6,
               padding: "6px 12px",
