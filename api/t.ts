@@ -22,7 +22,20 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
     const body = typeof req.body === "string" ? JSON.parse(req.body) : req.body;
 
-    const ua = UAParser(req.headers["user-agent"] || "");
+    // Reject known bots and headless browsers
+    const userAgent = req.headers["user-agent"] || "";
+    const botPatterns = /bot|crawl|spider|headless|lighthouse|pagespeed|pingdom|uptimerobot|vercel|preview/i;
+    if (botPatterns.test(userAgent)) {
+      return res.status(204).end();
+    }
+
+    // Only accept visits from production domains
+    const allowedDomains = ["hari.sh", "www.hari.sh", "htiruna.com", "www.htiruna.com"];
+    if (body.domain && !allowedDomains.includes(body.domain)) {
+      return res.status(204).end();
+    }
+
+    const ua = UAParser(userAgent);
     const browser = ua.browser.name || "Unknown";
     const os = ua.os.name || "Unknown";
     const deviceType = ua.device.type || "desktop";

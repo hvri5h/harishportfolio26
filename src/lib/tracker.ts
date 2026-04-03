@@ -64,7 +64,9 @@ export function initTracker() {
   if (typeof window === "undefined") return;
 
   const hostname = window.location.hostname;
-  if (hostname === "localhost" || hostname === "127.0.0.1") return;
+  // Only track on production domains
+  const allowedDomains = ["hari.sh", "www.hari.sh", "htiruna.com", "www.htiruna.com"];
+  if (!allowedDomains.includes(hostname)) return;
 
   // Don't track the analytics dashboard itself
   if (window.location.pathname.startsWith("/analytics")) return;
