@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { createClient } from "@supabase/supabase-js";
-import UAParser from "ua-parser-js";
+import { UAParser } from "ua-parser-js";
 
 const supabase = createClient(
   process.env.SUPABASE_URL!,
@@ -22,10 +22,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
     const body = typeof req.body === "string" ? JSON.parse(req.body) : req.body;
 
-    const ua = new UAParser(req.headers["user-agent"] || "");
-    const browser = ua.getBrowser().name || "Unknown";
-    const os = ua.getOS().name || "Unknown";
-    const deviceType = ua.getDevice().type || "desktop";
+    const ua = UAParser(req.headers["user-agent"] || "");
+    const browser = ua.browser.name || "Unknown";
+    const os = ua.os.name || "Unknown";
+    const deviceType = ua.device.type || "desktop";
 
     const country = (req.headers["x-vercel-ip-country"] as string) || null;
     const city = (req.headers["x-vercel-ip-city"] as string) || null;
