@@ -39,9 +39,9 @@
 
 @media (pointer: fine) {
 
-  *,
-  *::before,
-  *::after {
+  *:not(.cr):not(.cr *),
+  *:not(.cr):not(.cr *)::before,
+  *:not(.cr):not(.cr *)::after {
     cursor: none !important;
   }
 

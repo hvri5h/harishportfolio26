@@ -714,7 +714,7 @@ function Portfolio() {
               </motion.h1>
               <motion.p
                 variants={getStaggerItem(shouldReduceMotion)}
-                className="font-display font-medium text-2xl max-md:text-xl text-text-secondary leading-[1.4] max-w-none md:max-w-[400px] mb-5 md:mb-6"
+                className="font-display font-medium text-2xl max-md:text-xl text-text-secondary leading-[1.4] max-w-[400px] mb-5 md:mb-6"
               >
                 {siteConfig.hero.useCustomCursors ? (
                   <>

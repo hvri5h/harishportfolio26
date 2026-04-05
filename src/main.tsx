@@ -9,6 +9,7 @@ import { initTracker } from "./lib/tracker";
 initTracker();
 
 const Analytics = lazy(() => import("./pages/Analytics"));
+const Anthropic = lazy(() => import("./pages/Anthropic"));
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -35,6 +36,29 @@ createRoot(document.getElementById("root")!).render(
               }
             >
               <Analytics />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/anthropic"
+          element={
+            <Suspense
+              fallback={
+                <div
+                  style={{
+                    minHeight: "100vh",
+                    background: "#292824",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    color: "#888",
+                  }}
+                >
+                  Loading...
+                </div>
+              }
+            >
+              <Anthropic />
             </Suspense>
           }
         />
