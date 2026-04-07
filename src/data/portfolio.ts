@@ -1,6 +1,6 @@
 // import lj from "../assets/work/lj-2.webp";
-import watercoola from "../assets/work/watercoola/1.webp";
-import audiobook from "../assets/work/audiobook/1.webp";
+// import watercoola from "../assets/work/watercoola/1.webp";
+// import audiobook from "../assets/work/audiobook/1.webp";
 import sbnbBanner from "../assets/work/superbnb/_banner.webp";
 // import tpb from "../assets/work/tpb-3.webp";
 import nearmap from "../assets/work/nearmap/_banner.webp";
@@ -231,42 +231,42 @@ export const projects: Project[] = [
   //     isHidden: true,
   //   }
   // ),
-  createProject(
-    "mob-2",
-    watercoola,
-    "watercoola", // Optional fallback
-    true,
-    "image",
-    "Watercoola",
-    "Connecting remote teams asynchronously through immersive virtual environments.",
-    ["product design", "branding"],
-    {
-      client: "Watercoola Inc.",
-      team: "Myself, 2 Frontend Engineers",
-      year: "2024",
-      timeline: "6 Weeks",
-      bgColor: "#0EA5E9",
-      modalVariant: "imageOnly",
-    }
-  ),
-  createProject(
-    "mob-3",
-    audiobook,
-    "audiobook",
-    true,
-    "image",
-    "Audiobook app concept",
-    "Listen to your favorite books on the go with this modern, accessible player.",
-    ["product design"],
-    {
-      client: "Personal Project",
-      team: "Myself",
-      year: "2025",
-      timeline: "2 Weeks",
-      bgColor: "#8B5CF6",
-      modalVariant: "imageOnly",
-    }
-  ),
+  // createProject(
+  //   "mob-2",
+  //   watercoola,
+  //   "watercoola", // Optional fallback
+  //   true,
+  //   "image",
+  //   "Watercoola",
+  //   "Connecting remote teams asynchronously through immersive virtual environments.",
+  //   ["product design", "branding"],
+  //   {
+  //     client: "Watercoola Inc.",
+  //     team: "Myself, 2 Frontend Engineers",
+  //     year: "2024",
+  //     timeline: "6 Weeks",
+  //     bgColor: "#0EA5E9",
+  //     modalVariant: "imageOnly",
+  //   }
+  // ),
+  // createProject(
+  //   "mob-3",
+  //   audiobook,
+  //   "audiobook",
+  //   true,
+  //   "image",
+  //   "Audiobook app concept",
+  //   "Listen to your favorite books on the go with this modern, accessible player.",
+  //   ["product design"],
+  //   {
+  //     client: "Personal Project",
+  //     team: "Myself",
+  //     year: "2025",
+  //     timeline: "2 Weeks",
+  //     bgColor: "#8B5CF6",
+  //     modalVariant: "imageOnly",
+  //   }
+  // ),
   // createProject(
   //   "mob-4",
   //   lj,
