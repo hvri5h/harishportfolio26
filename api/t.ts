@@ -30,7 +30,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     // Only accept visits from production domains
-    const allowedDomains = ["hari.sh", "www.hari.sh", "htiruna.com", "www.htiruna.com"];
+    const allowedDomains = ["hari.sh", "www.hari.sh", "htiruna.com", "www.htiruna.com", "harish.design", "www.harish.design"];
     if (body.domain && !allowedDomains.includes(body.domain)) {
       return res.status(204).end();
     }

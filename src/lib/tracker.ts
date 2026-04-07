@@ -65,7 +65,7 @@ export function initTracker() {
 
   const hostname = window.location.hostname;
   // Only track on production domains
-  const allowedDomains = ["hari.sh", "www.hari.sh", "htiruna.com", "www.htiruna.com"];
+  const allowedDomains = ["hari.sh", "www.hari.sh", "htiruna.com", "www.htiruna.com", "harish.design", "www.harish.design"];
   if (!allowedDomains.includes(hostname)) return;
 
   // Don't track the analytics dashboard itself

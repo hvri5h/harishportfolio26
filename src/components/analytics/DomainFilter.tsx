@@ -2,6 +2,7 @@ const domains = [
   { label: "All", value: "" },
   { label: "hari.sh", value: "hari.sh" },
   { label: "htiruna.com", value: "htiruna.com" },
+  { label: "harish.design", value: "harish.design" },
 ];
 
 interface DomainFilterProps {
