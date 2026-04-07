@@ -46,7 +46,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     await supabase.from("visits").insert({
       session_id: body.session_id,
-      domain: body.domain,
+      domain: (body.domain || "").replace(/^www\./, ""),
       path: body.path || "/",
       referrer: body.referrer || null,
       ref_param: body.ref_param || null,

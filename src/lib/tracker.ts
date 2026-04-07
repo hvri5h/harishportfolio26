@@ -41,7 +41,7 @@ function onInteraction() {
   hasBounced = false;
   send({
     session_id: getSessionId(),
-    domain: window.location.hostname,
+    domain: normalizedDomain,
     path: window.location.pathname,
     is_bounce: false,
   });
@@ -53,7 +53,7 @@ function onLeave() {
   const duration = Math.round((performance.now() - startTime) / 1000);
   send({
     session_id: getSessionId(),
-    domain: window.location.hostname,
+    domain: normalizedDomain,
     path: window.location.pathname,
     session_duration: duration,
     is_bounce: hasBounced,
@@ -74,9 +74,12 @@ export function initTracker() {
   startTime = performance.now();
   const params = getParams();
 
+  // Normalize domain — strip www. prefix
+  const normalizedDomain = hostname.replace(/^www\./, "");
+
   send({
     session_id: getSessionId(),
-    domain: hostname,
+    domain: normalizedDomain,
     path: window.location.pathname,
     referrer: document.referrer || null,
     ref_param: params.ref,
