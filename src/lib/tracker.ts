@@ -4,6 +4,7 @@ let sessionId: string;
 let startTime: number;
 let hasBounced = true;
 let interactionSent = false;
+let normalizedDomain: string;
 
 function getSessionId(): string {
   if (sessionId) return sessionId;
@@ -75,7 +76,7 @@ export function initTracker() {
   const params = getParams();
 
   // Normalize domain — strip www. prefix
-  const normalizedDomain = hostname.replace(/^www\./, "");
+  normalizedDomain = hostname.replace(/^www\./, "");
 
   send({
     session_id: getSessionId(),
