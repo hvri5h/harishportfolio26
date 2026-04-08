@@ -76,100 +76,154 @@ const CONVERSATIONS: Conversation[] = [
 
 /* ─── Main page ─────────────────────────────────────────────────── */
 /* ─── Code string for code view ────────────────────────────────── */
-const ARTIFACT_CODE = `import { useState, useEffect, useCallback } from "react";
+const ARTIFACT_CODE = `import { useState, useEffect, useRef, useCallback } from "react";
+import { motion, AnimatePresence, useScroll } from "framer-motion";
+import Spline from "@splinetool/react-spline";
 
+/* ─── Animation helpers ───────────────────────────────────────── */
+const stagger = { hidden: {}, visible: { transition: { staggerChildren: 0.08 } } };
+const fadeUp = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } },
+};
+
+/* ─── Project data ────────────────────────────────────────────── */
 interface Project {
   id: string;
   title: string;
-  subtitle: string;
-  tags: string[];
-  year: number;
+  category: string;
+  color: string;
+  image: string;
+  isMobile?: boolean;
+  gridSpan?: 1 | 2;
 }
 
-const PROJECTS: Project[] = [
-  {
-    id: "woofly",
-    title: "Woofly",
-    subtitle: "AI-powered pet care platform",
-    tags: ["Product Design", "Design Systems", "Mobile"],
-    year: 2025,
-  },
-  {
-    id: "superbnb",
-    title: "Superbnb",
-    subtitle: "Reimagining short-term rental discovery",
-    tags: ["UX Research", "Interaction Design", "Web"],
-    year: 2024,
-  },
-  {
-    id: "nearmap",
-    title: "Nearmap",
-    subtitle: "Geospatial imagery analysis tools",
-    tags: ["Data Visualization", "Enterprise", "Desktop"],
-    year: 2024,
-  },
+const projects: Project[] = [
+  /* populated from case-studies.md */
 ];
 
-function ProjectCard({ project }: { project: Project }) {
-  const [isHovered, setIsHovered] = useState(false);
-
-  const handleKeyDown = useCallback(
-    (e: React.KeyboardEvent) => {
-      if (e.key === "Enter") {
-        window.location.hash = project.id;
-      }
-    },
-    [project.id]
-  );
-
+/* ─── Logo Cloud ──────────────────────────────────────────────── */
+function LogoCloud({ logos }: { logos: string[] }) {
   return (
-    <article
-      className="project-card"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      onKeyDown={handleKeyDown}
-      tabIndex={0}
-      role="link"
-      aria-label={\`View \${project.title} case study\`}
-    >
-      <div className="project-meta">
-        <span className="project-year">{project.year}</span>
-        <div className="project-tags">
-          {project.tags.map((tag) => (
-            <span key={tag} className="tag">{tag}</span>
-          ))}
-        </div>
-      </div>
-      <h3 className="project-title">{project.title}</h3>
-      <p className="project-subtitle">{project.subtitle}</p>
-    </article>
+    <div className="flex items-center justify-center gap-12 opacity-40">
+      {logos.map((src) => (
+        <img key={src} src={src} alt="" className="h-5 grayscale" />
+      ))}
+    </div>
   );
 }
 
-export default function Portfolio() {
-  const [filter, setFilter] = useState<string | null>(null);
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-    return () => setMounted(false);
-  }, []);
-
-  const filtered = filter
-    ? PROJECTS.filter((p) => p.tags.includes(filter))
-    : PROJECTS;
+/* ─── Stacking Cards ──────────────────────────────────────────── */
+function StackingCards({ images, color }: { images: string[]; color: string }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
 
   return (
-    <main className="portfolio">
-      <header className="portfolio-header">
-        <h1>Selected Work</h1>
-        <p>Design engineering at the intersection of craft and systems.</p>
+    <div ref={ref} className="relative" style={{ perspective: 1200 }}>
+      {images.map((src, i) => (
+        <motion.div
+          key={i}
+          className="sticky top-24 rounded-2xl overflow-hidden shadow-xl"
+          style={{ backgroundColor: color, zIndex: i }}
+        >
+          <img src={src} alt="" className="w-full" />
+        </motion.div>
+      ))}
+    </div>
+  );
+}
+
+/* ─── Project Card ────────────────────────────────────────────── */
+function ProjectCard({ project, onClick }: { project: Project; onClick: () => void }) {
+  return (
+    <motion.article
+      layoutId={project.id}
+      onClick={onClick}
+      className={\`rounded-3xl overflow-hidden cursor-pointer \${
+        project.gridSpan === 2 ? "md:col-span-2" : ""
+      }\`}
+      style={{ backgroundColor: project.color }}
+      whileHover={{ scale: 0.98 }}
+      transition={{ type: "spring", stiffness: 400, damping: 30 }}
+    >
+      <img
+        src={project.image}
+        alt={project.title}
+        className={\`w-full object-cover \${project.isMobile ? "p-8 mx-auto max-w-[280px]" : ""}\`}
+      />
+    </motion.article>
+  );
+}
+
+/* ─── Main Portfolio ──────────────────────────────────────────── */
+export default function Portfolio() {
+  const [selected, setSelected] = useState<Project | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const t = setTimeout(() => setIsLoading(false), 100);
+    return () => clearTimeout(t);
+  }, []);
+
+  return (
+    <main className="min-h-screen bg-white text-neutral-900 font-sans">
+      {/* Hero */}
+      <header className="flex flex-col items-center text-center pt-36 pb-8 px-8">
+        <motion.div initial="hidden" animate={!isLoading ? "visible" : "hidden"} variants={stagger}>
+          <motion.div variants={fadeUp} className="h-[200px] w-[200px] mb-6">
+            <Spline scene="https://prod.spline.design/zy5bc6-NJcpDwB1Y/scene.splinecode" />
+          </motion.div>
+          <motion.h1
+            variants={fadeUp}
+            className="font-display font-black text-7xl tracking-tight mb-4"
+          >
+            Harish
+          </motion.h1>
+          <motion.p variants={fadeUp} className="text-xl text-neutral-500 max-w-md mb-6">
+            AI-native Product Designer who ships fast while obsessing over details.
+          </motion.p>
+          <motion.a
+            variants={fadeUp}
+            href="mailto:htiruna@gmail.com"
+            className="inline-flex px-6 py-3.5 bg-neutral-900 text-white rounded-full font-semibold"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.97 }}
+          >
+            Get in touch
+          </motion.a>
+        </motion.div>
       </header>
-      <section className="project-grid">
-        {filtered.map((project) => (
-          <ProjectCard key={project.id} project={project} />
-        ))}
+
+      <LogoCloud logos={["/logos/optus.svg", "/logos/canon.svg", "/logos/nearmap.svg"]} />
+
+      {/* Work Grid */}
+      <section className="max-w-5xl mx-auto px-6 py-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {projects.map((p) => (
+            <ProjectCard key={p.id} project={p} onClick={() => setSelected(p)} />
+          ))}
+        </div>
       </section>
+
+      {/* Expanded Project */}
+      <AnimatePresence>
+        {selected && (
+          <motion.div
+            className="fixed inset-0 z-50 bg-white overflow-y-auto"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <button
+              onClick={() => setSelected(null)}
+              className="fixed top-6 right-6 z-50 p-2 rounded-full bg-neutral-100"
+            >
+              ✕
+            </button>
+            <StackingCards images={[]} color={selected.color} />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </main>
   );
 }`;
@@ -493,7 +547,7 @@ export default function Anthropic() {
                     <p className="cb-text-user" style={{ marginTop: 4 }}>— Clean white canvas. The project imagery brings all the color, not the container</p>
                     <p className="cb-text-user" style={{ marginTop: 4 }}>— Large, high-quality images that fill the frame. Each project gets its own bold accent and card size — mix of mobile and desktop at different scales</p>
                     <p className="cb-text-user" style={{ marginTop: 4 }}>— Images should tease continuation so you want to click into the full project</p>
-                    <p className="cb-text-user" style={{ marginTop: 4 }}>— 3D memoji in the hero that tracks the cursor. Name, one-liner, straight into work</p>
+                    <p className="cb-text-user" style={{ marginTop: 4 }}>— Hero section with a Spline 3D avatar that follows the cursor. Name, one-liner, then straight into the work</p>
                     <p className="cb-text-user" style={{ marginTop: 4 }}>— Scroll-driven stacking animations for the project deep-dives</p>
                     <p className="cb-text-user" style={{ marginTop: 4 }}>— Typography needs to be sharp — display font for headings, clean sans for body. This is the first thing people will judge</p>
                     <p className="cb-text-user" style={{ marginTop: 4 }}>— Personal about section with a handwritten signature. Not a corporate bio</p>
@@ -1076,6 +1130,20 @@ export default function Anthropic() {
   background: rgba(48,48,46,0.7); backdrop-filter: blur(8px);
   padding: 2px 4px; border: 0.5px solid rgba(222,220,209,0.25); border-radius: 4px; align-self: flex-start;
   box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+.cm-user-code {
+  margin-top: 8px; border-radius: 8px; overflow: hidden;
+  border: 0.5px solid rgba(222,220,209,0.15); background: rgba(0,0,0,0.25);
+  font-size: 13px; line-height: 1.5;
+}
+.cm-user-code-header {
+  padding: 6px 12px; font-size: 12px; color: var(--c-text-400);
+  border-bottom: 0.5px solid rgba(222,220,209,0.1);
+}
+.cm-user-code-body {
+  padding: 12px; margin: 0; color: var(--c-text-100);
+  font-family: "SF Mono", SFMono-Regular, ui-monospace, Menlo, monospace;
+  white-space: pre; overflow-x: auto;
 }
 .cm-assistant { min-width: 0; }
 .cm-content { min-width: 0; }
