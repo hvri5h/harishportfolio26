@@ -1065,7 +1065,7 @@ export default function Anthropic() {
 }
 .cx-head-share:hover { background: var(--c-bg-300); }
 .cx-title-group {
-  display: flex; align-items: center;
+  display: flex; align-items: center; min-width: 0; overflow: hidden;
 }
 .cx-title-group:hover .cx-title-btn,
 .cx-title-group:hover .cx-title-chevron {
@@ -1591,6 +1591,7 @@ export default function Anthropic() {
   .cx-chat.cx-mobile-active { flex: 1; }
   .cx-resize { display: none !important; }
   .cx-msgs { padding: 8px 24px 48px; }
+  .cm-bubble { max-width: 85%; }
   .cx-head-inner { padding-left: 12px; }
   .cx-head-sidebar-toggle { display: flex !important; }
   .cx-head-right { display: flex !important; }
