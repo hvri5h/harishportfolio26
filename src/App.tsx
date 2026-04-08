@@ -34,6 +34,7 @@ import StackingCards, {
   StackingCardItem,
 } from "./components/fancy/blocks/stacking-cards";
 import { getStaggerContainer, getStaggerItem } from "./lib/animations";
+import { TextShimmer } from "./components/motion-primitives/text-shimmer";
 import { siteConfig } from "./lib/siteMode";
 
 type ActiveImage = {
@@ -685,7 +686,7 @@ function Portfolio() {
         {/* Hero Section */}
         <header
           ref={heroSectionRef}
-          className="relative flex items-start justify-center pt-[80px] md:pt-[180px] pb-2 md:pb-4 max-sm:px-8"
+          className={`relative flex items-start justify-center pb-2 md:pb-4 max-sm:px-8 ${siteConfig.mode === "design" ? "pt-[70px] md:pt-[140px]" : "pt-[80px] md:pt-[180px]"}`}
         >
           <div className="max-w-none md:max-w-[1200px] mx-auto px-0 md:px-8 w-full">
             <motion.div
@@ -714,16 +715,25 @@ function Portfolio() {
               </motion.h1>
               <motion.p
                 variants={getStaggerItem(shouldReduceMotion)}
-                className="font-display font-medium text-2xl max-md:text-xl text-text-secondary leading-[1.4] max-w-[400px] mb-5 md:mb-6"
+                className={`font-display font-medium text-2xl max-md:text-xl text-text-secondary leading-[1.4] mb-5 md:mb-6 ${siteConfig.hero.useCustomCursors ? "max-w-[340px]" : "max-w-[460px]"}`}
               >
                 {siteConfig.hero.useCustomCursors ? (
                   <>
                     <span data-cursor-figma>Design +</span>{" "}
-                    <span data-cursor-code>Engineering</span> partner for startups that value
+                    <span data-cursor-code>Engineering</span> partner for early-stage startups that value
                     craft and speed.
                   </>
                 ) : (
-                  siteConfig.hero.subtitle
+                  <>
+                    <TextShimmer
+                      as="span"
+                      duration={1}
+                      className="[--base-color:var(--color-text-secondary)] [--base-gradient-color:#fff]"
+                    >
+                      AI-native
+                    </TextShimmer>{" "}
+                    {siteConfig.hero.subtitle}
+                  </>
                 )}
               </motion.p>
               <motion.a
@@ -738,7 +748,7 @@ function Portfolio() {
               </motion.a>
               <motion.div
                 variants={getStaggerItem(shouldReduceMotion)}
-                className="w-full mt-10 mb-12 md:mt-20 md:mb-0"
+                className={`w-full mt-10 md:mt-20 ${siteConfig.mode === "design" ? "mb-4 md:mb-0" : "mb-12 md:mb-0"}`}
               >
                 {/* <p className="text-[13px] md:text-base font-medium text-black/50 text-center mb-5">
                   12+ years of shipping digital products
@@ -753,7 +763,7 @@ function Portfolio() {
         <section
           id="work"
           ref={workSectionRef}
-          className="pt-2 md:pt-10 pb-12 md:pb-32 relative"
+          className={`pb-12 md:pb-32 relative ${siteConfig.mode === "design" ? "pt-0 md:pt-4" : "pt-2 md:pt-10"}`}
         >
           <div className="max-w-[1200px] mx-auto px-6 md:px-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">

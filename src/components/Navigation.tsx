@@ -143,16 +143,16 @@ export function Navigation({
           ref={mobileMenuRef}
           className="pointer-events-auto bg-[#f0f0f0]/50 backdrop-blur-[20px] backdrop-saturate-[180%] border border-white/50 shadow-[0_2px_6px_rgba(0,0,0,0.06),0_0_0_1px_rgba(0,0,0,0.06)] overflow-hidden"
           animate={{
-            width: mobileOpen ? "100%" : 56,
+            width: mobileOpen ? "100%" : 44,
             borderRadius: mobileOpen ? 20 : 20,
           }}
           transition={shouldReduceMotion ? { duration: 0 } : mobileOpen ? springConfig : exitConfig}
         >
           {/* Top bar */}
-          <div className="flex items-center justify-end p-2">
+          <div className="flex items-center justify-end p-1.5">
             <button
               onClick={() => setMobileOpen((v) => !v)}
-              className="relative w-10 h-10 flex items-center justify-center bg-transparent cursor-pointer"
+              className="relative w-8 h-8 flex items-center justify-center bg-transparent cursor-pointer"
               aria-label={mobileOpen ? "Close menu" : "Open menu"}
             >
               <MenuIcon open={mobileOpen} />

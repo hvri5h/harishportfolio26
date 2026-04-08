@@ -1,16 +1,18 @@
-export type SiteMode = "freelance" | "professional";
+export type SiteMode = "freelance" | "professional" | "design";
 
 export function getSiteMode(): SiteMode {
   if (typeof window === "undefined") return "freelance";
 
   const params = new URLSearchParams(window.location.search);
   const modeParam = params.get("mode");
-  if (modeParam === "professional" || modeParam === "freelance")
+  if (modeParam === "professional" || modeParam === "freelance" || modeParam === "design")
     return modeParam;
 
   const hostname = window.location.hostname;
   if (hostname === "htiruna.com" || hostname === "www.htiruna.com")
     return "professional";
+  if (hostname === "harish.design" || hostname === "www.harish.design")
+    return "design";
 
   return "freelance";
 }
@@ -53,7 +55,7 @@ const configs: Record<SiteMode, SiteConfig> = {
       showBookCall: true,
     },
     meta: {
-      title: "Harish — Portfolio",
+      title: "Harish Tirunahari — Portfolio",
       description: "Designer + Engineer",
       ogUrl: "https://hari.sh/",
       ogDescription:
@@ -76,11 +78,35 @@ const configs: Record<SiteMode, SiteConfig> = {
       showBookCall: false,
     },
     meta: {
-      title: "Harish Tirunahari — Design Engineer",
+      title: "Harish Tirunahari — Portfolio",
       description: "Design Engineer based in Australia",
       ogUrl: "https://htiruna.com/",
       ogDescription:
         "Design Engineer based in Australia with 12+ years across design, code, and product.",
+    },
+  },
+  design: {
+    mode: "design",
+    showAvailableBadge: false,
+    showServices: false,
+    hero: {
+      subtitle:
+        "Product Designer who ships fast while obsessing over details.",
+      useCustomCursors: false,
+    },
+    footer: {
+      heading: "Get in touch",
+      subheading:
+        "I'm always open to connecting with new people and exploring interesting opportunities.",
+      showBookCall: false,
+    },
+    meta: {
+      title: "Harish Tirunahari — Product Designer",
+      description:
+        "Product Designer who builds what he designs. Design, code, and craft.",
+      ogUrl: "https://harish.design/",
+      ogDescription:
+        "AI-native Product Designer. 12 years shipping polished interfaces across mobile, web, and enterprise.",
     },
   },
 };

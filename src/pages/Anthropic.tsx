@@ -88,10 +88,22 @@ const ActionIcons = () => (
   </div>
 );
 
-/* ─── Sidebar data ──────────────────────────────────────────────── */
-const starredChats: string[] = [];
-const recentChats = [
-  "Converting design portfolio to int...",
+/* ─── Conversation data ────────────────────────────────────────── */
+type Conversation = {
+  id: string;
+  sidebarTitle: string;
+  headerTitle: string;
+  starred?: boolean;
+  hasArtifact?: boolean;
+};
+
+const CONVERSATIONS: Conversation[] = [
+  { id: "portfolio", sidebarTitle: "Converting case studies into interac...", headerTitle: "Converting case studies into interactive design portfolio", hasArtifact: true, starred: true },
+  { id: "interview-prep", sidebarTitle: "Anthropic Product Designer role — interview prep ...", headerTitle: "Anthropic Product Designer role — interview prep study guide" },
+  { id: "cover-letter", sidebarTitle: "Draft a cover letter angle for Anth...", headerTitle: "Draft a cover letter angle for Anthropic" },
+  { id: "anthropic-values", sidebarTitle: "What does Anthropic value in design...", headerTitle: "What does Anthropic value in designers?" },
+  { id: "design-challenge", sidebarTitle: "What would a design exercise at Ant...", headerTitle: "What would a design exercise at Anthropic look like?" },
+  { id: "sf-move", sidebarTitle: "Convince me to move to San Francisc...", headerTitle: "Convince me to move to San Francisco" },
 ];
 
 /* ─── Main page ─────────────────────────────────────────────────── */
@@ -294,16 +306,18 @@ function tokenizeLine(line: string): { text: string; color: string }[] {
 /* ─── Main page ─────────────────────────────────────────────────── */
 export default function Anthropic() {
   const [sb, setSb] = useState(false);
+  const [activeChat, setActiveChat] = useState("portfolio");
   const [artifactWidth, setArtifactWidth] = useState(50); // percentage
   const [isResizing, setIsResizing] = useState(false);
   const [viewMode, setViewMode] = useState<"preview" | "code">("preview");
   const [mobilePanel, setMobilePanel] = useState<"chat" | "artifact">("artifact");
   const [showArtifact, setShowArtifact] = useState(true);
+  const activeConv = CONVERSATIONS.find(c => c.id === activeChat) || CONVERSATIONS[1];
   const panelsRef = useRef<HTMLDivElement>(null);
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
   useEffect(() => {
-    document.title = "Converting design portfolio to interactive format - Claude";
+    document.title = `${activeConv.headerTitle} - Claude`;
     if (window.innerWidth < 768) setSb(false);
     // Set initial artifact width to 900px equivalent
     const sidebarWidth = 49; // collapsed
@@ -398,16 +412,20 @@ export default function Anthropic() {
               </div>
             </div>
             <div className="cs-recents">
+              <div className="cs-label">Starred</div>
+              {CONVERSATIONS.filter(c => c.starred).map(c => (
+                <a key={c.id} className={`cs-chat-item${activeChat === c.id ? " cs-chat-active" : ""}`} onClick={() => { setActiveChat(c.id); setShowArtifact(!!c.hasArtifact); if (window.innerWidth < 768) { setSb(false); setMobilePanel("chat"); } }}>
+                  <span>{c.sidebarTitle}</span>
+                  {activeChat === c.id && <span className="cs-chat-more"><MoreIcon /></span>}
+                </a>
+              ))}
               <div className="cs-label">Recents</div>
-              {recentChats.map((title, i) => {
-                const isActive = title === "Converting design portfolio to int...";
-                return (
-                  <a key={`r-${i}`} className={`cs-chat-item${isActive ? " cs-chat-active" : ""}`}>
-                    <span>{title}</span>
-                    {isActive && <span className="cs-chat-more"><MoreIcon /></span>}
-                  </a>
-                );
-              })}
+              {CONVERSATIONS.filter(c => !c.starred).map(c => (
+                <a key={c.id} className={`cs-chat-item${activeChat === c.id ? " cs-chat-active" : ""}`} onClick={() => { setActiveChat(c.id); setShowArtifact(!!c.hasArtifact); if (window.innerWidth < 768) { setSb(false); setMobilePanel("chat"); } }}>
+                  <span>{c.sidebarTitle}</span>
+                  {activeChat === c.id && <span className="cs-chat-more"><MoreIcon /></span>}
+                </a>
+              ))}
             </div>
             <div className="cs-footer">
               <button className="cs-user">
@@ -472,7 +490,7 @@ export default function Anthropic() {
                   </button>
                   <div className="cx-title-group">
                     <button className="cx-title-btn">
-                      <div className="cx-title-text">Converting design portfolio to interactive format</div>
+                      <div className="cx-title-text">{activeConv.headerTitle}</div>
                     </button><div className="cx-title-sep" /><button className="cx-title-chevron" aria-label="More options">
                       <div style={{ width: 16, height: 16, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                         <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style={{ flexShrink: 0 }}><path d="M14.128 7.165a.502.502 0 0 1 .744.67l-4.5 5-.078.07a.5.5 0 0 1-.666-.07l-4.5-5-.06-.082a.501.501 0 0 1 .729-.656l.075.068L10 11.752z"/></svg>
@@ -491,81 +509,127 @@ export default function Anthropic() {
 
             <div className="cx-scroll">
               <div className="cx-msgs">
+
+                {activeChat === "portfolio" && (<>
                 {/* File attachment */}
                 <div className="cm cm-user">
                   <div className="cm-file">
                     <div className="cm-file-card">
-                      <span className="cm-file-name">1775304158450_case-studies.md</span>
+                      <span className="cm-file-name">case-studies.md</span>
                       <span className="cm-file-type">MD</span>
                     </div>
                   </div>
                   <div className="cm-bubble">
-                    <p className="cb-text-user">Hey Claude, could you transform the following md file of all my design projects into an interactive portfolio that I can use to submit a job application to work at anthropic?</p>
+                    <p className="cb-text-user">Hey Claude, could you transform the following md file of all my design projects into an interactive portfolio site that I can use to submit a job application to work at Anthropic?</p>
+                    <p className="cb-text-user" style={{ marginTop: 12 }}>Direction:</p>
+                    <p className="cb-text-user" style={{ marginTop: 4 }}>— Clean white canvas. The project imagery brings all the color, not the container</p>
+                    <p className="cb-text-user" style={{ marginTop: 4 }}>— Large, high-quality images that fill the frame. Each project gets its own bold accent and card size — mix of mobile and desktop at different scales</p>
+                    <p className="cb-text-user" style={{ marginTop: 4 }}>— Images should tease continuation so you want to click into the full project</p>
+                    <p className="cb-text-user" style={{ marginTop: 4 }}>— 3D memoji in the hero that tracks the cursor. Name, one-liner, straight into work</p>
+                    <p className="cb-text-user" style={{ marginTop: 4 }}>— Scroll-driven stacking animations for the project deep-dives</p>
+                    <p className="cb-text-user" style={{ marginTop: 4 }}>— Typography needs to be sharp — display font for headings, clean sans for body. This is the first thing people will judge</p>
+                    <p className="cb-text-user" style={{ marginTop: 4 }}>— Personal about section with a handwritten signature. Not a corporate bio</p>
+                    <p className="cb-text-user" style={{ marginTop: 4 }}>— Client logo cloud. Keep it subtle</p>
+                    <p className="cb-text-user" style={{ marginTop: 12 }}>React, Tailwind, Framer Motion. Single page, smooth scroll.</p>
                   </div>
                 </div>
+                <div className="cm cm-assistant"><div className="cm-content">
+                  <div className="cm-thinking-wrap"><button className="cm-thinking" aria-expanded="false"><div className="cm-thinking-inner"><span className="cm-thinking-text">Planning image-led portfolio layout with per-project accent system and scroll-driven reveals</span><span className="cm-thinking-chevron"><div className="cm-thinking-chevron-wrap"><svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style={{ flexShrink: 0 }}><path d="M14.128 7.165a.502.502 0 0 1 .744.67l-4.5 5-.078.07a.5.5 0 0 1-.666-.07l-4.5-5-.06-.082a.501.501 0 0 1 .729-.656l.075.068L10 11.752z"/></svg></div></span></div></button></div>
+                  <p className="cb-text">Strong direction — image-forward, gallery feel, let the craft speak. I'll build this so the work hits before anyone reads a word.</p>
+                  <div className="cm-thinking-wrap" style={{ marginBottom: 4 }}><button className="cm-thinking" aria-expanded="false"><div className="cm-thinking-inner"><span className="cm-thinking-text">Composing project grid with cursor-tracking 3D hero and stacking card animations</span><span className="cm-thinking-chevron"><div className="cm-thinking-chevron-wrap"><svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style={{ flexShrink: 0 }}><path d="M14.128 7.165a.502.502 0 0 1 .744.67l-4.5 5-.078.07a.5.5 0 0 1-.666-.07l-4.5-5-.06-.082a.501.501 0 0 1 .729-.656l.075.068L10 11.752z"/></svg></div></span></div></button></div>
+                  <p className="cb-text">Here's your portfolio, Harish. The whole thing is designed so the work lands before anyone reads a single word — large project imagery on a clean white canvas, each card filling the frame with its own bold accent color.</p>
+                  <p className="cb-text">The 3D memoji tracks the cursor to grab attention in the hero. Below that it's name, positioning, and straight into the project grid — mixed card sizes at mobile and desktop scale so the layout has rhythm. Each card teases the project with cropped imagery that makes you want to click in. Opening a project triggers a scroll-driven stacking animation into the full set of images.</p>
+                  <p className="cb-text">Typography is tight — display font for headings, clean sans for body, consistent hierarchy throughout. About section is personal with your handwritten signature. Logo cloud sits above the footer for social proof. Everything is responsive and smooth on mobile.</p>
+                  <div className="cm-artifact-wrap"><div className="cm-artifact-card" role="button" tabIndex={0} aria-label="Portfolio. Open artifact." onClick={() => { setShowArtifact(true); setMobilePanel("artifact"); }}><div className="cm-artifact-inner"><div className="cm-artifact-left"><div className="cm-artifact-thumb-area"><div className="cm-artifact-thumb"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 256 256"><path d="M67.84,92.61,25.37,128l42.47,35.39a6,6,0,1,1-7.68,9.22l-48-40a6,6,0,0,1,0-9.22l48-40a6,6,0,0,1,7.68,9.22Zm176,30.78-48-40a6,6,0,1,0-7.68,9.22L230.63,128l-42.47,35.39a6,6,0,1,0,7.68,9.22l48-40a6,6,0,0,0,0-9.22Zm-81.79-89A6,6,0,0,0,154.36,38l-64,176A6,6,0,0,0,94,221.64a6.15,6.15,0,0,0,2,.36,6,6,0,0,0,5.64-3.95l64-176A6,6,0,0,0,162.05,34.36Z"/></svg></div></div><div className="cm-artifact-info"><div className="cm-artifact-title">Portfolio</div><div className="cm-artifact-type">Code<span className="cm-artifact-dot"> · </span>JSX&nbsp;</div></div></div><div className="cm-artifact-actions"><button className="cm-artifact-download" type="button" aria-label="Download">Download</button></div></div></div></div>
+                  <ActionIcons />
+                </div></div>
+                </>)}
 
-                {/* Thinking 1 */}
-                <div className="cm cm-assistant">
-                  <div className="cm-content">
-                    <div className="cm-thinking-wrap">
-                      <button className="cm-thinking" aria-expanded="false">
-                        <div className="cm-thinking-inner">
-                          <span className="cm-thinking-text">Architected premium React portfolio with editorial design sensibility</span>
-                          <span className="cm-thinking-chevron">
-                            <div className="cm-thinking-chevron-wrap">
-                              <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style={{ flexShrink: 0 }}><path d="M14.128 7.165a.502.502 0 0 1 .744.67l-4.5 5-.078.07a.5.5 0 0 1-.666-.07l-4.5-5-.06-.082a.501.501 0 0 1 .729-.656l.075.068L10 11.752z"/></svg>
-                            </div>
-                          </span>
-                        </div>
-                      </button>
-                    </div>
+                {activeChat === "cover-letter" && (<>
+                <div className="cm cm-user"><div className="cm-bubble">
+                  <p className="cb-text-user">I need to write a cover letter for Anthropic's Product Designer role. I've already written a first draft but it feels generic — like it could be for any design role at any tech company. I want it to feel specific to Anthropic and specific to me.</p>
+                  <p className="cb-text-user" style={{ marginTop: 12 }}>Their AI guidance says to write the first draft myself and then use Claude to refine it, which is what I'm doing. Can you help me figure out which parts of my experience to emphasise that'll resonate most with what they're looking for?</p>
+                </div></div>
+                <div className="cm cm-assistant"><div className="cm-content">
+                  <div className="cm-thinking-wrap"><button className="cm-thinking" aria-expanded="false"><div className="cm-thinking-inner"><span className="cm-thinking-text">Identifying strongest cover letter angles based on Anthropic's JD and design team values</span><span className="cm-thinking-chevron"><div className="cm-thinking-chevron-wrap"><svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style={{ flexShrink: 0 }}><path d="M14.128 7.165a.502.502 0 0 1 .744.67l-4.5 5-.078.07a.5.5 0 0 1-.666-.07l-4.5-5-.06-.082a.501.501 0 0 1 .729-.656l.075.068L10 11.752z"/></svg></div></span></div></button></div>
+                  <p className="cb-text">Good instinct to follow their guidance — the fact that you're using Claude to refine (not generate) already signals you read it. Here's what I'd lean into:</p>
+                  <p className="cb-text"><strong>Lead with why Anthropic specifically, not why design generally.</strong> They read hundreds of "I'm passionate about design" cover letters. What they don't hear often is someone who can articulate why designing for AI trust is fundamentally different from designing for engagement — and why that excites you. If you have a point of view on how AI should feel when people use it, put that up front.</p>
+                  <p className="cb-text"><strong>Show that you ship in ambiguity.</strong> Their JD repeats this theme: "fast-paced, often ambiguous, resource-constrained." Don't just say you're comfortable with ambiguity — give a one-sentence example of a time you made a design decision without complete information and it worked. That's more convincing than any adjective.</p>
+                  <p className="cb-text"><strong>Mention your AI workflow naturally.</strong> They want people who are "AI-native in how you work." If you're already using Claude in your design process, mention it briefly — not as a flex, but as context for how you think about the tools you'd be designing.</p>
+                  <p className="cb-text"><strong>Keep it short.</strong> Three paragraphs max. Why Anthropic, what you bring, and one specific thing about the role that excites you. Hiring managers at companies like this are scanning, not reading — make every sentence earn its spot.</p>
+                  <ActionIcons />
+                </div></div>
+                </>)}
 
-                    <p className="cb-text">Now let me build this. I'm going to create an editorial, magazine-inspired interactive portfolio that feels premium and intentional — fitting for an Anthropic application.</p>
+                {activeChat === "anthropic-values" && (<>
+                <div className="cm cm-user"><div className="cm-bubble">
+                  <p className="cb-text-user">I've been reading everything I can find about Anthropic's design team. The job descriptions, the blog posts, the product updates. I want to make sure my application actually speaks to what they care about — not what I assume they care about based on other tech companies.</p>
+                  <p className="cb-text-user" style={{ marginTop: 12 }}>What patterns do you see in what they value? Be specific.</p>
+                </div></div>
+                <div className="cm cm-assistant"><div className="cm-content">
+                  <div className="cm-thinking-wrap"><button className="cm-thinking" aria-expanded="false"><div className="cm-thinking-inner"><span className="cm-thinking-text">Analyzing Anthropic's public design philosophy and hiring signals across JDs and product updates</span><span className="cm-thinking-chevron"><div className="cm-thinking-chevron-wrap"><svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style={{ flexShrink: 0 }}><path d="M14.128 7.165a.502.502 0 0 1 .744.67l-4.5 5-.078.07a.5.5 0 0 1-.666-.07l-4.5-5-.06-.082a.501.501 0 0 1 .729-.656l.075.068L10 11.752z"/></svg></div></span></div></button></div>
+                  <p className="cb-text">A few clear patterns stand out from how Anthropic talks about design publicly:</p>
+                  <p className="cb-text"><strong>Craft at speed, not craft instead of speed.</strong> Their JDs consistently pair "polish" with "ship fast." They want designers who obsess over details but don't use that as an excuse to slow down. The tension between these two is the signal — they want people who can hold both.</p>
+                  <p className="cb-text"><strong>Designing for trust, not delight.</strong> Most product companies optimize for engagement. Anthropic's language centers on trust, safety, and reliability. When Claude "feels like a collaborator," that's a design outcome — and it's very different from "delightful micro-interactions." Their design philosophy seems rooted in: does this make the AI feel more trustworthy?</p>
+                  <p className="cb-text"><strong>Comfort with ambiguity.</strong> They're explicit about this — "designing around capabilities that are emerging in real-time." This isn't a mature product with established patterns. They want designers who can make decisions with incomplete information and iterate without anxiety.</p>
+                  <p className="cb-text"><strong>AI-native workflow.</strong> Not just "uses AI" but uses it as a genuine creative partner. They name Claude Code specifically. This is a company that expects its designers to extend what they can build by using the tools they're making.</p>
+                  <p className="cb-text"><strong>Small team, high ownership.</strong> The design team is explicitly described as small. That means broad scope per designer, direct collaboration with engineers and researchers, and no hiding behind process. They want people who can own a problem end-to-end.</p>
+                  <ActionIcons />
+                </div></div>
+                </>)}
 
-                    <div className="cm-thinking-wrap" style={{ marginBottom: 4 }}>
-                      <button className="cm-thinking" aria-expanded="false">
-                        <div className="cm-thinking-inner">
-                          <span className="cm-thinking-text">Assessed portfolio transformation request for Anthropic application</span>
-                          <span className="cm-thinking-chevron">
-                            <div className="cm-thinking-chevron-wrap">
-                              <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style={{ flexShrink: 0 }}><path d="M14.128 7.165a.502.502 0 0 1 .744.67l-4.5 5-.078.07a.5.5 0 0 1-.666-.07l-4.5-5-.06-.082a.501.501 0 0 1 .729-.656l.075.068L10 11.752z"/></svg>
-                            </div>
-                          </span>
-                        </div>
-                      </button>
-                    </div>
+                {activeChat === "design-challenge" && (<>
+                <div className="cm cm-user"><div className="cm-bubble">
+                  <p className="cb-text-user">If I get to the design exercise stage at Anthropic, what kind of challenge do you think they'd give me? I want to practice but I don't want to prep for the wrong thing.</p>
+                  <p className="cb-text-user" style={{ marginTop: 12 }}>Based on the JD — they mention Claude Cowork, Claude Code, Growth, Developer Platform, and Consumer as team areas. What would a design exercise for this role actually look like?</p>
+                </div></div>
+                <div className="cm cm-assistant"><div className="cm-content">
+                  <div className="cm-thinking-wrap"><button className="cm-thinking" aria-expanded="false"><div className="cm-thinking-inner"><span className="cm-thinking-text">Anticipating Anthropic design exercise format based on role scope and team areas</span><span className="cm-thinking-chevron"><div className="cm-thinking-chevron-wrap"><svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style={{ flexShrink: 0 }}><path d="M14.128 7.165a.502.502 0 0 1 .744.67l-4.5 5-.078.07a.5.5 0 0 1-.666-.07l-4.5-5-.06-.082a.501.501 0 0 1 .729-.656l.075.068L10 11.752z"/></svg></div></span></div></button></div>
+                  <p className="cb-text">Based on how Anthropic talks about design and the team areas in the JD, here's what I'd expect:</p>
+                  <p className="cb-text"><strong>Most likely format:</strong> An open-ended design prompt around an AI interaction problem — not a typical "redesign this screen" exercise. Something like "Design an experience where Claude helps a user accomplish [task] across multiple sessions" or "How would you help new users understand what Claude can do without overwhelming them?" The ambiguity is the point — they want to see how you scope and make decisions, not whether you can push perfect pixels in 4 hours.</p>
+                  <p className="cb-text"><strong>What they're evaluating:</strong> How you think about trust (when should the AI ask permission vs. act?), progressive disclosure (how much capability do you reveal upfront?), and failure states (what happens when Claude gets something wrong?). These are the unique design problems at an AI company that don't have established conventions yet — which is exactly what the JD means by "rethinking the basics."</p>
+                  <p className="cb-text"><strong>How to stand out:</strong> Don't just deliver mockups. Show your decision framework — what you considered, what you rejected and why, where you'd want to test with real users. They value "product intuition" paired with craft. A thoughtful low-fi concept with clear rationale will beat a polished screen with no reasoning.</p>
+                  <p className="cb-text"><strong>Practice exercise:</strong> Pick any Claude feature (artifacts, projects, the system prompt) and redesign the first-time experience for it. Walk through it as if you're presenting to a product team — 5 minutes, clear problem statement, 2-3 design directions, and your recommendation with trade-offs. That's basically what the real exercise will feel like.</p>
+                  <ActionIcons />
+                </div></div>
+                </>)}
 
-                    <p className="cb-text">Here's your interactive portfolio, Harish. It's built around an editorial, magazine-inspired aesthetic with Instrument Serif + DM Sans — warm and refined without feeling corporate.</p>
+                {activeChat === "sf-move" && (<>
+                <div className="cm cm-user"><div className="cm-bubble">
+                  <p className="cb-text-user">Ok so hypothetically if I got this job I'd have to move to SF. I've been in Melbourne for years and I genuinely love it here. The coffee is better, the weather is better (fight me), and I don't have to explain what a flat white is to anyone.</p>
+                  <p className="cb-text-user" style={{ marginTop: 12 }}>Give me your best pitch. Why should I uproot my entire life and move to San Francisco?</p>
+                </div></div>
+                <div className="cm cm-assistant"><div className="cm-content">
+                  <div className="cm-thinking-wrap"><button className="cm-thinking" aria-expanded="false"><div className="cm-thinking-inner"><span className="cm-thinking-text">Building a case for relocating from Melbourne to San Francisco</span><span className="cm-thinking-chevron"><div className="cm-thinking-chevron-wrap"><svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style={{ flexShrink: 0 }}><path d="M14.128 7.165a.502.502 0 0 1 .744.67l-4.5 5-.078.07a.5.5 0 0 1-.666-.07l-4.5-5-.06-.082a.501.501 0 0 1 .729-.656l.075.068L10 11.752z"/></svg></div></span></div></button></div>
+                  <p className="cb-text">I'm not going to fight you on the coffee — Melbourne wins that easily and you know it. But here's the case anyway:</p>
+                  <p className="cb-text"><strong>You'd be designing the future of human-AI interaction.</strong> Not metaphorically. Literally. Claude is used by millions of people daily and the design decisions you'd make would directly shape how people experience AI. That's not a line you get to put on many resumes. Melbourne has great studios and startups, but this is a once-in-a-generation technology shift and Anthropic is at the center of it.</p>
+                  <p className="cb-text"><strong>The density of people who care about this stuff.</strong> In Melbourne, you're probably the most AI-obsessed designer in your circle. In SF, you'd be surrounded by hundreds of people who think about these problems all day. That proximity compounds — hallway conversations, weekend projects, the energy of being in a room where everyone's building something that matters.</p>
+                  <p className="cb-text"><strong>The timing.</strong> You've spent 12 years building the exact skill set they're looking for — design + engineering + AI fluency. That combination is rare right now. In 3 years, half the design industry will have caught up. This is the window where your background is a genuine differentiator.</p>
+                  <p className="cb-text"><strong>And honestly?</strong> You can always come back. Melbourne isn't going anywhere. The flat whites will wait. But an opportunity to work on Claude at this stage of the company probably won't.</p>
+                  <p className="cb-text">Also — the burritos in the Mission District are legitimately better than anything in Melbourne. I said what I said.</p>
+                  <ActionIcons />
+                </div></div>
+                </>)}
 
-                    <p className="cb-text">The structure has two views via the nav: <strong>Work</strong> (project grid → click to expand into full case studies with all your imagery, research findings, design process, key decisions, and outcomes) and <strong>About</strong> (your "Why Anthropic" section as a standalone page).</p>
-
-                    <p className="cb-text">A few things you might want to tweak: adding your email/LinkedIn to the contact section, adjusting the accent color if the burnt sienna doesn't feel right, or adding a link to your personal site. Let me know if you want any changes.</p>
-
-                    {/* Artifact block */}
-                    <div className="cm-artifact-wrap">
-                      <div className="cm-artifact-card" role="button" tabIndex={0} aria-label="Portfolio. Open artifact." onClick={() => { setShowArtifact(true); setMobilePanel("artifact"); }}>
-                        <div className="cm-artifact-inner">
-                          <div className="cm-artifact-left">
-                            <div className="cm-artifact-thumb-area">
-                              <div className="cm-artifact-thumb">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 256 256"><path d="M67.84,92.61,25.37,128l42.47,35.39a6,6,0,1,1-7.68,9.22l-48-40a6,6,0,0,1,0-9.22l48-40a6,6,0,0,1,7.68,9.22Zm176,30.78-48-40a6,6,0,1,0-7.68,9.22L230.63,128l-42.47,35.39a6,6,0,1,0,7.68,9.22l48-40a6,6,0,0,0,0-9.22Zm-81.79-89A6,6,0,0,0,154.36,38l-64,176A6,6,0,0,0,94,221.64a6.15,6.15,0,0,0,2,.36,6,6,0,0,0,5.64-3.95l64-176A6,6,0,0,0,162.05,34.36Z"/></svg>
-                              </div>
-                            </div>
-                            <div className="cm-artifact-info">
-                              <div className="cm-artifact-title">Portfolio</div>
-                              <div className="cm-artifact-type">Code<span className="cm-artifact-dot"> · </span>JSX&nbsp;</div>
-                            </div>
-                          </div>
-                          <div className="cm-artifact-actions">
-                            <button className="cm-artifact-download" type="button" aria-label="Download">Download</button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <ActionIcons />
-                  </div>
-                </div>
+                {activeChat === "interview-prep" && (<>
+                <div className="cm cm-user"><div className="cm-bubble">
+                  <p className="cb-text-user">Alright, let's say I get past the portfolio screen (fingers crossed). I need to be ready. Can you put together a study guide specifically for the Anthropic Product Designer role?</p>
+                  <p className="cb-text-user" style={{ marginTop: 12 }}>I want to nail the AI safety concepts, understand their research focus, and be ready for both the design critique and behavioral rounds. Don't give me generic interview advice — make it specific to this company and this role.</p>
+                </div></div>
+                <div className="cm cm-assistant"><div className="cm-content">
+                  <div className="cm-thinking-wrap"><button className="cm-thinking" aria-expanded="false"><div className="cm-thinking-inner"><span className="cm-thinking-text">Creating targeted study guide for Anthropic Product Designer interview across design, technical, and behavioral rounds</span><span className="cm-thinking-chevron"><div className="cm-thinking-chevron-wrap"><svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style={{ flexShrink: 0 }}><path d="M14.128 7.165a.502.502 0 0 1 .744.67l-4.5 5-.078.07a.5.5 0 0 1-.666-.07l-4.5-5-.06-.082a.501.501 0 0 1 .729-.656l.075.068L10 11.752z"/></svg></div></span></div></button></div>
+                  <p className="cb-text">Here's a focused study guide broken into the areas they'll likely probe:</p>
+                  <p className="cb-text"><strong>1. AI Safety Concepts (know the landscape)</strong></p>
+                  <p className="cb-text">You don't need to be a researcher, but you should be able to discuss: Constitutional AI (Anthropic's alignment approach), RLHF and how it shapes model behavior, the alignment problem in plain language, why "helpful, harmless, and honest" is harder than it sounds, and what responsible scaling means. Read Anthropic's core research page and their RSP (Responsible Scaling Policy). Be able to explain why a Product Designer at an AI safety company is different from a PD at any other tech company.</p>
+                  <p className="cb-text"><strong>2. Design Critique Prep</strong></p>
+                  <p className="cb-text">They'll likely give you a design exercise around AI interaction patterns. Practice thinking through: how do you design for output uncertainty (Claude might be wrong), progressive disclosure of AI capabilities, trust calibration (when should users trust vs. verify), and the tension between making AI feel capable vs. making it feel safe. Walk through Claude's current UI and form opinions — what works, what you'd change, and why.</p>
+                  <p className="cb-text"><strong>3. Behavioral / Values Fit</strong></p>
+                  <p className="cb-text">Prepare specific stories for: shipping fast under ambiguity (startup experience), making hard trade-offs between polish and speed, collaborating with engineers on technical constraints, and taking ownership of a problem end-to-end. For each, have the situation, your specific contribution, and the measurable outcome ready. They value intellectual honesty — be ready to talk about something you shipped that you'd do differently now.</p>
+                  <p className="cb-text"><strong>4. Your Unique Angle</strong></p>
+                  <p className="cb-text">Your biggest differentiator is that you design AND build, and you already use their tools. Prepare a story about how using Claude Code or Cursor changed your design process — not just made you faster, but changed the decisions you made. That's the AI-native signal they're screening for.</p>
+                  <ActionIcons />
+                </div></div>
+                </>)}
 
                 {/* Claude blob */}
                 <div className="cm-blob">
@@ -666,7 +730,7 @@ export default function Anthropic() {
               {viewMode === "preview" ? (
                 <iframe
                   ref={iframeRef}
-                  src="http://localhost:5173"
+                  src="/?mode=design"
                   className="ca-iframe"
                   title="Portfolio"
                 />
@@ -874,7 +938,7 @@ export default function Anthropic() {
 }
 .cs-chat-item {
   display: flex; align-items: center; justify-content: space-between;
-  padding: 0 8px; border-radius: 8px;
+  padding: 0 8px; border-radius: 8px; cursor: pointer;
   color: var(--c-text-200); font-size: 14px;
   text-decoration: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   transition: background 35ms; height: 32px; line-height: 20px;
@@ -1018,7 +1082,7 @@ export default function Anthropic() {
 .cx-scroll::-webkit-scrollbar { width: 6px; }
 .cx-scroll::-webkit-scrollbar-track { background: transparent; }
 .cx-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 3px; }
-.cx-msgs { max-width: 48rem; margin: 0 auto; padding: 8px 24px 48px; min-width: 0; }
+.cx-msgs { max-width: 48rem; margin: 0 auto; padding: 40px 24px 48px; min-width: 0; }
 
 /* ═══ MESSAGES ═══ */
 .cm { margin-bottom: 20px; }
@@ -1028,18 +1092,22 @@ export default function Anthropic() {
   padding: 10px 16px; max-width: 80%;
 }
 .cb-text-user { font-family: var(--font-sans); font-size: 16px; line-height: 22.4px; font-weight: 400; color: var(--c-text-100); }
-.cm-file { display: flex; justify-content: flex-end; }
+.cm-file { display: flex; justify-content: flex-end; margin-bottom: 8px; }
 .cm-file-card {
   display: flex; flex-direction: column; justify-content: space-between;
-  width: 120px; height: 120px;
-  background: var(--c-bg-000); border: 1px solid var(--c-border);
+  width: 120px; height: 120px; min-width: 120px;
+  background: var(--c-bg-000); border: 0.5px solid rgba(222,220,209,0.25);
   border-radius: 8px; padding: 8px 10px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  cursor: pointer; transition: all 150ms;
 }
-.cm-file-name { font-size: 12px; color: var(--c-text-200); word-break: break-all; }
+.cm-file-card:hover { border-color: rgba(222,220,209,0.5); box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+.cm-file-name { font-size: 12px; color: var(--c-text-100); word-break: break-word; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
 .cm-file-type {
-  font-size: 11px; color: var(--c-text-400);
-  background: var(--c-bg-300);
-  padding: 2px 6px; border-radius: 4px; align-self: flex-start;
+  font-size: 11px; line-height: 13px; color: var(--c-text-400); text-transform: uppercase; font-weight: 500;
+  background: rgba(48,48,46,0.7); backdrop-filter: blur(8px);
+  padding: 2px 4px; border: 0.5px solid rgba(222,220,209,0.25); border-radius: 4px; align-self: flex-start;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
 }
 .cm-assistant { min-width: 0; }
 .cm-content { min-width: 0; }
