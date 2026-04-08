@@ -10,33 +10,12 @@ function ClaudeWordmark() {
   );
 }
 
-const I = ({ d, size = 16 }: { d: string; size?: number }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round"><path d={d} /></svg>
-);
 /* Exact plus icon from Claude */
 const PlusIcon = () => (
   <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg" style={{ flexShrink: 0 }}>
     <path d="M10 3a.5.5 0 0 1 .5.5v6h6l.1.01a.5.5 0 0 1 0 .98l-.1.01h-6v6a.5.5 0 0 1-1 0v-6h-6a.5.5 0 0 1 0-1h6v-6A.5.5 0 0 1 10 3"/>
   </svg>
 );
-const SearchIcon = () => <I d="M11 3a8 8 0 100 16 8 8 0 000-16zM21 21l-4.35-4.35" />;
-const CustomizeIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-    <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
-  </svg>
-);
-const ChatIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
-  </svg>
-);
-const FolderIcon = () => <I d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z" />;
-const GridIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-    <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/>
-  </svg>
-);
-const CodeIcon = () => <I d="M16 18l6-6-6-6M8 6l-6 6 6 6" />;
 const SidebarIcon = () => (
   <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style={{ flexShrink: 0 }}>
     <path d="M16.5 4A1.5 1.5 0 0 1 18 5.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 2 14.5v-9A1.5 1.5 0 0 1 3.5 4zM7 15h9.5a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5H7zM3.5 5a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5H6V5z"/>
@@ -50,9 +29,6 @@ const DownloadIcon = () => (
 );
 const ChevronUpDown = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 256 256"><path d="M181.66,170.34a8,8,0,0,1,0,11.32l-48,48a8,8,0,0,1-11.32,0l-48-48a8,8,0,0,1,11.32-11.32L128,212.69l42.34-42.35A8,8,0,0,1,181.66,170.34Zm-96-84.68L128,43.31l42.34,42.35a8,8,0,0,0,11.32-11.32l-48-48a8,8,0,0,0-11.32,0l-48,48A8,8,0,0,0,85.66,85.66Z"/></svg>
-);
-const ChevronDown = () => (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
 );
 const CopyIcon = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
@@ -70,14 +46,6 @@ const VoiceIcon = () => (
     <rect x="20" y="7.5" height="6" fill="currentColor" fillOpacity="1" width="1" rx="0.5" ry="0.5"/>
   </svg>
 );
-/* Claude sparkle for avatar */
-const ClaudeSparkle = () => (
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M14.059 7.627c-1.864 1.238-3.256 3.013-4.03 5.155-.778-2.136-2.166-3.911-4.03-5.155C4.135 6.389 2.012 5.886 0 6.093c2.05.412 3.886 1.45 5.314 3.003 1.421 1.55 2.324 3.51 2.607 5.67l.012.092h1.31l.012-.092c.284-2.16 1.186-4.12 2.607-5.67C13.29 7.543 15.126 6.505 17.176 6.093c-2.012-.207-4.135.296-5.999 1.534h-.004Z" fill="#D97757"/>
-    <path d="M19.318 14.353c-1.138.754-1.986 1.838-2.458 3.142-.473-1.301-1.32-2.384-2.458-3.142-1.138-.754-2.434-1.06-3.741-.937 1.25.252 2.368.888 3.238 1.834.87.946 1.417 2.14 1.588 3.46l.008.056h.654l.008-.056c.171-1.317.718-2.511 1.588-3.46.87-.946 1.988-1.582 3.238-1.834-1.307-.123-2.603.183-3.741.937Z" fill="#D97757"/>
-  </svg>
-);
-
 /* Action icons row: copy, thumbs up, thumbs down, refresh */
 const ActionIcons = () => (
   <div className="cm-actions">
