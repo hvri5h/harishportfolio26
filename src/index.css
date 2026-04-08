@@ -39,9 +39,9 @@
 
 @media (pointer: fine) {
 
-  *:not(.cr):not(.cr *),
-  *:not(.cr):not(.cr *)::before,
-  *:not(.cr):not(.cr *)::after {
+  *:not(.cr):not(.cr *):not([data-standard-cursor]):not([data-standard-cursor] *),
+  *:not(.cr):not(.cr *):not([data-standard-cursor]):not([data-standard-cursor] *)::before,
+  *:not(.cr):not(.cr *):not([data-standard-cursor]):not([data-standard-cursor] *)::after {
     cursor: none !important;
   }
 
