@@ -91,7 +91,7 @@ const configs: Record<SiteMode, SiteConfig> = {
     showServices: false,
     hero: {
       subtitle:
-        "Product Designer who ships fast while obsessing over details.",
+        "Product Designer who codes & ships fast while obsessing over details.",
       useCustomCursors: false,
     },
     footer: {
