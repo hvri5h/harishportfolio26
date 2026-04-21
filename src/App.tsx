@@ -726,8 +726,8 @@ function Portfolio() {
                     >
                       AI-native
                     </TextShimmer>{" "}
-                    <span data-cursor-figma>Design +</span>{" "}
-                    <span data-cursor-code>Engineering</span> partner for early-stage startups that value
+                    <span data-cursor-figma>design +</span>{" "}
+                    <span data-cursor-code>engineering</span> partner for early-stage startups that value
                     craft and speed.
                   </>
                 ) : (
