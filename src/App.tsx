@@ -646,7 +646,7 @@ function Portfolio() {
                     <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
                   </div>
                 </div>
-                <span className="text-text-secondary tracking-[-0.01em] text-sm">Available for work <span className="hidden md:inline-block">Apr 2026</span></span>
+                <span className="text-text-secondary tracking-[-0.01em] text-sm">Available for work <span className="hidden md:inline-block">May 2026</span></span>
               </div>
               <div className="hidden md:flex items-center gap-2">
                 <button
