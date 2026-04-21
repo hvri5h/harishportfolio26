@@ -719,6 +719,13 @@ function Portfolio() {
               >
                 {siteConfig.hero.useCustomCursors ? (
                   <>
+                    <TextShimmer
+                      as="span"
+                      duration={1}
+                      className="[--base-color:var(--color-text-secondary)] [--base-gradient-color:#fff]"
+                    >
+                      AI-native
+                    </TextShimmer>{" "}
                     <span data-cursor-figma>Design +</span>{" "}
                     <span data-cursor-code>Engineering</span> partner for early-stage startups that value
                     craft and speed.
