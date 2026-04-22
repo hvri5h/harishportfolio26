@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./index.css";
 import Portfolio from "./App";
 import { initTracker } from "./lib/tracker";
+import { usePageTracking } from "./hooks/usePageTracking";
 
 // Initialize tracker outside React render cycle
 initTracker();
@@ -11,58 +12,66 @@ initTracker();
 const Analytics = lazy(() => import("./pages/Analytics"));
 const Anthropic = lazy(() => import("./pages/Anthropic"));
 
+function AppRoutes() {
+  usePageTracking();
+
+  return (
+    <Routes>
+      <Route path="/" element={<Portfolio />} />
+      <Route
+        path="/analytics"
+        element={
+          <Suspense
+            fallback={
+              <div
+                style={{
+                  minHeight: "100vh",
+                  background: "#0a0a0a",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  color: "#888",
+                }}
+              >
+                Loading...
+              </div>
+            }
+          >
+            <Analytics />
+          </Suspense>
+        }
+      />
+      <Route
+        path="/anthropic"
+        element={
+          <Suspense
+            fallback={
+              <div
+                style={{
+                  minHeight: "100vh",
+                  background: "#292824",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  color: "#888",
+                }}
+              >
+                Loading...
+              </div>
+            }
+          >
+            <Anthropic />
+          </Suspense>
+        }
+      />
+    </Routes>
+  );
+}
+
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Portfolio />} />
-        <Route
-          path="/analytics"
-          element={
-            <Suspense
-              fallback={
-                <div
-                  style={{
-                    minHeight: "100vh",
-                    background: "#0a0a0a",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    color: "#888",
-                  }}
-                >
-                  Loading...
-                </div>
-              }
-            >
-              <Analytics />
-            </Suspense>
-          }
-        />
-        <Route
-          path="/anthropic"
-          element={
-            <Suspense
-              fallback={
-                <div
-                  style={{
-                    minHeight: "100vh",
-                    background: "#292824",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    color: "#888",
-                  }}
-                >
-                  Loading...
-                </div>
-              }
-            >
-              <Anthropic />
-            </Suspense>
-          }
-        />
-      </Routes>
+      <AppRoutes />
     </BrowserRouter>
   </StrictMode>
 );
