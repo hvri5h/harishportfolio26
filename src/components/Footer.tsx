@@ -145,9 +145,6 @@ const Footer = () => {
         <div className="flex justify-between items-end text-sm text-[rgba(255,255,255,0.3)] max-sm:flex-col max-sm:items-center max-sm:gap-0 max-sm:text-center max-sm:leading-relaxed">
           <span>
             &copy; 2026 Harish Tirunahari
-            <span className="max-sm:hidden"> &middot; </span>
-            <br className="sm:hidden" />
-            Vibe coded with Claude Code & Antigravity
           </span>
           <span>
             Have a nice{" "}
